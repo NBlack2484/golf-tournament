@@ -8,32 +8,29 @@
 <style>
   body {
     margin: 0;
-    padding: 0;
     min-height: 100vh;
-    background-image: url('assets/images/pine_valley.png');
+    background: url('assets/images/pine_valley.jpg') no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     font-family: Arial, sans-serif;
   }
 
   .overlay {
-    background-color: rgba(0,0,0,0.5);
     width: 100%;
     min-height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    padding: 2rem;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    padding: 2rem;
-    box-sizing: border-box;
   }
 
   h1 {
     color: white;
     font-size: 3rem;
     margin-bottom: 2rem;
+    text-align: center;
   }
 
   table {
@@ -77,7 +74,6 @@
         <td>5</td>
         <td>30</td>
       </tr>
-      <!-- Additional players dynamically added later -->
     </table>
   </div>
 </body>
