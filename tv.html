@@ -5,21 +5,81 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TV Leaderboard</title>
 <link rel="stylesheet" href="css/style.css">
-<style> 
-  body { background-image: url('assets/images/pine_valley.png'); } 
-  table { font-size: 3rem; }
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-image: url('assets/images/pine_valley.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+  }
+
+  .overlay {
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  h1 {
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  table {
+    width: 90%;
+    max-width: 1200px;
+    border-collapse: collapse;
+    background-color: rgba(255,255,255,0.9);
+    color: black;
+  }
+
+  th, td {
+    padding: 1rem 2rem;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  th {
+    background-color: #e63946;
+    color: white;
+    font-size: 1.8rem;
+  }
 </style>
 </head>
 <body>
   <div class="overlay">
-    <main>
-      <h1>Leaderboard</h1>
-      <table>
-        <tr><th>Player</th><th>Score</th></tr>
-        <tr><td>Player 1</td><td>72</td></tr>
-        <tr><td>Player 2</td><td>74</td></tr>
-      </table>
-    </main>
+    <h1>TV Leaderboard</h1>
+    <table>
+      <tr>
+        <th>Player</th>
+        <th>Hole Score</th>
+        <th>Total Score</th>
+      </tr>
+      <tr>
+        <td>Player 1</td>
+        <td>4</td>
+        <td>28</td>
+      </tr>
+      <tr>
+        <td>Player 2</td>
+        <td>5</td>
+        <td>30</td>
+      </tr>
+      <!-- Additional players dynamically added later -->
+    </table>
   </div>
 </body>
 </html>
+
