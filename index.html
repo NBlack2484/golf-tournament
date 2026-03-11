@@ -6,19 +6,19 @@
 <title>Golf Tournament Registration</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* Full-screen Augusta background */
+  /* Full-page Augusta background */
   body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
     background-image: url('assets/images/augusta.png');
-    background-size: cover;
+    background-size: cover;        /* fill screen */
     background-position: center;
     background-repeat: no-repeat;
     font-family: Arial, sans-serif;
   }
 
-  /* Overlay for readability (covers entire page but doesn't vertically center) */
+  /* Overlay for readability, content flows from top */
   .overlay {
     background-color: rgba(0, 0, 0, 0.2); /* subtle overlay */
     width: 100%;
@@ -27,14 +27,14 @@
     box-sizing: border-box;
   }
 
-  /* Banner at the top (fixed height, responsive width) */
+  /* Banner at top of page */
   .banner {
     width: 90%;          /* span across most of the screen */
-    max-width: 1200px;   /* cap max width */
-    height: 120px;       /* fixed height */
-    object-fit: contain; /* preserve aspect ratio */
+    max-width: 1200px;   /* maximum width */
+    height: auto;
+    max-height: 200px;   /* prevent huge banner */
     display: block;
-    margin: 0 auto 2rem auto; /* center horizontally, margin bottom */
+    margin: 0 auto 2rem auto; /* top centered */
   }
 
   /* Heading and description */
