@@ -22,54 +22,53 @@
     .back-link {
       display: inline-flex; align-items: center; gap: 8px;
       font-family:'Cinzel',serif;
-      font-size:0.60rem; letter-spacing:0.14em;
-      text-transform:uppercase; color:var(--gold-dim);
-      text-decoration:none; margin-bottom:28px;
-      transition: color 0.2s;
+      font-size:0.80rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--gold);
+      opacity: 0.7;
+      text-decoration:none; margin-bottom:32px;
+      transition: opacity 0.2s;
     }
-    .back-link:hover { color:var(--gold); }
-    .back-link::before { content:'←'; font-size:0.85rem; }
+    .back-link:hover { opacity: 1; }
+    .back-link::before { content:'←'; font-size:1rem; }
 
     /* Tier cards */
     .tier-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 28px;
+      gap: 24px;
+      margin-bottom: 32px;
     }
     @media (max-width:580px) { .tier-grid { grid-template-columns:1fr; } }
 
     .tier-card {
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 4px;
-      backdrop-filter: blur(18px);
-      padding: 28px 26px 24px;
+      background: #1a1a1a;
+      border: 2px solid #333;
+      border-radius: 6px;
+      padding: 32px 28px;
       cursor: pointer;
       transition: border-color 0.2s, background 0.2s, transform 0.15s;
       position: relative;
       user-select: none;
     }
     .tier-card:hover {
-      border-color: rgba(201,162,39,0.60);
-      background: rgba(4,8,4,0.78);
-      transform: translateY(-2px);
+      border-color: var(--gold);
+      background: #222;
+      transform: translateY(-3px);
     }
     .tier-card.selected {
       border-color: var(--gold);
-      background: rgba(201,162,39,0.08);
-      box-shadow: 0 0 0 1px var(--gold), 0 8px 32px rgba(201,162,39,0.18);
+      background: #1e1800;
+      box-shadow: 0 0 0 1px var(--gold), 0 8px 32px rgba(201,162,39,0.2);
     }
 
-    /* Selected checkmark */
     .tier-card .check-ring {
-      position: absolute; top:16px; right:16px;
-      width:22px; height:22px;
+      position: absolute; top:18px; right:18px;
+      width:26px; height:26px;
       border-radius:50%;
-      border:2px solid var(--card-border);
+      border:2px solid #444;
       display:flex; align-items:center; justify-content:center;
       transition: all 0.2s;
-      font-size:0.75rem; color:transparent;
+      font-size:0.9rem; color:transparent;
     }
     .tier-card.selected .check-ring {
       background: var(--gold);
@@ -79,36 +78,36 @@
 
     .tier-price {
       font-family:'Cinzel',serif;
-      font-size:2.0rem; font-weight:900;
+      font-size:2.8rem; font-weight:900;
       color:var(--gold-light);
       line-height:1;
-      margin-bottom:6px;
+      margin-bottom:8px;
     }
     .tier-name {
       font-family:'Cinzel',serif;
-      font-size:0.75rem; font-weight:700;
+      font-size:0.90rem; font-weight:700;
       letter-spacing:0.18em; text-transform:uppercase;
-      color:var(--cream);
-      margin-bottom:16px;
-      padding-bottom:14px;
-      border-bottom:1px solid var(--card-border);
+      color:#fff;
+      margin-bottom:20px;
+      padding-bottom:16px;
+      border-bottom:1px solid #333;
     }
     .tier-includes {
       list-style:none;
       display:flex;
       flex-direction:column;
-      gap:9px;
+      gap:12px;
     }
     .tier-includes li {
-      font-size:0.97rem;
-      color:#d0c8b4;
-      display:flex; align-items:flex-start; gap:10px;
+      font-size:1.15rem;
+      color:#ccc;
+      display:flex; align-items:flex-start; gap:12px;
       line-height:1.4;
     }
     .tier-includes li::before {
       content:'✓';
       color:var(--gold);
-      font-size:0.8rem;
+      font-size:0.95rem;
       margin-top:2px;
       flex-shrink:0;
     }
@@ -117,55 +116,55 @@
     .tier-badge {
       display:inline-block;
       font-family:'Cinzel',serif;
-      font-size:0.52rem; letter-spacing:0.12em;
+      font-size:0.68rem; letter-spacing:0.12em;
       text-transform:uppercase;
       background:rgba(201,162,39,0.18);
       color:var(--gold-light);
       border:1px solid rgba(201,162,39,0.45);
-      padding:3px 10px; border-radius:2px;
-      margin-bottom:10px;
+      padding:4px 12px; border-radius:2px;
+      margin-bottom:12px;
     }
 
     /* Venmo section */
     .venmo-section {
       text-align:center;
-      padding:26px 20px;
-      background:rgba(0,0,0,0.3);
-      border:1px solid var(--card-border);
-      border-radius:3px;
-      margin-bottom:20px;
+      padding:36px 24px;
+      background:#1a1a1a;
+      border:1px solid #333;
+      border-radius:6px;
+      margin-bottom:24px;
     }
     .venmo-section h3 {
       font-family:'Cinzel',serif;
-      font-size:0.70rem; letter-spacing:0.20em;
+      font-size:1.0rem; letter-spacing:0.20em;
       text-transform:uppercase; color:var(--gold);
-      margin-bottom:14px;
+      margin-bottom:20px;
     }
     .venmo-qr-img {
-      width:180px; height:180px;
-      margin:0 auto 14px;
+      width:220px; height:220px;
+      margin:0 auto 20px;
       border-radius:12px; display:block;
-      box-shadow:0 4px 20px rgba(0,0,0,0.5);
+      box-shadow:0 4px 24px rgba(0,0,0,0.5);
     }
     .venmo-amount-display {
-      font-size:1.5rem; font-style:italic;
-      color:var(--cream); margin:8px 0 4px;
+      font-size:2.0rem; font-weight:700;
+      color:#fff; margin:10px 0 6px;
       font-family:'Cinzel',serif;
       transition: all 0.3s;
     }
     .venmo-link {
       display:inline-block;
       font-family:'Cinzel',serif;
-      font-size:0.65rem; letter-spacing:0.14em;
+      font-size:0.90rem; letter-spacing:0.14em;
       color:var(--gold); text-decoration:none;
-      border-bottom:1px solid var(--gold-border);
-      padding-bottom:2px;
+      border-bottom:1px solid rgba(201,162,39,0.4);
+      padding-bottom:3px;
       transition:color 0.2s, border-color 0.2s;
     }
     .venmo-link:hover { color:var(--gold-light); border-color:var(--gold); }
     .venmo-note {
-      font-size:0.88rem; color:rgba(244,238,216,0.50);
-      font-style:italic; margin-top:6px;
+      font-size:1.05rem; color:rgba(255,255,255,0.45);
+      font-style:italic; margin-top:8px;
     }
 
     /* Form grid */
@@ -176,31 +175,31 @@
 
     /* Confirm row */
     .confirm-row {
-      display:flex; align-items:flex-start; gap:12px;
-      margin:20px 0 28px;
+      display:flex; align-items:flex-start; gap:14px;
+      margin:24px 0 32px;
     }
     .confirm-row input[type=checkbox] {
-      width:18px; height:18px; min-width:18px;
-      margin-top:3px; cursor:pointer;
+      width:20px; height:20px; min-width:20px;
+      margin-top:4px; cursor:pointer;
       accent-color:var(--gold);
     }
     .confirm-row label {
-      font-size:0.92rem; color:var(--cream-dim);
+      font-size:1.05rem; color:rgba(255,255,255,0.75);
       cursor:pointer; line-height:1.5;
     }
-    .confirm-row label span { color:var(--gold); }
+    .confirm-row label span { color:var(--gold); font-weight:600; }
 
     /* Success */
-    #success-screen { display:none; text-align:center; padding:40px 20px; }
+    #success-screen { display:none; text-align:center; padding:60px 24px; }
     #success-screen.show { display:block; }
-    .success-icon { font-size:3rem; margin-bottom:16px; }
+    .success-icon { font-size:4rem; margin-bottom:20px; }
     #success-screen h2 {
       font-family:'Cinzel',serif;
-      font-size:1.4rem; color:var(--gold-light); margin-bottom:12px;
+      font-size:1.8rem; color:var(--gold-light); margin-bottom:16px;
     }
     #success-screen p {
-      font-size:1.05rem; font-style:italic;
-      color:var(--cream-dim); margin-bottom:24px; line-height:1.6;
+      font-size:1.15rem; font-style:italic;
+      color:rgba(255,255,255,0.65); margin-bottom:32px; line-height:1.7;
     }
   </style>
 </head>

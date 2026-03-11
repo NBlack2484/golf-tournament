@@ -84,7 +84,7 @@
     }
     .title-event {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.9rem,1.8vw,1.4rem);
+      font-size:1.8rem;
       font-weight:900; letter-spacing:0.18em;
       text-transform:uppercase;
       color:var(--gold-light);
@@ -92,21 +92,21 @@
     }
     .title-sub {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.55rem,1vw,0.75rem);
-      letter-spacing:0.25em; text-transform:uppercase;
-      color:var(--gold-dim); margin-top:4px;
+      font-size:0.85rem;
+      letter-spacing:0.22em; text-transform:uppercase;
+      color:var(--gold-dim); margin-top:6px;
     }
 
     .live-badge {
       display:flex; align-items:center; gap:8px;
       font-family:'Cinzel',serif;
-      font-size:0.62rem; letter-spacing:0.18em;
+      font-size:0.85rem; letter-spacing:0.18em;
       text-transform:uppercase; color:var(--gold);
     }
     .live-dot {
-      width:8px; height:8px; border-radius:50%;
+      width:10px; height:10px; border-radius:50%;
       background:#4ade80;
-      box-shadow:0 0 8px #4ade80;
+      box-shadow:0 0 10px #4ade80;
       animation:pulse 2s ease infinite;
     }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.85)} }
@@ -114,22 +114,22 @@
     /* ── MAIN LEADERBOARD ── */
     .leaderboard-wrap {
       overflow:hidden;
-      padding:0 32px;
+      padding:0 40px;
       display:flex; flex-direction:column;
     }
 
     /* Table header */
     .lb-header {
       display:grid;
-      grid-template-columns: 52px 1fr 80px 80px 72px;
+      grid-template-columns: 80px 1fr 120px 120px 100px;
       gap:0;
-      padding:14px 20px 10px;
+      padding:16px 24px 12px;
       border-bottom:1px solid rgba(201,162,39,0.35);
       margin-top:16px;
     }
     .lb-header span {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.52rem,0.9vw,0.68rem);
+      font-size:0.85rem;
       letter-spacing:0.14em; text-transform:uppercase;
       color:var(--gold-dim);
     }
@@ -140,20 +140,19 @@
     .lb-rows {
       flex:1; overflow:hidden;
       display:flex; flex-direction:column;
-      gap:3px;
-      padding:8px 0;
+      gap:4px;
+      padding:10px 0;
     }
 
     .lb-row {
       display:grid;
-      grid-template-columns: 52px 1fr 80px 80px 72px;
+      grid-template-columns: 80px 1fr 120px 120px 100px;
       align-items:center;
-      padding:10px 20px;
-      border-radius:3px;
+      padding:14px 24px;
+      border-radius:4px;
       border:1px solid transparent;
       transition:all 0.5s ease;
       animation:rowIn 0.6s ease both;
-      backdrop-filter:blur(4px);
     }
     @keyframes rowIn { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
 
@@ -176,41 +175,40 @@
 
     .col-pos {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.9rem,1.5vw,1.2rem);
+      font-size:1.5rem;
       font-weight:700; color:var(--gold);
     }
-    .lb-row.rank-1 .col-pos { color:var(--gold-light); font-size:clamp(1.0rem,1.8vw,1.5rem); }
-    .col-pos .pos-trophy { font-size:1.1em; }
+    .lb-row.rank-1 .col-pos { color:var(--gold-light); font-size:1.8rem; }
 
     .col-team {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.8rem,1.4vw,1.1rem);
+      font-size:1.4rem;
       font-weight:600; color:var(--cream);
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .lb-row.rank-1 .col-team { font-size:clamp(0.9rem,1.6vw,1.3rem); color:white; }
+    .lb-row.rank-1 .col-team { font-size:1.6rem; color:white; }
 
     .col-score {
       font-family:'Cinzel',serif;
-      font-size:clamp(1.0rem,1.8vw,1.4rem);
+      font-size:1.7rem;
       font-weight:900; text-align:right;
     }
     .col-score.under { color:#4ade80; }
     .col-score.over  { color:#f87171; }
     .col-score.even  { color:var(--cream); }
-    .col-score.dashes { color:rgba(255,255,255,0.25); font-size:0.9em; }
+    .col-score.dashes { color:rgba(255,255,255,0.25); font-size:1.2rem; }
 
     .col-total {
       font-family:'Cormorant Garamond',serif;
-      font-size:clamp(0.9rem,1.4vw,1.1rem);
+      font-size:1.3rem;
       color:rgba(244,238,216,0.65); text-align:right;
     }
 
     .col-thru {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.6rem,1vw,0.8rem);
+      font-size:1.0rem;
       letter-spacing:0.1em;
-      color:rgba(244,238,216,0.45);
+      color:rgba(244,238,216,0.55);
       text-align:center;
     }
     .col-thru.finished { color:#4ade80; }
@@ -219,7 +217,7 @@
     .lb-empty {
       flex:1; display:flex; align-items:center; justify-content:center;
       font-family:'Cinzel',serif;
-      font-size:1.1rem; letter-spacing:0.18em;
+      font-size:1.4rem; letter-spacing:0.18em;
       text-transform:uppercase;
       color:rgba(201,162,39,0.35);
     }
@@ -227,8 +225,8 @@
     /* ── CONTESTS STRIP ── */
     .contests-strip {
       display:grid; grid-template-columns:1fr 1fr;
-      gap:12px;
-      padding:12px 32px;
+      gap:14px;
+      padding:14px 40px;
       border-top:1px solid rgba(201,162,39,0.18);
       background:rgba(0,0,0,0.30);
     }
@@ -236,24 +234,24 @@
       background:rgba(0,0,0,0.4);
       border:1px solid rgba(201,162,39,0.22);
       border-radius:3px;
-      padding:10px 16px;
+      padding:12px 20px;
       display:flex; align-items:center; justify-content:space-between;
     }
     .contest-label {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.52rem,0.85vw,0.65rem);
+      font-size:0.85rem;
       letter-spacing:0.16em; text-transform:uppercase;
       color:var(--gold-dim);
     }
     .contest-value {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.75rem,1.2vw,1.0rem);
+      font-size:1.2rem;
       color:var(--gold-light); font-weight:700;
       text-align:right;
     }
     .contest-value small {
       display:block;
-      font-size:clamp(0.48rem,0.75vw,0.60rem);
+      font-size:0.75rem;
       font-weight:400; color:var(--gold-dim);
       letter-spacing:0.10em;
     }
@@ -262,7 +260,7 @@
     .sponsor-ticker {
       background:rgba(0,0,0,0.55);
       border-top:1px solid rgba(201,162,39,0.25);
-      padding:10px 0;
+      padding:12px 0;
       overflow:hidden;
       position:relative;
     }
@@ -285,19 +283,18 @@
     }
     .ticker-label {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.55rem,0.9vw,0.68rem);
+      font-size:0.85rem;
       letter-spacing:0.14em; text-transform:uppercase;
-      color:var(--gold-dim);
-      flex-shrink:0;
+      color:var(--gold-dim); flex-shrink:0;
     }
     .ticker-sponsor {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.65rem,1.1vw,0.85rem);
+      font-size:1.0rem;
       letter-spacing:0.12em; text-transform:uppercase;
       color:var(--cream); flex-shrink:0;
     }
     .ticker-diamond {
-      width:5px; height:5px;
+      width:6px; height:6px;
       background:var(--gold); transform:rotate(45deg);
       flex-shrink:0;
     }
@@ -305,17 +302,29 @@
     /* Clock */
     .clock {
       font-family:'Cinzel',serif;
-      font-size:clamp(0.6rem,1vw,0.8rem);
+      font-size:1.0rem;
       color:var(--gold-dim); letter-spacing:0.12em;
     }
 
+    /* Home link */
+    .home-link {
+      font-family:'Cinzel',serif;
+      font-size:0.85rem; letter-spacing:0.14em;
+      text-transform:uppercase;
+      color:rgba(201,162,39,0.55);
+      text-decoration:none;
+      transition:color 0.2s;
+      display:block; margin-top:4px;
+    }
+    .home-link:hover { color:var(--gold); }
+
     /* Refresh countdown */
     .refresh-indicator {
-      position:fixed; bottom:14px; right:20px;
+      position:fixed; bottom:16px; right:24px;
       font-family:'Cinzel',serif;
-      font-size:0.52rem; letter-spacing:0.12em;
+      font-size:0.75rem; letter-spacing:0.12em;
       text-transform:uppercase;
-      color:rgba(201,162,39,0.30);
+      color:rgba(201,162,39,0.35);
       z-index:20;
     }
   </style>
@@ -344,7 +353,7 @@
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
         <div class="live-badge"><div class="live-dot"></div>Live</div>
         <div class="clock" id="clock">—</div>
-        <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(201,162,39,0.45);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(201,162,39,0.45)'">← Tournament Home</a>
+        <a href="index.html" class="home-link">← Tournament Home</a>
       </div>
     </div>
 
