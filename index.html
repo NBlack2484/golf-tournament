@@ -29,96 +29,101 @@
       z-index: 0;
     }
 
+    /* Lighter overlay so the course photo breathes */
     .bg::after {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%),
-        linear-gradient(to bottom, rgba(5,15,40,0.72) 0%, rgba(0,0,0,0.1) 45%, rgba(5,15,40,0.8) 100%);
+        radial-gradient(ellipse at center, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.4) 100%),
+        linear-gradient(to bottom, rgba(5,15,40,0.55) 0%, rgba(0,0,0,0.0) 40%, rgba(5,15,40,0.6) 100%);
     }
 
     .page {
       position: relative;
       z-index: 1;
       height: 100vh;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 20px 80px;
+      justify-items: center;
+      padding: 40px 20px;
     }
 
-    /* ── Logo — much larger ── */
+    /* ── Logo ── */
     .logo-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      padding-top: 48px;
-      animation: fadeDown 1s ease both;
+      align-self: start;
+      padding-top: 20px;
+      animation: fadeDown 0.9s ease both;
     }
 
     .logo-wrap img {
-      height: 320px;
+      height: min(38vh, 380px);
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 0 40px rgba(201,168,76,0.5)) drop-shadow(0 4px 20px rgba(0,0,0,0.8));
+      filter: drop-shadow(0 0 40px rgba(201,168,76,0.6)) drop-shadow(0 6px 24px rgba(0,0,0,0.9));
     }
 
-    /* ── Title block — larger text ── */
+    /* ── Title block ── */
     .title-block {
       text-align: center;
-      animation: fadeUp 1s 0.3s ease both;
+      animation: fadeUp 0.9s 0.25s ease both;
+      padding: 0 16px;
     }
 
     .eyebrow {
       font-family: 'Cinzel', serif;
-      font-size: 1.1rem;
+      font-size: clamp(0.9rem, 1.5vw, 1.2rem);
       font-weight: 600;
-      letter-spacing: 0.35em;
+      letter-spacing: 0.3em;
       color: var(--gold);
       text-transform: uppercase;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .event-title {
       font-family: 'Cinzel Decorative', serif;
-      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-size: clamp(2.8rem, 6vw, 6rem);
       font-weight: 900;
       color: #fff;
-      line-height: 1.1;
-      text-shadow: 0 2px 30px rgba(0,0,0,0.8), 0 0 60px rgba(201,168,76,0.2);
-      letter-spacing: 0.04em;
+      line-height: 1.15;
+      text-shadow: 0 4px 40px rgba(0,0,0,0.9), 0 0 80px rgba(201,168,76,0.25);
+      letter-spacing: 0.03em;
     }
 
     .divider {
-      width: 260px;
+      width: 300px;
       height: 2px;
-      margin: 24px auto;
+      margin: 22px auto;
       background: linear-gradient(to right, transparent, var(--gold), transparent);
     }
 
     .subtitle {
       font-family: 'Cinzel', serif;
-      font-size: clamp(1rem, 2.2vw, 1.4rem);
-      color: rgba(255,255,255,0.75);
-      letter-spacing: 0.2em;
+      font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.25em;
       text-transform: uppercase;
     }
 
-    /* ── CTA — larger button ── */
+    /* ── CTA ── */
     .cta-wrap {
-      animation: fadeUp 1s 0.6s ease both;
+      align-self: end;
+      padding-bottom: 10px;
+      animation: fadeUp 0.9s 0.5s ease both;
     }
 
     .enter-button {
       display: inline-block;
-      padding: 22px 80px;
+      padding: clamp(16px, 2.5vh, 24px) clamp(48px, 6vw, 90px);
       font-family: 'Cinzel', serif;
-      font-size: 1.4rem;
+      font-size: clamp(1rem, 1.8vw, 1.5rem);
       font-weight: 600;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--navy);
       background: linear-gradient(135deg, var(--gold-light), var(--gold));
@@ -126,9 +131,9 @@
       border-radius: 4px;
       text-decoration: none;
       box-shadow:
-        0 0 0 1px rgba(201,168,76,0.5),
-        0 8px 32px rgba(0,0,0,0.5),
-        0 0 60px rgba(201,168,76,0.15);
+        0 0 0 2px rgba(201,168,76,0.6),
+        0 10px 40px rgba(0,0,0,0.6),
+        0 0 80px rgba(201,168,76,0.2);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -139,34 +144,33 @@
       position: absolute;
       top: 0; left: -100%;
       width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
       transition: left 0.5s ease;
     }
 
     .enter-button:hover::before { left: 100%; }
 
     .enter-button:hover {
-      background: linear-gradient(135deg, #f0d98a, var(--gold-light));
-      box-shadow:
-        0 0 0 1px rgba(201,168,76,0.8),
-        0 12px 40px rgba(0,0,0,0.6),
-        0 0 80px rgba(201,168,76,0.3);
+      background: linear-gradient(135deg, #f5e090, var(--gold-light));
       transform: translateY(-3px);
+      box-shadow:
+        0 0 0 2px rgba(201,168,76,0.9),
+        0 16px 48px rgba(0,0,0,0.7),
+        0 0 100px rgba(201,168,76,0.35);
     }
 
     @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-24px); }
+      from { opacity: 0; transform: translateY(-30px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
+      from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 768px) {
-      .logo-wrap img { height: 220px; }
-      .enter-button { padding: 18px 50px; font-size: 1.1rem; }
-      .page { padding-bottom: 60px; }
+      .logo-wrap img { height: min(28vh, 220px); }
+      .divider { width: 200px; }
     }
   </style>
 </head>
