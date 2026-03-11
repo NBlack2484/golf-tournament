@@ -6,23 +6,28 @@
   <title>STL Naturals Tournament</title>
   <style>
     /* Full-page background */
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      height: 100vh;
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
       background: url('assets/images/augusta.jpg') no-repeat center center fixed;
       background-size: cover;
-      font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
     }
 
-    /* Top banner */
+    /* Top banner overlay */
     .top-banner {
       width: 100%;
       max-height: 200px;
-      object-fit: contain; /* ensures no blur/stretch */
+      object-fit: contain;
       margin-top: 20px;
     }
 
@@ -37,8 +42,8 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
       text-decoration: none;
+      transition: background-color 0.3s ease;
     }
 
     .enter-button:hover {
@@ -58,10 +63,12 @@
   </style>
 </head>
 <body>
+
   <!-- Top Banner Overlay -->
   <img src="assets/images/stl_naturals_banner.png" alt="STL Naturals Tournament Banner" class="top-banner">
 
   <!-- Enter Tournament Button -->
   <a href="registration.html" class="enter-button">Enter Tournament</a>
+
 </body>
 </html>
