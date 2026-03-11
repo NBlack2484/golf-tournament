@@ -6,42 +6,40 @@
 <title>Golf Tournament Registration</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* Full-page Augusta background */
+  /* Full-page background */
   body {
     margin: 0;
-    padding: 0;
     min-height: 100vh;
-    background-image: url('assets/images/augusta.png');
-    background-size: cover;        /* fill screen */
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url('assets/images/augusta.png') no-repeat center center fixed;
+    background-size: cover;
     font-family: Arial, sans-serif;
   }
 
-  /* Overlay for readability, content flows from top */
+  /* Overlay for text readability */
   .overlay {
-    background-color: rgba(0, 0, 0, 0.2); /* subtle overlay */
     width: 100%;
     min-height: 100vh;
+    background-color: rgba(0,0,0,0.25); /* semi-transparent */
     padding: 2rem;
     box-sizing: border-box;
   }
 
-  /* Banner at top of page */
+  /* Banner */
   .banner {
-    width: 90%;          /* span across most of the screen */
-    max-width: 1200px;   /* maximum width */
-    height: auto;
-    max-height: 200px;   /* prevent huge banner */
     display: block;
-    margin: 0 auto 2rem auto; /* top centered */
+    margin: 0 auto;
+    width: 80%;          /* responsive width */
+    max-width: 1200px;
+    height: auto;
+    max-height: 150px;   /* limit height */
+    object-fit: contain;
   }
 
-  /* Heading and description */
+  /* Heading and paragraph */
   h1, p {
-    color: white;
     text-align: center;
-    margin: 0.5rem 0;
+    color: white;
+    margin: 1rem 0;
   }
 
   /* Enter Tournament button */
@@ -49,13 +47,13 @@
     display: block;
     margin: 2rem auto;
     padding: 12px 24px;
+    width: 220px;
+    text-align: center;
     background-color: #e63946;
     color: white;
     text-decoration: none;
     border-radius: 5px;
     font-size: 1.2rem;
-    width: 200px;
-    text-align: center;
   }
 
   .btn:hover {
@@ -65,14 +63,9 @@
 </head>
 <body>
   <div class="overlay">
-    <!-- Top banner -->
     <img src="assets/images/stl_naturals_banner.png" alt="St. Louis Naturals Banner" class="banner">
-
-    <!-- Page heading -->
     <h1>St. Louis Naturals Golf Tournament</h1>
     <p>Join us for a fun golf tournament!</p>
-
-    <!-- Enter Tournament button -->
     <a href="play.html" class="btn">Enter Tournament</a>
   </div>
 </body>
