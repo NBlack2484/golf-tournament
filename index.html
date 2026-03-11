@@ -23,17 +23,18 @@
       justify-content: flex-start;
     }
 
-    /* Full-width stretched banner */
+    /* Top banner stretched full width with fixed height */
     .top-banner {
       width: 100%;
-      height: auto;
+      height: 200px; /* Fixed height for the banner */
+      object-fit: cover;
       display: block;
       margin-top: 20px;
     }
 
     /* Enter Tournament button */
     .enter-button {
-      margin-top: 100px;
+      margin-top: 50px;  /* Adjust the space between the banner and button */
       padding: 20px 40px;
       font-size: 2rem;
       font-weight: bold;
@@ -55,6 +56,9 @@
       .enter-button {
         font-size: 1.5rem;
         padding: 15px 30px;
+      }
+      .top-banner {
+        height: 150px; /* Slightly smaller on mobile */
       }
     }
   </style>
