@@ -1,1 +1,61 @@
 
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* dark overlay for readability */
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+header, footer {
+  text-align: center;
+  padding: 1rem;
+}
+
+.banner {
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+  display: block;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e63946;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: #d62828;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+table, th, td {
+  border: 1px solid white;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+
+h1, h2 {
+  margin-top: 0;
+}
+
