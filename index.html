@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STL Naturals Golf Tournament · Oak Valley</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <style>body { background: url("assets/images/augusta.jpg") no-repeat center center fixed; background-size: cover; }</style>
+  <style>
+    /* Page-specific layout */
+    .main-wrap {
+      position: relative; z-index: 10;
+      width: min(820px, 92%);
+      margin: 0 auto;
+      padding-bottom: 60px;
+      animation: contentRise 0.9s 0.2s ease both;
+    }
+    @keyframes contentRise {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* Hero section */
+    .hero {
+      text-align: center;
+      padding: 8px 0 40px;
+    }
+    .hero-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.9rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.12;
+      color: var(--cream);
+      text-shadow: 0 2px 24px rgba(0,0,0,0.7);
+      margin-bottom: 10px;
+    }
+    .hero-title span { color: var(--gold-light); }
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+      font-style: italic;
+      color: var(--cream-dim);
+      margin-bottom: 32px;
+    }
+    .hero-cta-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Info grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px 36px;
+    }
+    .info-item label {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.8;
+      margin-bottom: 6px;
+    }
+    .info-item span {
+      font-size: 1.08rem;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.35;
+    }
+
+    /* Rules / format */
+    .rule-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px 28px;
+    }
+    .rule-list li {
+      font-size: 1.02rem;
+      color: #d0c8b4;
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .rule-list li::before {
+      content: '';
+      position: absolute; left: 0; top: 0.55em;
+      width: 5px; height: 5px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* CTA banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(201,162,39,0.12) 0%, rgba(201,162,39,0.04) 100%);
+      border: 1px solid rgba(201,162,39,0.35);
+      border-radius: 3px;
+      padding: 36px 40px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .cta-banner h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      color: var(--gold-light);
+      margin-bottom: 10px;
+    }
+    .cta-banner p {
+      font-size: 1.08rem;
+      font-style: italic;
+      color: var(--cream-dim);
+      margin-bottom: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <img class="logo-naturals"
+         src="https://images.squarespace-cdn.com/content/v1/65b2759817ce66234d372a27/f8b60d78-fc73-4e77-85c6-7595dfb53e17/Nats-Logo.png"
+         alt="St. Louis Naturals">
+    <div class="logo-divider"></div>
+    <img class="logo-oakvalley"
+         src="assets/images/oakvalley_logo.png"
+         alt="Oak Valley Golf Course & Resort">
+  </header>
+
+  <div class="gold-rule"><div class="gold-rule-diamond"></div></div>
+  <p class="site-tagline">Presented by St. Louis Naturals &nbsp;·&nbsp; Oak Valley Golf Course &amp; Resort</p>
+
+  <!-- MAIN -->
+  <main class="main-wrap">
+
+    <!-- Hero -->
+    <div class="hero">
+      <p class="hero-eyebrow">Annual Charity Golf Tournament</p>
+      <h1 class="hero-title">STL Naturals<br><span>Golf Classic</span></h1>
+      <p class="hero-subtitle">Oak Valley Golf Course &amp; Resort &nbsp;·&nbsp; 2026</p>
+      <div class="hero-cta-wrap">
+        <a href="register.html" class="btn btn-gold">Enter Tournament</a>
+        <a href="sponsor.html" class="btn btn-outline">Become a Sponsor</a>
+        <a href="leaderboard.html" target="_blank" class="btn btn-outline">Live Leaderboard</a>
+        <a href="admin.html" class="btn btn-outline" style="font-size:0.55rem;padding:10px 22px;opacity:0.6;">Admin</a>
+      </div>
+    </div>
+
+    <!-- Tournament Info -->
+    <div class="card">
+      <div class="card-title">Tournament Details</div>
+      <div class="info-grid">
+        <div class="info-item"><label>Venue</label><span>Oak Valley Golf Course &amp; Resort</span></div>
+        <div class="info-item"><label>Format</label><span>4-Man Team Stroke Play</span></div>
+        <div class="info-item"><label>Date</label><span>TBD — 2026</span></div>
+        <div class="info-item"><label>Start Time</label><span>Shotgun Start, 8:00 AM</span></div>
+        <div class="info-item"><label>Entry Fee</label><span>$100 per Player</span></div>
+        <div class="info-item"><label>Team Size</label><span>4 Players per Team</span></div>
+        <div class="info-item"><label>Location</label><span>Hillsboro, Missouri</span></div>
+        <div class="info-item"><label>Payment</label><span>Venmo at Registration</span></div>
+      </div>
+    </div>
+
+    <!-- Format & Rules -->
+    <div class="card">
+      <div class="card-title">Format &amp; Rules</div>
+      <ul class="rule-list">
+        <li>Teams consist of exactly 4 players</li>
+        <li>Players may register individually under a team name</li>
+        <li>All 4 team members must be registered &amp; paid to be eligible</li>
+        <li>$100 entry fee per player — payable via Venmo at registration</li>
+        <li>Teams may be created or joined during registration</li>
+        <li>Prizes awarded to top gross and net finishing teams</li>
+        <li>Skills contests: Longest Drive &amp; Closest to the Pin</li>
+        <li>All players must follow USGA rules of golf</li>
+      </ul>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h2>Ready to Play?</h2>
+      <p>Register your team today — spots are limited.</p>
+      <a href="register.html" class="btn btn-gold">Enter Tournament &rarr;</a>
+      &nbsp;&nbsp;
+      <a href="sponsor.html" class="btn btn-outline">Sponsor the Event &rarr;</a>
+      &nbsp;&nbsp;
+      <a href="leaderboard.html" target="_blank" class="btn btn-outline">Live Leaderboard &rarr;</a>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; 2026 STL Naturals Golf Classic &nbsp;&bull;&nbsp; Oak Valley Golf Course &amp; Resort &nbsp;&bull;&nbsp; All Rights Reserved
+  </footer>
+
+</body>
+</html>
