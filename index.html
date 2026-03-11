@@ -6,7 +6,7 @@
 <title>Golf Tournament Registration</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* Full-page Augusta background */
+  /* Full-screen Augusta background */
   body {
     margin: 0;
     padding: 0;
@@ -18,7 +18,7 @@
     font-family: Arial, sans-serif;
   }
 
-  /* Overlay only for readability, don't center vertically */
+  /* Overlay for readability (covers entire page but doesn't vertically center) */
   .overlay {
     background-color: rgba(0, 0, 0, 0.2); /* subtle overlay */
     width: 100%;
@@ -27,27 +27,24 @@
     box-sizing: border-box;
   }
 
-  /* Banner at the top */
+  /* Banner at the top (fixed height, responsive width) */
   .banner {
-    width: 90%;          /* banner spans across most of the screen */
-    max-width: 1200px;   /* cap maximum size */
-    height: auto;
+    width: 90%;          /* span across most of the screen */
+    max-width: 1200px;   /* cap max width */
+    height: 120px;       /* fixed height */
+    object-fit: contain; /* preserve aspect ratio */
     display: block;
-    margin: 0 auto 2rem auto;  /* top centered with bottom margin */
+    margin: 0 auto 2rem auto; /* center horizontally, margin bottom */
   }
 
-  /* Heading and button */
-  h1 {
+  /* Heading and description */
+  h1, p {
     color: white;
     text-align: center;
-    margin: 1rem 0;
+    margin: 0.5rem 0;
   }
 
-  p {
-    color: white;
-    text-align: center;
-  }
-
+  /* Enter Tournament button */
   .btn {
     display: block;
     margin: 2rem auto;
@@ -71,7 +68,7 @@
     <!-- Top banner -->
     <img src="assets/images/stl_naturals_banner.png" alt="St. Louis Naturals Banner" class="banner">
 
-    <!-- Heading -->
+    <!-- Page heading -->
     <h1>St. Louis Naturals Golf Tournament</h1>
     <p>Join us for a fun golf tournament!</p>
 
@@ -80,4 +77,3 @@
   </div>
 </body>
 </html>
-
