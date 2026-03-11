@@ -342,6 +342,9 @@
       <div id="panel-sponsors" class="tab-panel">
         <div class="card">
           <div class="card-title">Registered Sponsors</div>
+          <p style="font-style:italic;color:rgba(255,255,255,0.45);font-size:0.88rem;margin-bottom:16px;">
+            💡 To add a sponsor logo: upload the image file to <code style="background:#111;padding:2px 6px;border-radius:2px;color:var(--gold);">assets/images/sponsors/</code> in your GitHub repo, then enter the filename below.
+          </p>
           <div class="table-wrap">
             <table>
               <thead>
@@ -353,6 +356,7 @@
                   <th class="center">Package</th>
                   <th>Team Name</th>
                   <th>Registered</th>
+                  <th>Logo File</th>
                   <th class="center">Status</th>
                   <th class="center">Actions</th>
                 </tr>
@@ -706,6 +710,13 @@
           <td class="center"><span class="badge ${Number(s.tier)===700?'badge-full':'badge-open'}">${Number(s.tier)===700?'Sponsor+Play ($700)':'Tee Box ($300)'}</span></td>
           <td style="color:var(--gold-dim);font-style:italic;">${s.teamName?esc(s.teamName):'—'}</td>
           <td style="color:#888;font-size:0.85rem;">${fmtDate(s.registeredAt)}</td>
+          <td>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <input type="text" id="logo-${s.id}" value="${esc(s.logoFile||'')}" placeholder="logo.png"
+                style="background:#111;border:1px solid #333;border-radius:2px;color:#fff;font-size:0.85rem;padding:5px 8px;width:110px;outline:none;">
+              <button class="btn-sm btn-sm-pay" onclick="saveSponsorLogo('${s.id}')">Set</button>
+            </div>
+          </td>
           <td class="center"><span class="badge ${isPaid?'badge-paid':'badge-unpaid'}">${isPaid?'Paid':'Unpaid'}</span></td>
           <td class="center" style="white-space:nowrap;">
             ${isPaid
@@ -716,6 +727,12 @@
           </td>
         </tr>`;
       }).join('');
+    }
+
+    async function saveSponsorLogo(id) {
+      const filename = document.getElementById(`logo-${id}`).value.trim();
+      await DB.setSponsorLogo(id, filename);
+      await refreshAndRender(() => renderSponsors());
     }
 
     async function toggleSponsorPaid(id, paid) {

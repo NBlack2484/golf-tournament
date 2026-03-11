@@ -260,45 +260,75 @@
 
     /* ── SPONSOR TICKER ── */
     .sponsor-ticker {
-      background:rgba(0,0,0,0.55);
+      background:rgba(0,0,0,0.65);
       border-top:1px solid rgba(201,162,39,0.25);
-      padding:12px 0;
+      padding:14px 0;
       overflow:hidden;
       position:relative;
+      height: 90px;
+      display: flex;
+      align-items: center;
     }
     .sponsor-ticker::before, .sponsor-ticker::after {
       content:'';
-      position:absolute; top:0; bottom:0; width:60px;
+      position:absolute; top:0; bottom:0; width:80px;
       z-index:2; pointer-events:none;
     }
-    .sponsor-ticker::before { left:0;  background:linear-gradient(to right, rgba(0,0,0,0.6), transparent); }
-    .sponsor-ticker::after  { right:0; background:linear-gradient(to left,  rgba(0,0,0,0.6), transparent); }
+    .sponsor-ticker::before { left:0;  background:linear-gradient(to right, rgba(0,0,0,0.8), transparent); }
+    .sponsor-ticker::after  { right:0; background:linear-gradient(to left,  rgba(0,0,0,0.8), transparent); }
 
     .ticker-track {
       display:flex; align-items:center; gap:60px;
       white-space:nowrap;
-      animation:tickerScroll 30s linear infinite;
+      animation:tickerScroll 40s linear infinite;
     }
     @keyframes tickerScroll {
       from { transform:translateX(0); }
       to   { transform:translateX(-50%); }
     }
+
     .ticker-label {
       font-family:'Cinzel',serif;
       font-size:0.85rem;
       letter-spacing:0.14em; text-transform:uppercase;
       color:var(--gold-dim); flex-shrink:0;
     }
-    .ticker-sponsor {
-      font-family:'Cinzel',serif;
-      font-size:1.0rem;
-      letter-spacing:0.12em; text-transform:uppercase;
-      color:var(--cream); flex-shrink:0;
-    }
     .ticker-diamond {
       width:6px; height:6px;
       background:var(--gold); transform:rotate(45deg);
       flex-shrink:0;
+    }
+
+    /* Sponsor item — logo + name */
+    .ticker-item {
+      display:inline-flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      flex-shrink:0;
+    }
+    .ticker-item img {
+      height:40px;
+      width:auto;
+      max-width:120px;
+      object-fit:contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+    .ticker-item span {
+      font-family:'Cinzel',serif;
+      font-size:0.75rem;
+      letter-spacing:0.10em; text-transform:uppercase;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    /* Name-only fallback (no logo) */
+    .ticker-name-only {
+      font-family:'Cinzel',serif;
+      font-size:1.0rem;
+      letter-spacing:0.12em; text-transform:uppercase;
+      color:#fff; flex-shrink:0;
     }
 
     /* Clock */
@@ -475,12 +505,27 @@
 
     function renderTicker(sponsors) {
       const track = document.getElementById('ticker-track');
-      const items = (sponsors && sponsors.length > 0)
-        ? sponsors
-        : ['Presenting Sponsor', 'Gold Sponsor', 'Silver Sponsor', 'Community Partner'];
       const divider = `<div class="ticker-diamond"></div>`;
       const label   = `<span class="ticker-label">Our Sponsors</span>${divider}`;
-      const sponsorHtml = items.map(name => `<span class="ticker-sponsor">${esc(name)}</span>${divider}`).join('');
+
+      let items;
+      if (sponsors && sponsors.length > 0) {
+        items = sponsors.map(s => {
+          if (s.logoFile) {
+            return `<div class="ticker-item">
+              <img src="assets/images/sponsors/${esc(s.logoFile)}" alt="${esc(s.name)}" onerror="this.style.display='none'">
+              <span>${esc(s.name)}</span>
+            </div>`;
+          }
+          return `<span class="ticker-name-only">${esc(s.name)}</span>`;
+        });
+      } else {
+        items = ['Presenting Sponsor','Gold Sponsor','Silver Sponsor','Community Partner']
+          .map(n => `<span class="ticker-name-only">${n}</span>`);
+      }
+
+      const sponsorHtml = items.map(item => item + divider).join('');
+      // Double for seamless loop
       track.innerHTML = label + sponsorHtml + label + sponsorHtml;
     }
 
