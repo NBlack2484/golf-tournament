@@ -1,67 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Golf Tournament Registration</title>
-<link rel="stylesheet" href="css/style.css">
-<style>
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background: url('assets/images/augusta.jpg') no-repeat center center fixed;
-    background-size: cover;
-    font-family: Arial, sans-serif;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STL Naturals Tournament</title>
+  <style>
+    /* Full-page background */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: url('augusta.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  .overlay {
-    width: 100%;
-    min-height: 100vh;
-    background-color: rgba(0,0,0,0.25);
-    padding: 2rem;
-    box-sizing: border-box;
-  }
+    /* Top banner */
+    .top-banner {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain; /* ensures no blur/stretch */
+      margin-top: 20px;
+    }
 
-  .banner {
-    display: block;
-    margin: 0 auto;
-    width: 80%;
-    max-width: 1200px;
-    height: auto;
-    max-height: 150px;
-    object-fit: contain;
-  }
+    /* Enter Tournament button */
+    .enter-button {
+      margin-top: 100px;
+      padding: 20px 40px;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      background-color: rgba(0, 123, 255, 0.85);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
 
-  h1, p {
-    text-align: center;
-    color: white;
-    margin: 1rem 0;
-  }
+    .enter-button:hover {
+      background-color: rgba(0, 123, 255, 1);
+    }
 
-  .btn {
-    display: block;
-    margin: 2rem auto;
-    padding: 12px 24px;
-    width: 220px;
-    text-align: center;
-    background-color: #e63946;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
-  }
-
-  .btn:hover {
-    background-color: #d62828;
-  }
-</style>
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .enter-button {
+        font-size: 1.5rem;
+        padding: 15px 30px;
+      }
+      .top-banner {
+        max-height: 150px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="overlay">
-    <img src="assets/images/stl_naturals_banner.png" alt="St. Louis Naturals Banner" class="banner">
-    <h1>St. Louis Naturals Golf Tournament</h1>
-    <p>Join us for a fun golf tournament!</p>
-    <a href="play.html" class="btn">Enter Tournament</a>
-  </div>
+  <!-- Top Banner Overlay -->
+  <img src="stl_naturals_banner.png" alt="STL Naturals Tournament Banner" class="top-banner">
+
+  <!-- Enter Tournament Button -->
+  <a href="registration.html" class="enter-button">Enter Tournament</a>
 </body>
 </html>
