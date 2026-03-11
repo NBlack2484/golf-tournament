@@ -5,23 +5,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Golf Tournament Registration</title>
 <link rel="stylesheet" href="css/style.css">
-<style> body { background-image: url('assets/images/augusta.png'); } </style>
+<style>
+  /* Full-screen background for the page */
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* full viewport height */
+    background-image: url('assets/images/augusta.png');
+    background-size: cover;       /* fill screen */
+    background-position: center;  /* center the image */
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Overlay to add optional dark layer and center content */
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.3); /* light overlay for readability */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;  /* start at top */
+    align-items: center;           /* center horizontally */
+    text-align: center;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  /* Banner at the top of the page */
+  .banner {
+    width: 100%;
+    max-width: 1200px;  /* span across screen but maintain max width */
+    height: auto;
+    margin-bottom: 2rem;
+  }
+
+  /* Enter Tournament button styling */
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    margin-top: 2rem;
+    background-color: #e63946;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+  }
+
+  .btn:hover {
+    background-color: #d62828;
+  }
+
+</style>
 </head>
 <body>
   <div class="overlay">
-    <header>
-      <img src="assets/images/stl_naturals_banner.png" alt="St. Louis Naturals Golf Tournament Banner" class="banner">
-    </header>
+    <!-- Top page banner -->
+    <img src="assets/images/stl_naturals_banner.png" alt="St. Louis Naturals Banner" class="banner">
 
-    <main>
-      <h2>Register Now</h2>
-      <p>Join us for a fun golf tournament!</p>
-      <a href="play.html" class="btn">Enter Tournament</a>
-    </main>
+    <!-- Page heading -->
+    <h1>St. Louis Naturals Golf Tournament</h1>
+    <p>Join us for a fun golf tournament!</p>
 
-    <footer>
-      <p>© 2026 St. Louis Naturals</p>
-    </footer>
+    <!-- Enter Tournament button -->
+    <a href="play.html" class="btn">Enter Tournament</a>
   </div>
 </body>
 </html>
+
