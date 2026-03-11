@@ -8,30 +8,26 @@
 <style>
   body {
     margin: 0;
-    padding: 0;
     min-height: 100vh;
-    background-image: url('assets/images/cypress_point.png');
+    background: url('assets/images/cypress_point.jpg') no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     font-family: Arial, sans-serif;
   }
 
   .overlay {
-    background-color: rgba(0,0,0,0.4);
     width: 100%;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    text-align: center;
+    background-color: rgba(0,0,0,0.35);
     padding: 2rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   h1 {
     color: white;
+    text-align: center;
     margin-bottom: 1rem;
   }
 
@@ -52,6 +48,20 @@
   th {
     background-color: #e63946;
     color: white;
+  }
+
+  .btn {
+    display: block;
+    margin-top: 2rem;
+    padding: 12px 24px;
+    background-color: #e63946;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  .btn:hover {
+    background-color: #d62828;
   }
 </style>
 </head>
@@ -74,9 +84,8 @@
         <td>5</td>
         <td>30</td>
       </tr>
-      <!-- Additional players dynamically added later -->
     </table>
+    <a href="tv.html" class="btn">Full Screen Leaderboard</a>
   </div>
 </body>
 </html>
-
