@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sponsorship · STL Naturals Golf Classic</title>
-  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/shared.css?v=2">
   <style>body { background: url("assets/images/augusta.jpg") no-repeat center center fixed; background-size: cover; }</style>
   <style>
     .main-wrap {
@@ -20,16 +22,15 @@
     }
 
     .back-link {
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex; align-items: center; gap: 10px;
       font-family:'Cinzel',serif;
-      font-size:0.80rem; letter-spacing:0.14em;
+      font-size:1.0rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--gold);
-      opacity: 0.7;
       text-decoration:none; margin-bottom:32px;
-      transition: opacity 0.2s;
+      transition: color 0.2s;
     }
-    .back-link:hover { opacity: 1; }
-    .back-link::before { content:'←'; font-size:1rem; }
+    .back-link:hover { color:var(--gold-light); }
+    .back-link::before { content:'←'; font-size:1.1rem; }
 
     /* Tier cards */
     .tier-grid {
