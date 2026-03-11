@@ -3,7 +3,7 @@
    Replace SCRIPT_URL below with your deployed Apps Script URL
 ═══════════════════════════════════════════════════════════ */
 
-const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLatnJUBpfwdN1jnPCvGQBVKgxiO6kRa12IwUt6g5XH-3ceXKPMnpfhallMEGoJq8/exec';
 
 const DB = {
 
