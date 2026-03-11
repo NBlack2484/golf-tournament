@@ -3,7 +3,7 @@
    Replace SCRIPT_URL below with your deployed Apps Script URL
 ═══════════════════════════════════════════════════════════ */
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPIR55VbI6Q_hhBnLVAnY9l7jBJw1w9otE-NowTChcLatQkgOUmBYHXji4UR0CSQg/exec';
+const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
 
 const DB = {
 
@@ -65,6 +65,10 @@ const DB = {
 
   async deletePlayer(id) {
     return this.post({ action: 'deletePlayer', id });
+  },
+
+  async setSponsorLogo(id, logoFile) {
+    return this.post({ action: 'setSponsorLogo', id, logoFile });
   },
 
   async setSponsorPaid(id, paid) {
