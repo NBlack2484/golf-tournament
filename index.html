@@ -6,41 +6,41 @@
 <title>Golf Tournament Registration</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* Full-screen background for the page */
+  /* Full-screen background */
   body {
     margin: 0;
     padding: 0;
-    height: 100vh; /* full viewport height */
+    min-height: 100vh;
     background-image: url('assets/images/augusta.png');
-    background-size: cover;       /* fill screen */
-    background-position: center;  /* center the image */
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
     font-family: Arial, sans-serif;
   }
 
-  /* Overlay to add optional dark layer and center content */
+  /* Overlay to make content readable and centered */
   .overlay {
-    background-color: rgba(0, 0, 0, 0.3); /* light overlay for readability */
+    background-color: rgba(0,0,0,0.3); /* semi-transparent overlay */
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;  /* start at top */
-    align-items: center;           /* center horizontally */
+    justify-content: flex-start;  /* start near top */
+    align-items: center;          /* horizontal center */
     text-align: center;
     padding: 2rem;
     box-sizing: border-box;
   }
 
-  /* Banner at the top of the page */
+  /* Banner image at top of page */
   .banner {
-    width: 100%;
-    max-width: 1200px;  /* span across screen but maintain max width */
-    height: auto;
+    width: 70%;          /* responsive width */
+    max-width: 1000px;   /* limit max width */
+    height: auto;        /* keep aspect ratio */
     margin-bottom: 2rem;
   }
 
-  /* Enter Tournament button styling */
+  /* Enter Tournament button */
   .btn {
     display: inline-block;
     padding: 12px 24px;
@@ -56,14 +56,18 @@
     background-color: #d62828;
   }
 
+  h1, p {
+    color: white; /* text readable on top of background */
+    margin: 0.5rem 0;
+  }
 </style>
 </head>
 <body>
   <div class="overlay">
-    <!-- Top page banner -->
+    <!-- Top banner -->
     <img src="assets/images/stl_naturals_banner.png" alt="St. Louis Naturals Banner" class="banner">
 
-    <!-- Page heading -->
+    <!-- Heading and info -->
     <h1>St. Louis Naturals Golf Tournament</h1>
     <p>Join us for a fun golf tournament!</p>
 
