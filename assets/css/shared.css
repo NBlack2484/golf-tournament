@@ -88,7 +88,7 @@ body {
   text-align:center;
   font-family:'Cinzel',serif;
   font-size:1.0rem; letter-spacing:0.22em;
-  text-transform:uppercase; color:var(--gold);
+  text-transform:uppercase; color:#ffffff;
   margin-bottom: 36px;
   padding: 0 16px;
 }
