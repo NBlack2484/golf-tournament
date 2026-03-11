@@ -402,17 +402,17 @@
 
   <script src="assets/js/storage.js"></script>
   <script>
-    let refreshTimer = 30;
+    let refreshTimer = 10;
 
     async function loadLeaderboard() {
-      const board    = await DB.getLeaderboard();
-      const contests = await DB.getContests();
-      const course   = await DB.getCourse();
-      const par      = course.pars.reduce((a,b)=>a+b,0);
-
-      renderBoard(board, par);
-      renderContests(contests);
-      await renderTicker();
+      try {
+        const data = await DB.getLeaderboard();
+        renderBoard(data.board, data.totalPar);
+        renderContests(data.contests);
+        renderTicker(data.sponsors);
+      } catch(e) {
+        console.warn('Leaderboard fetch failed:', e);
+      }
     }
 
     function renderBoard(board, totalPar) {
@@ -463,40 +463,24 @@
     function renderContests(contests) {
       const ld  = contests['longest_drive'];
       const ctp = contests['closest_to_pin'];
-
       const ldEl  = document.getElementById('ld-value');
       const ctpEl = document.getElementById('ctp-value');
-
       if (ld && ld.player) {
         ldEl.innerHTML = `${esc(ld.player)}<small>Hole ${esc(String(ld.hole||''))} ${ld.distance?'· '+esc(ld.distance):''}</small>`;
-      } else {
-        ldEl.innerHTML = '<small>Awaiting Results</small>';
-      }
-
+      } else { ldEl.innerHTML = '<small>Awaiting Results</small>'; }
       if (ctp && ctp.player) {
         ctpEl.innerHTML = `${esc(ctp.player)}<small>Hole ${esc(String(ctp.hole||''))} ${ctp.distance?'· '+esc(ctp.distance):''}</small>`;
-      } else {
-        ctpEl.innerHTML = '<small>Awaiting Results</small>';
-      }
+      } else { ctpEl.innerHTML = '<small>Awaiting Results</small>'; }
     }
 
-    async function renderTicker() {
-      const sponsors = await DB.getSponsors();
-      const track    = document.getElementById('ticker-track');
-
-      // Build sponsor list — use registered sponsors or fallback placeholder
-      const items = sponsors.length > 0
-        ? sponsors.map(s => s.bizName || s.contactName)
+    function renderTicker(sponsors) {
+      const track = document.getElementById('ticker-track');
+      const items = (sponsors && sponsors.length > 0)
+        ? sponsors
         : ['Presenting Sponsor', 'Gold Sponsor', 'Silver Sponsor', 'Community Partner'];
-
       const divider = `<div class="ticker-diamond"></div>`;
       const label   = `<span class="ticker-label">Our Sponsors</span>${divider}`;
-
-      const sponsorHtml = items.map(name =>
-        `<span class="ticker-sponsor">${esc(name)}</span>${divider}`
-      ).join('');
-
-      // Double it so scroll loops seamlessly
+      const sponsorHtml = items.map(name => `<span class="ticker-sponsor">${esc(name)}</span>${divider}`).join('');
       track.innerHTML = label + sponsorHtml + label + sponsorHtml;
     }
 
@@ -510,7 +494,7 @@
       refreshTimer--;
       document.getElementById('countdown').textContent = refreshTimer;
       if (refreshTimer <= 0) {
-        refreshTimer = 30;
+        refreshTimer = 10;
         loadLeaderboard();
       }
     }

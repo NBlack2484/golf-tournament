@@ -278,23 +278,20 @@
 
     async function loadTeams() {
       const sel = document.getElementById('team-select');
-      const teams = await DB.getTeams();
-      const players = await DB.getPlayers();
-      sel.innerHTML = '<option value="">— Select a team —</option>';
-
-      const teamNames = Object.keys(teams).sort();
-      for (const name of teamNames) {
-        const count = players.filter(p => p.team === name).length;
-        if (count < 4) {
+      sel.innerHTML = '<option value="">Loading teams...</option>';
+      try {
+        const teams = await DB.getTeams();
+        sel.innerHTML = '<option value="">— Select a team —</option>';
+        const open = teams.filter(t => t.memberCount < 4);
+        for (const t of open) {
           const opt = document.createElement('option');
-          opt.value = name;
-          opt.textContent = `${name} (${count}/4 players)`;
+          opt.value = t.name;
+          opt.textContent = `${t.name} (${t.memberCount}/4 players)`;
           sel.appendChild(opt);
         }
-      }
-
-      if (teamNames.filter(t => players.filter(p=>p.team===t).length < 4).length === 0) {
-        setTeamMode('new'); // no open teams — switch to create
+        if (open.length === 0) setTeamMode('new');
+      } catch(e) {
+        sel.innerHTML = '<option value="">— Could not load teams —</option>';
       }
     }
 
@@ -303,18 +300,19 @@
       const statusEl = document.getElementById('team-status');
       const teamName = sel.value;
       if (!teamName) { statusEl.className = 'team-status'; return; }
-
-      const players = await DB.getPlayers();
-      const count = players.filter(p => p.team === teamName).length;
-
-      if (count >= 4) {
-        statusEl.textContent = `⚠ ${teamName} is already full (4/4 players). Please choose another team.`;
-        statusEl.className = 'team-status show warn';
-        sel.value = '';
-      } else {
-        statusEl.textContent = `✓ ${teamName} has ${count}/4 players — ${4 - count} spot${4-count===1?'':'s'} remaining.`;
-        statusEl.className = 'team-status show ok';
-      }
+      try {
+        const teams = await DB.getTeams();
+        const t = teams.find(x => x.name === teamName);
+        const count = t ? t.memberCount : 0;
+        if (count >= 4) {
+          statusEl.textContent = `⚠ ${teamName} is already full (4/4 players).`;
+          statusEl.className = 'team-status show warn';
+          sel.value = '';
+        } else {
+          statusEl.textContent = `✓ ${teamName} has ${count}/4 players — ${4-count} spot${4-count===1?'':'s'} remaining.`;
+          statusEl.className = 'team-status show ok';
+        }
+      } catch(e) {}
     }
 
     function showAlert(msg, type) {
@@ -323,9 +321,7 @@
       el.className = `alert alert-${type} show`;
       el.scrollIntoView({ behavior:'smooth', block:'nearest' });
     }
-    function hideAlert() {
-      document.getElementById('alert-box').className = 'alert';
-    }
+    function hideAlert() { document.getElementById('alert-box').className = 'alert'; }
 
     async function submitRegistration() {
       hideAlert();
@@ -339,52 +335,52 @@
       if (!email || !email.includes('@')) return showAlert('Please enter a valid email address.', 'error');
       if (!paid)  return showAlert('Please confirm your Venmo payment before completing registration.', 'error');
 
-      let teamName = '';
-      let isNewTeam = false;
+      let teamName = '', isNewTeam = false;
 
       if (teamMode === 'join') {
         teamName = document.getElementById('team-select').value;
         if (!teamName) return showAlert('Please select a team to join.', 'error');
-        // Double-check not full
-        const players = await DB.getPlayers();
-        const count = players.filter(p => p.team === teamName).length;
-        if (count >= 4) return showAlert('That team is now full. Please select a different team.', 'error');
+        const teams = await DB.getTeams();
+        const t = teams.find(x => x.name === teamName);
+        if (t && t.memberCount >= 4) return showAlert('That team is now full. Please select a different team.', 'error');
       } else {
         teamName = document.getElementById('new-team-name').value.trim();
         if (!teamName) return showAlert('Please enter a team name.', 'error');
-        // Check name not already taken
-        const existing = await DB.getTeamNames();
-        if (existing.map(t=>t.toLowerCase()).includes(teamName.toLowerCase())) {
-          return showAlert('That team name is already taken. Please join it from the "Join Existing Team" tab or choose a different name.', 'error');
+        const teams = await DB.getTeams();
+        if (teams.find(x => x.name.toLowerCase() === teamName.toLowerCase())) {
+          return showAlert('That team name is already taken. Please join it or choose a different name.', 'error');
         }
         isNewTeam = true;
       }
 
-      await DB.registerPlayer({ name, phone, email, team: teamName, isNewTeam });
+      const btn = document.querySelector('button.btn-gold');
+      btn.textContent = 'Submitting...'; btn.disabled = true;
 
-      // Show success
-      document.getElementById('reg-form-wrap').style.display = 'none';
-      const ss = document.getElementById('success-screen');
-      ss.classList.add('show');
-      document.getElementById('success-message').textContent =
-        `${name} has been registered for team "${teamName}". Your spot is pending payment confirmation by the tournament director. Make sure your Venmo payment of $100 was sent to @Dalton-Erger.`;
+      try {
+        const result = await DB.registerPlayer({ name, phone, email, team: teamName, isNewTeam });
+        if (result.error) return showAlert(result.error, 'error');
+        document.getElementById('reg-form-wrap').style.display = 'none';
+        document.getElementById('success-screen').classList.add('show');
+        document.getElementById('success-message').textContent =
+          `${name} has been registered for team "${teamName}". Your spot is pending payment confirmation. Make sure your Venmo payment of $100 was sent to @Dalton-Erger.`;
+      } catch(e) {
+        showAlert('Registration failed. Please try again.', 'error');
+      } finally {
+        btn.textContent = 'Complete Registration'; btn.disabled = false;
+      }
     }
 
     function registerAnother() {
       document.getElementById('reg-form-wrap').style.display = 'block';
       document.getElementById('success-screen').classList.remove('show');
-      document.getElementById('player-name').value = '';
-      document.getElementById('player-phone').value = '';
-      document.getElementById('player-email').value = '';
+      ['player-name','player-phone','player-email','new-team-name'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('payment-confirm').checked = false;
-      document.getElementById('new-team-name').value = '';
       setTeamMode('join');
       hideAlert();
       loadTeams();
       window.scrollTo({ top:0, behavior:'smooth' });
     }
 
-    // Init
     loadTeams();
   </script>
 

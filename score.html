@@ -426,31 +426,35 @@
     async function loadScorer() {
       const token = document.getElementById('token-input').value.trim().toUpperCase();
       if (token.length < 4) return showAccessAlert('Please enter your scorer code.');
-      const entry = await DB.getTeamByToken(token);
-      if (!entry) return showAccessAlert('Invalid scorer code. Check with your tournament director.');
 
-      currentToken = token;
-      currentTeam  = entry.teamName;
-      teamScores   = [...entry.scores];
-      startHole    = (entry.startHole || 1) - 1;
+      showAccessAlert('Loading...', true);
+      try {
+        const entry = await DB.getScoreEntry(token);
+        if (entry.error) return showAccessAlert('Invalid scorer code. Check with your tournament director.');
 
-      const course = await DB.getCourse();
-      coursePars   = course.pars;
+        currentToken = token;
+        currentTeam  = entry.teamName;
+        teamScores   = [...entry.scores];
+        coursePars   = entry.pars;
+        startHole    = (entry.startHole || 1) - 1;
 
-      // Go to first unentered hole from start
-      currentHole = startHole;
-      for (let i = 0; i < 18; i++) {
-        const h = (startHole + i) % 18;
-        if (teamScores[h] === null) { currentHole = h; break; }
+        // Go to first unentered hole from start
+        currentHole = startHole;
+        for (let i = 0; i < 18; i++) {
+          const h = (startHole + i) % 18;
+          if (teamScores[h] === null) { currentHole = h; break; }
+        }
+
+        document.getElementById('access-screen').style.display = 'none';
+        document.getElementById('score-screen').classList.add('show');
+        document.getElementById('hdr-team').textContent = currentTeam;
+
+        renderHole();
+        renderMiniCard();
+        updateHeader();
+      } catch(e) {
+        showAccessAlert('Could not connect. Please check your internet and try again.');
       }
-
-      document.getElementById('access-screen').style.display = 'none';
-      document.getElementById('score-screen').classList.add('show');
-      document.getElementById('hdr-team').textContent = currentTeam;
-
-      renderHole();
-      renderMiniCard();
-      updateHeader();
     }
 
     function renderHole() {
@@ -571,7 +575,11 @@
     }
 
     async function saveHole(holeIndex, strokes) {
-      await DB.saveHoleScore(currentToken, holeIndex, strokes);
+      try {
+        await DB.saveHoleScore(currentToken, holeIndex, strokes);
+      } catch(e) {
+        console.warn('Score save failed, will retry:', e);
+      }
     }
 
     function nextHole() {
@@ -608,9 +616,10 @@
       renderHole();
     }
 
-    function showAccessAlert(msg) {
+    function showAccessAlert(msg, isInfo) {
       const el = document.getElementById('access-alert');
-      el.textContent = msg; el.classList.add('show');
+      el.textContent = msg;
+      el.className = isInfo ? 'alert alert-success show' : 'alert alert-error show';
     }
     function showMainAlert(msg) {
       const el = document.getElementById('alert-main');

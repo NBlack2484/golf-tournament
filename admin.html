@@ -558,32 +558,42 @@
     }
 
     // ── LOAD DASHBOARD ───────────────────────────
+    let _cache = null; // cache last getAll result
+
     async function loadDashboard() {
-      const stats = await DB.getStats();
-      document.getElementById('stat-players').textContent    = stats.totalPlayers;
-      document.getElementById('stat-paid').textContent       = stats.paidPlayers;
-      document.getElementById('stat-teams').textContent      = stats.totalTeams;
-      document.getElementById('stat-full-teams').textContent = stats.fullPaidTeams;
-      const sponsors = await getSponsorList();
-      document.getElementById('stat-sponsors').textContent   = sponsors.length;
-      renderPlayers();
+      try {
+        _cache = await DB.getAll();
+        const s = _cache.stats;
+        document.getElementById('stat-players').textContent    = s.totalPlayers;
+        document.getElementById('stat-paid').textContent       = s.paidPlayers;
+        document.getElementById('stat-teams').textContent      = s.totalTeams;
+        document.getElementById('stat-full-teams').textContent = s.fullPaidTeams;
+        document.getElementById('stat-sponsors').textContent   = s.totalSponsors;
+        renderPlayers();
+      } catch(e) {
+        console.error('Dashboard load failed:', e);
+      }
+    }
+
+    async function refreshAndRender(fn) {
+      _cache = await DB.getAll();
+      fn();
     }
 
     // ── PLAYERS TABLE ─────────────────────────────
-    async function renderPlayers() {
-      const players = await DB.getPlayers();
+    function renderPlayers() {
+      if (!_cache) return;
+      const players = _cache.players;
       const search  = (document.getElementById('player-search')?.value || '').toLowerCase();
       const filter  = document.getElementById('player-filter-paid')?.value || 'all';
 
-      let filtered = players.filter(p => {
+      const filtered = players.filter(p => {
         const matchSearch = !search ||
-          p.name.toLowerCase().includes(search) ||
-          p.email.toLowerCase().includes(search) ||
-          p.team.toLowerCase().includes(search);
-        const matchPaid =
-          filter === 'all' ||
-          (filter === 'paid' && p.paid) ||
-          (filter === 'unpaid' && !p.paid);
+          String(p.name||'').toLowerCase().includes(search) ||
+          String(p.email||'').toLowerCase().includes(search) ||
+          String(p.team||'').toLowerCase().includes(search);
+        const isPaid = String(p.paid) === 'true';
+        const matchPaid = filter==='all' || (filter==='paid'&&isPaid) || (filter==='unpaid'&&!isPaid);
         return matchSearch && matchPaid;
       });
 
@@ -592,260 +602,182 @@
         tbody.innerHTML = '<tr><td colspan="7" class="center" style="color:var(--gold-dim);font-style:italic;padding:24px;">No players found.</td></tr>';
         return;
       }
-
-      tbody.innerHTML = filtered.map(p => `
-        <tr id="row-${p.id}">
-          <td>${esc(p.name)}</td>
-          <td>${esc(p.team)}</td>
-          <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
-          <td>${esc(p.phone)}</td>
-          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
-          <td class="center">
-            <span class="badge ${p.paid ? 'badge-paid' : 'badge-unpaid'}">${p.paid ? 'Paid' : 'Unpaid'}</span>
-          </td>
-          <td class="center" style="white-space:nowrap;">
-            ${p.paid
-              ? `<button class="btn-sm btn-sm-unpay" onclick="togglePaid('${p.id}', false)">Mark Unpaid</button>`
-              : `<button class="btn-sm btn-sm-pay"   onclick="togglePaid('${p.id}', true)">Mark Paid</button>`
-            }
-            &nbsp;
-            <button class="btn-sm btn-sm-del" onclick="deletePlayer('${p.id}', '${esc(p.name)}')">Delete</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // ── TEAMS GRID ────────────────────────────────
-    async function renderTeams() {
-      const players = await DB.getPlayers();
-      const teams   = await DB.getTeams();
-      const grid    = document.getElementById('teams-grid');
-
-      const teamNames = Object.keys(teams).sort();
-      if (teamNames.length === 0) {
-        grid.innerHTML = '<p style="font-style:italic;color:var(--gold-dim);grid-column:1/-1;">No teams registered yet.</p>';
-        return;
-      }
-
-      grid.innerHTML = teamNames.map(team => {
-        const members  = players.filter(p => p.team === team);
-        const paidAll  = members.length === 4 && members.every(p => p.paid);
-        const paidSome = members.some(p => p.paid);
-        const slots    = 4 - members.length;
-
-        const statusBadge = paidAll
-          ? '<span class="badge badge-full">Fully Paid</span>'
-          : members.length === 4
-            ? '<span class="badge badge-unpaid">Payment Pending</span>'
-            : `<span class="badge badge-open">${slots} Spot${slots===1?'':'s'} Open</span>`;
-
-        const memberRows = members.map(p => `
-          <div class="team-member">
-            <span class="name">${esc(p.name)}</span>
-            <span class="badge ${p.paid ? 'badge-paid' : 'badge-unpaid'}" style="font-size:0.50rem;">
-              ${p.paid ? 'Paid' : 'Unpaid'}
-            </span>
-          </div>
-        `).join('');
-
-        const emptySlots = Array(slots).fill(0).map(() =>
-          `<div class="team-member" style="opacity:0.35;font-style:italic;color:#888;">
-            <span>— open slot —</span>
-          </div>`
-        ).join('');
-
-        return `
-          <div class="team-card">
-            <div class="team-card-header">
-              <span class="team-card-name">${esc(team)}</span>
-              ${statusBadge}
-            </div>
-            ${memberRows}
-            ${emptySlots}
-            <div class="team-slots">${members.length}/4 registered · ${members.filter(p=>p.paid).length}/4 paid</div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // ── UNPAID TABLE ──────────────────────────────
-    async function renderUnpaid() {
-      const players = await DB.getPlayers();
-      const unpaid  = players.filter(p => !p.paid);
-      const tbody   = document.getElementById('unpaid-tbody');
-
-      if (unpaid.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="center" style="color:#5cb87a;font-style:italic;padding:24px;">✓ All registered players have been marked as paid!</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = unpaid.map(p => `
-        <tr>
-          <td>${esc(p.name)}</td>
-          <td>${esc(p.team)}</td>
-          <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
-          <td>${esc(p.phone)}</td>
-          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
-          <td class="center">
-            <button class="btn-sm btn-sm-pay" onclick="togglePaid('${p.id}', true)">Mark Paid</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // ── ACTIONS ───────────────────────────────────
-    async function togglePaid(id, paid) {
-      await DB.setPlayerPaid(id, paid);
-      await loadDashboard();
-      renderTeams();
-      renderUnpaid();
-    }
-
-    async function deletePlayer(id, name) {
-      if (!confirm(`Delete registration for "${name}"? This cannot be undone.`)) return;
-      await DB.deletePlayer(id);
-      await loadDashboard();
-      renderTeams();
-      renderUnpaid();
-    }
-
-    // ── HELPERS ───────────────────────────────────
-    function esc(str) {
-      return String(str)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;');
-    }
-    function fmtDate(iso) {
-      if (!iso) return '—';
-      const d = new Date(iso);
-      return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-    }
-    // ── SPONSORS ─────────────────────────────────
-    async function getSponsorList() {
-      try {
-        const r = await window.storage.get('tournament_sponsors');
-        return r ? JSON.parse(r.value) : [];
-      } catch { return []; }
-    }
-
-    async function renderSponsors() {
-      const sponsors = await getSponsorList();
-      const tbody = document.getElementById('sponsors-tbody');
-      if (sponsors.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="center" style="color:var(--gold-dim);font-style:italic;padding:24px;">No sponsors registered yet.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = sponsors.map(s => `
-        <tr>
-          <td style="color:var(--cream);font-weight:600;">${esc(s.bizName)}</td>
-          <td>${esc(s.contactName)}</td>
-          <td><a href="mailto:${esc(s.contactEmail)}" style="color:var(--gold-dim);text-decoration:none;">${esc(s.contactEmail)}</a></td>
-          <td>${esc(s.contactPhone)}</td>
-          <td class="center">
-            <span class="badge ${s.tier===700?'badge-full':'badge-open'}">
-              ${s.tier===700?'Sponsor + Play ($700)':'Tee Box ($300)'}
-            </span>
-          </td>
-          <td style="color:var(--gold-dim);font-style:italic;">${s.teamName ? esc(s.teamName) : '—'}</td>
-          <td style="color:#888;font-size:0.85rem;">${fmtDate(s.registeredAt)}</td>
-          <td class="center">
-            <span class="badge ${s.paid?'badge-paid':'badge-unpaid'}">${s.paid?'Paid':'Unpaid'}</span>
-          </td>
-          <td class="center" style="white-space:nowrap;">
-            ${s.paid
-              ? `<button class="btn-sm btn-sm-unpay" onclick="toggleSponsorPaid('${s.id}',false)">Mark Unpaid</button>`
-              : `<button class="btn-sm btn-sm-pay"   onclick="toggleSponsorPaid('${s.id}',true)">Mark Paid</button>`
-            }
-            &nbsp;
-            <button class="btn-sm btn-sm-del" onclick="deleteSponsor('${s.id}','${esc(s.bizName)}')">Delete</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    async function toggleSponsorPaid(id, paid) {
-      const sponsors = await getSponsorList();
-      const s = sponsors.find(x => x.id === id);
-      if (s) { s.paid = paid; await window.storage.set('tournament_sponsors', JSON.stringify(sponsors)); }
-      await loadDashboard();
-      renderSponsors();
-    }
-
-    async function deleteSponsor(id, name) {
-      if (!confirm(`Delete sponsor registration for "${name}"?`)) return;
-      let sponsors = await getSponsorList();
-      sponsors = sponsors.filter(x => x.id !== id);
-      await window.storage.set('tournament_sponsors', JSON.stringify(sponsors));
-      await loadDashboard();
-      renderSponsors();
-    }
-
-    // ── SCORING TAB ──────────────────────────────────
-    async function renderScoring() {
-      const teams   = await DB.getTeamNames();
-      const scores  = await DB.getScores();
-      const course  = await DB.getCourse();
-      const pars    = course.pars;
-      const tbody   = document.getElementById('scoring-tbody');
-      const sel     = document.getElementById('override-team');
-
-      // Populate override team dropdown
-      sel.innerHTML = '<option value="">— Select team —</option>' +
-        teams.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
-
-      if (teams.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="center" style="color:var(--gold-dim);font-style:italic;padding:20px;">No teams registered yet.</td></tr>';
-        return;
-      }
-
-      const baseUrl = window.location.href.replace('admin.html','');
-      tbody.innerHTML = teams.map(teamName => {
-        const entry = scores[teamName];
-        const token = entry?.scorerToken || '—';
-        const holesPlayed = entry ? entry.scores.filter(s=>s!==null).length : 0;
-        const grossTotal  = entry ? entry.scores.filter(s=>s!==null).reduce((a,b)=>a+b,0) : 0;
-        let parThrough = 0;
-        if (entry) { for(let i=0;i<18;i++) { if(entry.scores[i]!==null) parThrough+=pars[i]; } }
-        const tp = holesPlayed > 0 ? grossTotal - parThrough : null;
-        const scoreStr = tp===null?'—':tp===0?'E':tp>0?`+${tp}`:tp;
-        const link = token !== '—' ? `${baseUrl}score.html?t=${token}` : '';
-
+      tbody.innerHTML = filtered.map(p => {
+        const isPaid = String(p.paid) === 'true';
         return `<tr>
-          <td style="color:var(--cream);">${esc(teamName)}</td>
-          <td class="center">${entry?.startHole||1}</td>
-          <td class="center">
-            ${token!=='—'
-              ? `<span style="font-family:'Cinzel',serif;letter-spacing:0.15em;color:var(--gold-light);font-size:1.05rem;">${token}</span>`
-              : `<button class="btn-sm btn-sm-pay" onclick="genToken('${esc(teamName)}')">Generate</button>`}
-          </td>
-          <td style="font-size:0.82rem;">
-            ${link ? `<input type="text" value="${link}" readonly onclick="this.select()" style="background:rgba(0,0,0,0.3);border:1px solid rgba(201,162,39,0.2);border-radius:2px;color:var(--gold-dim);font-size:0.78rem;padding:5px 8px;width:100%;max-width:320px;outline:none;">` : '—'}
-          </td>
-          <td class="center">
-            <span style="font-family:'Cinzel',serif;font-size:0.75rem;color:${holesPlayed===18?'#5cb87a':'var(--cream)'};">
-              ${holesPlayed}/18
-            </span>
-          </td>
-          <td class="center">
-            <span style="font-family:'Cinzel',serif;font-size:0.85rem;color:${tp<0?'#5cb87a':tp>0?'#e08888':'var(--cream)'};">
-              ${scoreStr}
-            </span>
+          <td>${esc(p.name)}</td>
+          <td>${esc(p.team)}</td>
+          <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
+          <td>${esc(p.phone)}</td>
+          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
+          <td class="center"><span class="badge ${isPaid?'badge-paid':'badge-unpaid'}">${isPaid?'Paid':'Unpaid'}</span></td>
+          <td class="center" style="white-space:nowrap;">
+            ${isPaid
+              ? `<button class="btn-sm btn-sm-unpay" onclick="togglePaid('${p.id}',false)">Mark Unpaid</button>`
+              : `<button class="btn-sm btn-sm-pay"   onclick="togglePaid('${p.id}',true)">Mark Paid</button>`}
+            &nbsp;
+            <button class="btn-sm btn-sm-del" onclick="deletePlayer('${p.id}','${esc(p.name)}')">Delete</button>
           </td>
         </tr>`;
       }).join('');
     }
 
+    // ── TEAMS GRID ────────────────────────────────
+    function renderTeams() {
+      if (!_cache) return;
+      const players = _cache.players;
+      const teams   = _cache.teams;
+      const grid    = document.getElementById('teams-grid');
+
+      if (teams.length === 0) {
+        grid.innerHTML = '<p style="font-style:italic;color:var(--gold-dim);grid-column:1/-1;">No teams registered yet.</p>';
+        return;
+      }
+      grid.innerHTML = teams.map(t => {
+        const members = players.filter(p => p.team === t.name);
+        const paidAll = members.length === 4 && members.every(p => String(p.paid)==='true');
+        const slots   = 4 - members.length;
+        const statusBadge = paidAll
+          ? '<span class="badge badge-full">Fully Paid</span>'
+          : members.length === 4
+            ? '<span class="badge badge-unpaid">Payment Pending</span>'
+            : `<span class="badge badge-open">${slots} Spot${slots===1?'':'s'} Open</span>`;
+        const memberRows = members.map(p => `
+          <div class="team-member">
+            <span class="name">${esc(p.name)}</span>
+            <span class="badge ${String(p.paid)==='true'?'badge-paid':'badge-unpaid'}" style="font-size:0.50rem;">${String(p.paid)==='true'?'Paid':'Unpaid'}</span>
+          </div>`).join('');
+        const emptySlots = Array(slots).fill(0).map(()=>`<div class="team-member" style="opacity:0.35;font-style:italic;color:#888;"><span>— open slot —</span></div>`).join('');
+        return `<div class="team-card">
+          <div class="team-card-header"><span class="team-card-name">${esc(t.name)}</span>${statusBadge}</div>
+          ${memberRows}${emptySlots}
+          <div class="team-slots">${members.length}/4 registered · ${members.filter(p=>String(p.paid)==='true').length}/4 paid</div>
+        </div>`;
+      }).join('');
+    }
+
+    // ── UNPAID TABLE ──────────────────────────────
+    function renderUnpaid() {
+      if (!_cache) return;
+      const unpaid = _cache.players.filter(p => String(p.paid) !== 'true');
+      const tbody  = document.getElementById('unpaid-tbody');
+      if (unpaid.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="center" style="color:#5cb87a;font-style:italic;padding:24px;">✓ All registered players have been marked as paid!</td></tr>';
+        return;
+      }
+      tbody.innerHTML = unpaid.map(p => `
+        <tr>
+          <td>${esc(p.name)}</td><td>${esc(p.team)}</td>
+          <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
+          <td>${esc(p.phone)}</td>
+          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
+          <td class="center"><button class="btn-sm btn-sm-pay" onclick="togglePaid('${p.id}',true)">Mark Paid</button></td>
+        </tr>`).join('');
+    }
+
+    // ── PLAYER ACTIONS ────────────────────────────
+    async function togglePaid(id, paid) {
+      await DB.setPlayerPaid(id, paid);
+      await refreshAndRender(() => { renderPlayers(); renderTeams(); renderUnpaid(); loadDashboard(); });
+    }
+
+    async function deletePlayer(id, name) {
+      if (!confirm(`Delete registration for "${name}"?`)) return;
+      await DB.deletePlayer(id);
+      await refreshAndRender(() => { renderPlayers(); renderTeams(); renderUnpaid(); loadDashboard(); });
+    }
+
+    // ── SPONSORS ─────────────────────────────────
+    function renderSponsors() {
+      if (!_cache) return;
+      const sponsors = _cache.sponsors;
+      const tbody = document.getElementById('sponsors-tbody');
+      if (sponsors.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="center" style="color:var(--gold-dim);font-style:italic;padding:24px;">No sponsors registered yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = sponsors.map(s => {
+        const isPaid = String(s.paid) === 'true';
+        return `<tr>
+          <td style="color:var(--cream);font-weight:600;">${esc(s.bizName)}</td>
+          <td>${esc(s.contactName)}</td>
+          <td><a href="mailto:${esc(s.contactEmail)}" style="color:var(--gold-dim);text-decoration:none;">${esc(s.contactEmail)}</a></td>
+          <td>${esc(s.contactPhone)}</td>
+          <td class="center"><span class="badge ${Number(s.tier)===700?'badge-full':'badge-open'}">${Number(s.tier)===700?'Sponsor+Play ($700)':'Tee Box ($300)'}</span></td>
+          <td style="color:var(--gold-dim);font-style:italic;">${s.teamName?esc(s.teamName):'—'}</td>
+          <td style="color:#888;font-size:0.85rem;">${fmtDate(s.registeredAt)}</td>
+          <td class="center"><span class="badge ${isPaid?'badge-paid':'badge-unpaid'}">${isPaid?'Paid':'Unpaid'}</span></td>
+          <td class="center" style="white-space:nowrap;">
+            ${isPaid
+              ? `<button class="btn-sm btn-sm-unpay" onclick="toggleSponsorPaid('${s.id}',false)">Mark Unpaid</button>`
+              : `<button class="btn-sm btn-sm-pay"   onclick="toggleSponsorPaid('${s.id}',true)">Mark Paid</button>`}
+            &nbsp;
+            <button class="btn-sm btn-sm-del" onclick="deleteSponsor('${s.id}','${esc(s.bizName)}')">Delete</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function toggleSponsorPaid(id, paid) {
+      await DB.setSponsorPaid(id, paid);
+      await refreshAndRender(() => { renderSponsors(); loadDashboard(); });
+    }
+
+    async function deleteSponsor(id, name) {
+      if (!confirm(`Delete sponsor "${name}"?`)) return;
+      await DB.deleteSponsor(id);
+      await refreshAndRender(() => { renderSponsors(); loadDashboard(); });
+    }
+
+    // ── SCORING TAB ──────────────────────────────
+    function renderScoring() {
+      if (!_cache) return;
+      const teams     = _cache.teams;
+      const scoresMap = _cache.scoresMap;
+      const pars      = _cache.pars;
+      const tbody     = document.getElementById('scoring-tbody');
+      const sel       = document.getElementById('override-team');
+
+      sel.innerHTML = '<option value="">— Select team —</option>' +
+        teams.map(t => `<option value="${esc(t.name)}">${esc(t.name)}</option>`).join('');
+
+      if (teams.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="center" style="color:var(--gold-dim);font-style:italic;padding:20px;">No teams registered yet.</td></tr>';
+        return;
+      }
+      const baseUrl = window.location.href.replace('admin.html','');
+      tbody.innerHTML = teams.map(t => {
+        const entry = scoresMap[t.name];
+        const token = entry?.scorerToken || '—';
+        const scores = entry?.scores || Array(18).fill(null);
+        const holesPlayed = scores.filter(s=>s!==null).length;
+        const grossTotal  = scores.filter(s=>s!==null).reduce((a,b)=>a+b,0);
+        let parThrough = 0;
+        for(let i=0;i<18;i++) { if(scores[i]!==null) parThrough+=pars[i]; }
+        const tp = holesPlayed>0 ? grossTotal-parThrough : null;
+        const scoreStr = tp===null?'—':tp===0?'E':tp>0?`+${tp}`:tp;
+        const link = token!=='—' ? `${baseUrl}score.html?t=${token}` : '';
+        return `<tr>
+          <td style="color:var(--cream);">${esc(t.name)}</td>
+          <td class="center">${entry?.startHole||1}</td>
+          <td class="center">${token!=='—'
+            ? `<span style="font-family:'Cinzel',serif;letter-spacing:0.15em;color:var(--gold-light);font-size:1.05rem;">${token}</span>`
+            : `<button class="btn-sm btn-sm-pay" onclick="genToken('${esc(t.name)}')">Generate</button>`}</td>
+          <td>${link?`<input type="text" value="${link}" readonly onclick="this.select()" style="background:rgba(0,0,0,0.3);border:1px solid rgba(201,162,39,0.2);border-radius:2px;color:var(--gold-dim);font-size:0.78rem;padding:5px 8px;width:100%;max-width:320px;outline:none;">`:'—'}</td>
+          <td class="center" style="font-family:'Cinzel',serif;font-size:0.75rem;color:${holesPlayed===18?'#5cb87a':'var(--cream)'};">${holesPlayed}/18</td>
+          <td class="center" style="font-family:'Cinzel',serif;font-size:0.85rem;color:${tp<0?'#5cb87a':tp>0?'#e08888':'var(--cream)'};">${scoreStr}</td>
+        </tr>`;
+      }).join('');
+    }
+
     async function generateAllTokens() {
-      const teams = await DB.getTeamNames();
-      for (const t of teams) await DB.generateScorerToken(t);
-      renderScoring();
+      await DB.generateAllTokens();
+      await refreshAndRender(() => renderScoring());
     }
 
     async function genToken(teamName) {
-      await DB.generateScorerToken(teamName);
-      renderScoring();
+      await DB.generateToken(teamName);
+      await refreshAndRender(() => renderScoring());
     }
 
     async function adminOverride() {
@@ -853,80 +785,61 @@
       const hole     = parseInt(document.getElementById('override-hole').value);
       const score    = parseInt(document.getElementById('override-score').value);
       const alertEl  = document.getElementById('override-alert');
-
       if (!teamName) { alertEl.textContent='Select a team.'; alertEl.className='alert alert-error show'; return; }
       if (!hole||hole<1||hole>18) { alertEl.textContent='Enter a valid hole (1–18).'; alertEl.className='alert alert-error show'; return; }
       if (!score||score<1) { alertEl.textContent='Enter a valid stroke count.'; alertEl.className='alert alert-error show'; return; }
-
-      const scores  = await DB.getScores();
-      if (!scores[teamName]) scores[teamName] = { scores:Array(18).fill(null), scorerToken:null, submitted:false, startHole:1, lastUpdated:null };
-      scores[teamName].scores[hole-1] = score;
-      scores[teamName].lastUpdated = new Date().toISOString();
-      await DB.saveScores(scores);
-
+      await DB.adminOverride(teamName, hole-1, score);
       alertEl.textContent = `✓ Hole ${hole} for "${teamName}" set to ${score}.`;
       alertEl.className   = 'alert alert-success show';
-      renderScoring();
-      await loadDashboard();
+      await refreshAndRender(() => renderScoring());
     }
 
-    // ── COURSE SETUP TAB ─────────────────────────────
-    async function renderCourseSetup() {
-      const course = await DB.getCourse();
-      const pars   = course.pars;
-      const grid   = document.getElementById('par-grid');
-
+    // ── COURSE SETUP TAB ─────────────────────────
+    function renderCourseSetup() {
+      if (!_cache) return;
+      const pars = _cache.pars;
+      const grid = document.getElementById('par-grid');
       grid.innerHTML = Array.from({length:18},(_,i) => `
-        <div style="background:rgba(0,0,0,0.3);border:1px solid var(--card-border);border-radius:3px;padding:12px;text-align:center;">
-          <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;">Hole ${i+1}</div>
-          <select id="par-${i}" style="background:rgba(0,0,0,0.5);border:1px solid rgba(201,162,39,0.3);border-radius:2px;color:var(--cream);font-family:'Cinzel',serif;font-size:1.1rem;padding:6px 10px;width:100%;outline:none;text-align:center;" onchange="updateParTotal()">
+        <div style="background:#111;border:1px solid #333;border-radius:3px;padding:12px;text-align:center;">
+          <div style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Hole ${i+1}</div>
+          <select id="par-${i}" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:'Cinzel',serif;font-size:1.1rem;padding:6px 10px;width:100%;outline:none;text-align:center;" onchange="updateParTotal()">
             <option value="3" ${pars[i]===3?'selected':''}>3</option>
             <option value="4" ${pars[i]===4?'selected':''}>4</option>
             <option value="5" ${pars[i]===5?'selected':''}>5</option>
           </select>
-        </div>
-      `).join('');
-
+        </div>`).join('');
       updateParTotal();
 
-      // Starting holes
-      const teams  = await DB.getTeamNames();
-      const scores = await DB.getScores();
+      const teams = _cache.teams;
+      const scoresMap = _cache.scoresMap;
       const shBody = document.getElementById('starting-holes-tbody');
       if (teams.length === 0) {
         shBody.innerHTML = '<tr><td colspan="3" class="center" style="color:var(--gold-dim);font-style:italic;padding:16px;">No teams yet.</td></tr>';
         return;
       }
       shBody.innerHTML = teams.map(t => {
-        const sh = scores[t]?.startHole || 1;
+        const sh = scoresMap[t.name]?.startHole || 1;
         return `<tr>
-          <td style="color:var(--cream);">${esc(t)}</td>
+          <td style="color:#fff;">${esc(t.name)}</td>
           <td class="center">
-            <select id="sh-${esc(t)}" style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.3);border-radius:2px;color:var(--cream);font-family:inherit;font-size:0.95rem;padding:6px 10px;outline:none;">
+            <select id="sh-${esc(t.name)}" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:inherit;font-size:0.95rem;padding:6px 10px;outline:none;">
               ${Array.from({length:18},(_,i)=>`<option value="${i+1}" ${sh===i+1?'selected':''}>${i+1}</option>`).join('')}
             </select>
           </td>
-          <td class="center">
-            <button class="btn-sm btn-sm-pay" onclick="saveStartHole('${esc(t)}')">Save</button>
-          </td>
+          <td class="center"><button class="btn-sm btn-sm-pay" onclick="saveStartHole('${esc(t.name)}')">Save</button></td>
         </tr>`;
       }).join('');
     }
 
     function updateParTotal() {
       let total = 0;
-      for (let i=0;i<18;i++) {
-        const sel = document.getElementById(`par-${i}`);
-        if (sel) total += parseInt(sel.value);
-      }
+      for(let i=0;i<18;i++) { const s=document.getElementById(`par-${i}`); if(s) total+=parseInt(s.value); }
       document.getElementById('par-total-display').textContent = `Course Total: Par ${total}`;
     }
 
     async function savePars() {
       const pars = Array.from({length:18},(_,i)=>parseInt(document.getElementById(`par-${i}`).value));
-      const course = await DB.getCourse();
-      course.pars  = pars;
-      await DB.saveCourse(course);
+      await DB.saveCourse(pars);
       const alertEl = document.getElementById('course-alert');
       alertEl.textContent='✓ Par settings saved.'; alertEl.className='alert alert-success show';
       setTimeout(()=>alertEl.classList.remove('show'),2500);
@@ -934,17 +847,13 @@
 
     async function saveStartHole(teamName) {
       const sel  = document.getElementById(`sh-${teamName}`);
-      const hole = parseInt(sel.value);
-      await DB.setTeamStartHole(teamName, hole);
-      const scores = await DB.getScores();
-      if (!scores[teamName]) scores[teamName] = { scores:Array(18).fill(null), scorerToken:null, submitted:false, startHole:hole, lastUpdated:null };
-      else scores[teamName].startHole = hole;
-      await DB.saveScores(scores);
+      await DB.setStartHole(teamName, parseInt(sel.value));
     }
 
-    // ── CONTESTS TAB ─────────────────────────────────
-    async function renderContests() {
-      const c = await DB.getContests();
+    // ── CONTESTS TAB ─────────────────────────────
+    function renderContests() {
+      if (!_cache) return;
+      const c   = _cache.contestsMap;
       const ld  = c['longest_drive'];
       const ctp = c['closest_to_pin'];
       if (ld) {
@@ -967,7 +876,17 @@
       const distance = document.getElementById(`${prefix}-distance`).value.trim();
       if (!player) return;
       await DB.setContest(key, { player, hole, distance });
-      renderContests();
+      await refreshAndRender(() => renderContests());
+    }
+
+    // ── HELPERS ───────────────────────────────────
+    function esc(str) {
+      return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      try { return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+      catch { return '—'; }
     }
 
   </script>

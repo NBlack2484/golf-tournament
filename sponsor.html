@@ -372,7 +372,6 @@
 
     async function submitSponsor() {
       hideAlert();
-
       if (!selectedTier) return showAlert('Please select a sponsorship package.', 'error');
 
       const bizName      = document.getElementById('biz-name').value.trim();
@@ -384,8 +383,7 @@
       if (!bizName)      return showAlert('Please enter your business name.', 'error');
       if (!contactName)  return showAlert('Please enter a contact name.', 'error');
       if (!contactPhone) return showAlert('Please enter a phone number.', 'error');
-      if (!contactEmail || !contactEmail.includes('@'))
-                         return showAlert('Please enter a valid email address.', 'error');
+      if (!contactEmail || !contactEmail.includes('@')) return showAlert('Please enter a valid email address.', 'error');
       if (!paid)         return showAlert('Please confirm your Venmo payment before submitting.', 'error');
 
       let teamName = '';
@@ -394,50 +392,24 @@
         if (!teamName) return showAlert('Please enter a team name for your foursome.', 'error');
       }
 
-      // Save sponsor to storage
-      try {
-        const sponsors = await getSponsorList();
-        sponsors.push({
-          id:            crypto.randomUUID(),
-          bizName,
-          contactName,
-          contactPhone,
-          contactEmail,
-          tier:          selectedTier,
-          teamName:      teamName || null,
-          paid:          false,
-          registeredAt:  new Date().toISOString()
-        });
-        await window.storage.set('tournament_sponsors', JSON.stringify(sponsors));
+      const btn = document.querySelector('button.btn-gold');
+      btn.textContent = 'Submitting...'; btn.disabled = true;
 
-        // If $700 tier, also create the team in player DB
-        if (selectedTier === 700 && teamName) {
-          const teams = await DB.getTeams();
-          if (!teams[teamName]) {
-            teams[teamName] = { created: Date.now(), paidCount: 0, isSponsorTeam: true };
-            await DB.saveTeams(teams);
-          }
-        }
+      try {
+        const result = await DB.registerSponsor({ bizName, contactName, contactPhone, contactEmail, tier: selectedTier, teamName });
+        if (result.error) return showAlert(result.error, 'error');
+        document.getElementById('sponsor-form-wrap').style.display = 'none';
+        document.getElementById('success-screen').classList.add('show');
+        const tierLabel = selectedTier === 700 ? 'Sponsor + Play ($700)' : 'Tee Box Sponsor ($300)';
+        document.getElementById('success-message').textContent =
+          `${bizName} has been registered as a ${tierLabel} sponsor. ` +
+          (teamName ? `Team "${teamName}" has been created — your players can register on the registration page. ` : '') +
+          `Your sponsorship is pending payment confirmation. A tournament representative will be in touch shortly.`;
       } catch(e) {
-        console.error(e);
+        showAlert('Submission failed. Please try again.', 'error');
+      } finally {
+        btn.textContent = 'Complete Sponsorship Registration'; btn.disabled = false;
       }
-
-      // Show success
-      document.getElementById('sponsor-form-wrap').style.display = 'none';
-      const ss = document.getElementById('success-screen');
-      ss.classList.add('show');
-      const tierLabel = selectedTier === 700 ? 'Sponsor + Play ($700)' : 'Tee Box Sponsor ($300)';
-      document.getElementById('success-message').textContent =
-        `${bizName} has been registered as a ${tierLabel} sponsor. ` +
-        (teamName ? `Team "${teamName}" has been created — your players can register on the registration page. ` : '') +
-        `Your sponsorship is pending payment confirmation. A tournament representative will be in touch shortly.`;
-    }
-
-    async function getSponsorList() {
-      try {
-        const r = await window.storage.get('tournament_sponsors');
-        return r ? JSON.parse(r.value) : [];
-      } catch { return []; }
     }
   </script>
 
