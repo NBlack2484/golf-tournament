@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enter Hole Scores</title>
+<link rel="stylesheet" href="css/style.css">
+<style> body { background-image: url('assets/images/st_andrews.png'); } </style>
+</head>
+<body>
+  <div class="overlay">
+    <header>
+      <h1>Hole Score Entry</h1>
+    </header>
+
+    <main>
+      <form>
+        <label>Player Name:</label><br>
+        <input type="text" name="player" required><br><br>
+        <label>Hole Number:</label><br>
+        <input type="number" name="hole" min="1" max="18" required><br><br>
+        <label>Score:</label><br>
+        <input type="number" name="score" min="1" required><br><br>
+        <input type="submit" value="Submit Score" class="btn">
+      </form>
+    </main>
+  </div>
+</body>
+</html>
