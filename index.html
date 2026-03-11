@@ -3,52 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STL Naturals Golf Tournament · Oak Valley</title>
-  <link rel="stylesheet" href="assets/css/shared.css">
-  <style>body { background: url("assets/images/augusta.jpg") no-repeat center center fixed; background-size: cover; }</style>
+  <title>STL Naturals Golf Classic · Oak Valley</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
-    /* Page-specific layout */
-    .main-wrap {
-      position: relative; z-index: 10;
-      width: min(820px, 92%);
-      margin: 0 auto;
-      padding-bottom: 60px;
-      animation: contentRise 0.9s 0.2s ease both;
-    }
-    @keyframes contentRise {
-      from { opacity:0; transform:translateY(20px); }
-      to   { opacity:1; transform:translateY(0); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #c9a227;
+      --gold-light: #f0d060;
+      --cream:      #ffffff;
+      --body-bg:    #0d0d0d;
+      --card-bg:    #1a1a1a;
+      --card-border:#2e2e2e;
+      --gold-border:rgba(201,162,39,0.4);
     }
 
-    /* Hero section */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--body-bg);
+      color: var(--cream);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────── */
+    .site-header {
+      background: #111;
+      border-bottom: 2px solid var(--gold-border);
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+    }
+
+    .logo-naturals {
+      height: 80px;
+      width: auto;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .logo-oakvalley {
+      height: 70px;
+      width: auto;
+      max-width: 280px;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    }
+
+    .logo-divider {
+      width: 1px;
+      height: 70px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      flex-shrink: 0;
+    }
+
+    /* ── GOLD RULE ──────────────────────────────── */
+    .gold-rule {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 0 6px;
+    }
+    .gold-rule::before, .gold-rule::after {
+      content: '';
+      width: 120px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold));
+    }
+    .gold-rule::after { background: linear-gradient(to left, transparent, var(--gold)); }
+    .gold-rule-diamond {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    .site-tagline {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.75;
+      padding-bottom: 40px;
+    }
+
+    /* ── HERO ───────────────────────────────────── */
     .hero {
       text-align: center;
-      padding: 8px 0 40px;
+      padding: 20px 24px 52px;
+      max-width: 900px;
+      margin: 0 auto;
     }
+
     .hero-eyebrow {
       font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.35em;
+      font-size: 0.78rem;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: var(--gold-dim);
-      margin-bottom: 16px;
+      color: var(--gold);
+      margin-bottom: 20px;
     }
+
     .hero-title {
       font-family: 'Cinzel', serif;
-      font-size: clamp(1.9rem, 5vw, 3.2rem);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
       font-weight: 900;
-      line-height: 1.12;
-      color: var(--cream);
-      text-shadow: 0 2px 24px rgba(0,0,0,0.7);
-      margin-bottom: 10px;
+      line-height: 1.08;
+      color: #ffffff;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
     }
-    .hero-title span { color: var(--gold-light); }
+    .hero-title span { color: var(--gold-light); display: block; }
+
     .hero-subtitle {
-      font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
       font-style: italic;
-      color: var(--cream-dim);
-      margin-bottom: 32px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 44px;
     }
+
+    /* ── BUTTONS ────────────────────────────────── */
     .hero-cta-wrap {
       display: flex;
       align-items: center;
@@ -57,71 +138,186 @@
       flex-wrap: wrap;
     }
 
-    /* Info grid */
+    .btn {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.80rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      border-radius: 3px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: #0a0800;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(201,162,39,0.4);
+    }
+    .btn-gold:hover { background: var(--gold-light); box-shadow: 0 6px 28px rgba(201,162,39,0.6); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+    }
+    .btn-outline:hover { background: rgba(201,162,39,0.12); color: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-admin {
+      background: transparent;
+      border: 1px solid #333;
+      color: #555;
+      font-size: 0.62rem;
+      padding: 12px 24px;
+    }
+    .btn-admin:hover { border-color: #555; color: #888; }
+
+    /* ── MAIN CONTENT ───────────────────────────── */
+    .main-wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── CARDS ──────────────────────────────────── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 40px 48px;
+      margin-bottom: 28px;
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-title::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      display: block;
+      flex-shrink: 0;
+    }
+
+    /* ── INFO GRID ──────────────────────────────── */
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 24px 36px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px 40px;
     }
+
     .info-item label {
       display: block;
       font-family: 'Cinzel', serif;
-      font-size: 0.58rem;
-      letter-spacing: 0.16em;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--gold);
       opacity: 0.8;
-      margin-bottom: 6px;
-    }
-    .info-item span {
-      font-size: 1.08rem;
-      font-style: italic;
-      color: var(--cream);
-      line-height: 1.35;
+      margin-bottom: 8px;
     }
 
-    /* Rules / format */
+    .info-item span {
+      font-size: 1.25rem;
+      font-style: italic;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    /* ── RULES ──────────────────────────────────── */
     .rule-list {
       list-style: none;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px 28px;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 48px;
     }
+
     .rule-list li {
-      font-size: 1.02rem;
-      color: #d0c8b4;
-      padding-left: 18px;
+      font-size: 1.18rem;
+      color: rgba(255,255,255,0.85);
+      padding-left: 22px;
       position: relative;
       line-height: 1.5;
     }
+
     .rule-list li::before {
       content: '';
-      position: absolute; left: 0; top: 0.55em;
-      width: 5px; height: 5px;
+      position: absolute;
+      left: 0; top: 0.58em;
+      width: 6px; height: 6px;
       background: var(--gold);
       transform: rotate(45deg);
     }
 
-    /* CTA banner */
+    /* ── CTA BANNER ─────────────────────────────── */
     .cta-banner {
-      background: linear-gradient(135deg, rgba(201,162,39,0.12) 0%, rgba(201,162,39,0.04) 100%);
-      border: 1px solid rgba(201,162,39,0.35);
-      border-radius: 3px;
-      padding: 36px 40px;
+      background: linear-gradient(135deg, #1e1800 0%, #151000 100%);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      padding: 52px 48px;
       text-align: center;
-      margin-top: 8px;
     }
+
     .cta-banner h2 {
       font-family: 'Cinzel', serif;
-      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900;
       color: var(--gold-light);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
+
     .cta-banner p {
-      font-size: 1.08rem;
+      font-size: 1.25rem;
       font-style: italic;
-      color: var(--cream-dim);
-      margin-bottom: 28px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 36px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    .site-footer {
+      text-align: center;
+      padding: 28px 24px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #444;
+      border-top: 1px solid #222;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 600px) {
+      .site-header { padding: 20px 20px; gap: 20px; }
+      .logo-naturals { height: 56px; }
+      .logo-oakvalley { height: 48px; max-width: 180px; }
+      .logo-divider { height: 50px; }
+      .card { padding: 28px 22px; }
+      .hero { padding: 16px 16px 40px; }
+      .btn { padding: 14px 28px; font-size: 0.72rem; }
     }
   </style>
 </head>
@@ -141,34 +337,37 @@
   <div class="gold-rule"><div class="gold-rule-diamond"></div></div>
   <p class="site-tagline">Presented by St. Louis Naturals &nbsp;·&nbsp; Oak Valley Golf Course &amp; Resort</p>
 
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-eyebrow">⛳ Annual Charity Golf Tournament</p>
+    <h1 class="hero-title">
+      STL Naturals
+      <span>Golf Classic</span>
+    </h1>
+    <p class="hero-subtitle">Oak Valley Golf Course &amp; Resort &nbsp;·&nbsp; 2026</p>
+    <div class="hero-cta-wrap">
+      <a href="register.html" class="btn btn-gold">Enter Tournament</a>
+      <a href="sponsor.html" class="btn btn-outline">Become a Sponsor</a>
+      <a href="leaderboard.html" target="_blank" class="btn btn-outline">🏆 Live Leaderboard</a>
+      <a href="admin.html" class="btn btn-admin">Admin</a>
+    </div>
+  </div>
+
   <!-- MAIN -->
   <main class="main-wrap">
 
-    <!-- Hero -->
-    <div class="hero">
-      <p class="hero-eyebrow">Annual Charity Golf Tournament</p>
-      <h1 class="hero-title">STL Naturals<br><span>Golf Classic</span></h1>
-      <p class="hero-subtitle">Oak Valley Golf Course &amp; Resort &nbsp;·&nbsp; 2026</p>
-      <div class="hero-cta-wrap">
-        <a href="register.html" class="btn btn-gold">Enter Tournament</a>
-        <a href="sponsor.html" class="btn btn-outline">Become a Sponsor</a>
-        <a href="leaderboard.html" target="_blank" class="btn btn-outline">Live Leaderboard</a>
-        <a href="admin.html" class="btn btn-outline" style="font-size:0.55rem;padding:10px 22px;opacity:0.6;">Admin</a>
-      </div>
-    </div>
-
-    <!-- Tournament Info -->
+    <!-- Tournament Details -->
     <div class="card">
       <div class="card-title">Tournament Details</div>
       <div class="info-grid">
         <div class="info-item"><label>Venue</label><span>Oak Valley Golf Course &amp; Resort</span></div>
-        <div class="info-item"><label>Format</label><span>4-Man Team Stroke Play</span></div>
+        <div class="info-item"><label>Format</label><span>4-Man Team Scramble</span></div>
         <div class="info-item"><label>Date</label><span>TBD — 2026</span></div>
         <div class="info-item"><label>Start Time</label><span>Shotgun Start, 8:00 AM</span></div>
         <div class="info-item"><label>Entry Fee</label><span>$100 per Player</span></div>
         <div class="info-item"><label>Team Size</label><span>4 Players per Team</span></div>
-        <div class="info-item"><label>Location</label><span>Hillsboro, Missouri</span></div>
-        <div class="info-item"><label>Payment</label><span>Venmo at Registration</span></div>
+        <div class="info-item"><label>Location</label><span>Oak Valley Golf Course, Pevely, MO</span></div>
+        <div class="info-item"><label>Payment</label><span>Venmo @Dalton-Erger</span></div>
       </div>
     </div>
 
@@ -179,11 +378,9 @@
         <li>Teams consist of exactly 4 players</li>
         <li>Players may register individually under a team name</li>
         <li>All 4 team members must be registered &amp; paid to be eligible</li>
-        <li>$100 entry fee per player — payable via Venmo at registration</li>
+        <li>$100 entry fee per player — pay via Venmo @Dalton-Erger</li>
         <li>Teams may be created or joined during registration</li>
-        <li>Prizes awarded to top gross and net finishing teams</li>
         <li>Skills contests: Longest Drive &amp; Closest to the Pin</li>
-        <li>All players must follow USGA rules of golf</li>
       </ul>
     </div>
 
@@ -191,11 +388,11 @@
     <div class="cta-banner">
       <h2>Ready to Play?</h2>
       <p>Register your team today — spots are limited.</p>
-      <a href="register.html" class="btn btn-gold">Enter Tournament &rarr;</a>
-      &nbsp;&nbsp;
-      <a href="sponsor.html" class="btn btn-outline">Sponsor the Event &rarr;</a>
-      &nbsp;&nbsp;
-      <a href="leaderboard.html" target="_blank" class="btn btn-outline">Live Leaderboard &rarr;</a>
+      <div class="cta-buttons">
+        <a href="register.html" class="btn btn-gold">Enter Tournament &rarr;</a>
+        <a href="sponsor.html" class="btn btn-outline">Become a Sponsor &rarr;</a>
+        <a href="leaderboard.html" target="_blank" class="btn btn-outline">Live Leaderboard &rarr;</a>
+      </div>
     </div>
 
   </main>
