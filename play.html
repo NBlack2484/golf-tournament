@@ -3,35 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enter Player Hole Score</title>
+<title>Enter Hole Score</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
   body {
     margin: 0;
-    padding: 0;
     min-height: 100vh;
-    background-image: url('assets/images/st_andrews.png');
+    background: url('assets/images/st_andrews.jpg') no-repeat center center fixed;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     font-family: Arial, sans-serif;
   }
 
   .overlay {
-    background-color: rgba(0,0,0,0.3);
     width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* vertical center */
-    align-items: center;     /* horizontal center */
-    text-align: center;
+    min-height: 100vh;
+    background-color: rgba(0,0,0,0.25);
     padding: 2rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   h1, label {
     color: white;
+    text-align: center;
     margin: 0.5rem 0;
   }
 
@@ -45,9 +42,9 @@
   }
 
   .btn {
-    display: inline-block;
-    padding: 12px 24px;
+    display: block;
     margin-top: 1rem;
+    padding: 12px 24px;
     background-color: #e63946;
     color: white;
     text-decoration: none;
