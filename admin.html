@@ -75,7 +75,7 @@
     .stat-card .lbl {
       font-family:'Cinzel',serif;
       font-size:0.85rem; letter-spacing:0.12em;
-      text-transform:uppercase; color:#ffffff;
+      text-transform:uppercase; color:#1a2744;
     }
 
     .admin-tabs {
@@ -90,8 +90,8 @@
       border:1.5px solid #fdf8e8; border-radius:3px;
       cursor:pointer; background:none; transition:all 0.2s;
     }
-    .admin-tab:hover { color:#ffffff; border-color:#ffffff; background:rgba(253,248,232,0.15); }
-    .admin-tab.active { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.85); }
+    .admin-tab:hover { color:#ffffff; border-color:#ffffff; background:rgba(26,39,68,0.70); }
+    .admin-tab.active { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.90); }
 
     .tab-panel { display:none; }
     .tab-panel.active { display:block; animation:fadeIn 0.35s ease both; }
@@ -184,7 +184,7 @@
     }
     .logout-btn:hover { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.85); }
 
-    /* Dark navy background + pale yellow text on all admin action buttons */
+    /* Dark navy bg + pale yellow text on all admin action buttons */
     #dashboard .btn-gold {
       background: #1a2744 !important;
       color: #fdf8e8 !important;
@@ -371,7 +371,7 @@
         <div class="card">
           <div class="card-title">Registered Sponsors</div>
           <p style="font-style:italic;color:rgba(255,255,255,0.45);font-size:0.88rem;margin-bottom:16px;">
-            💡 To add a sponsor logo: upload the image file to <code style="background:#111;padding:2px 6px;border-radius:2px;color:var(--gold);">assets/images/sponsors/</code> in your GitHub repo, then enter the filename below.
+            💡 To add a sponsor logo: upload the image file to <code style="background:#e8e0bc;padding:2px 6px;border-radius:2px;color:#1a2744;">assets/images/sponsors/</code> in your GitHub repo, then enter the filename below.
           </p>
           <div class="table-wrap">
             <table>
@@ -399,7 +399,7 @@
       <div id="panel-scoring" class="tab-panel">
         <div class="card">
           <div class="card-title">Team Scorer Links</div>
-          <p style="font-style:italic;color:rgba(244,238,216,0.55);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:#1a2744;font-size:0.95rem;margin-bottom:20px;">
             Generate a unique scorer code for each team. Share the link with the team's designated scorer — they open it on their phone and enter scores hole-by-hole.
           </p>
           <div style="margin-bottom:16px;">
@@ -431,7 +431,7 @@
 
         <div class="card">
           <div class="card-title">Live Score Override</div>
-          <p style="font-style:italic;color:rgba(244,238,216,0.55);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:#1a2744;font-size:0.95rem;margin-bottom:20px;">
             Manually enter or correct a team's score for any hole.
           </p>
           <div style="display:grid;grid-template-columns:1fr 120px 120px auto;gap:12px;align-items:flex-end;">
@@ -461,7 +461,7 @@
       <div id="panel-course" class="tab-panel">
         <div class="card">
           <div class="card-title">Course Par Settings</div>
-          <p style="font-style:italic;color:rgba(244,238,216,0.55);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:#1a2744;font-size:0.95rem;margin-bottom:20px;">
             Set the par for each hole. This affects all score-to-par calculations on the leaderboard.
           </p>
           <div id="par-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:24px;"></div>
@@ -474,7 +474,7 @@
 
         <div class="card">
           <div class="card-title">Starting Holes — Shotgun Assignment</div>
-          <p style="font-style:italic;color:rgba(255,255,255,0.5);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:#1a2744;font-size:0.95rem;margin-bottom:20px;">
             Assign each team's starting hole. The course map below updates live as you assign holes.
           </p>
 
@@ -482,9 +482,9 @@
           <div style="margin-bottom:28px;">
             <div style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Course Map</div>
             <div id="course-map" style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin-bottom:8px;"></div>
-            <div style="display:flex;gap:20px;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.10em;text-transform:uppercase;color:#666;margin-top:8px;">
-              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:#1a1a1a;border:1px solid #333;display:inline-block;"></span> Unassigned</span>
-              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:rgba(201,162,39,0.25);border:1px solid var(--gold);display:inline-block;"></span> Assigned</span>
+            <div style="display:flex;gap:20px;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.10em;text-transform:uppercase;color:#4a4a6a;margin-top:8px;">
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:#fdf8e8;border:1.5px solid #b0a478;display:inline-block;"></span> Unassigned</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:rgba(26,39,68,0.15);border:1.5px solid #1a2744;display:inline-block;"></span> Assigned</span>
             </div>
           </div>
 
@@ -754,7 +754,7 @@
           <td>
             <div style="display:flex;gap:6px;align-items:center;">
               <input type="text" id="logo-${s.id}" value="${esc(s.logoFile||'')}" placeholder="logo.png"
-                style="background:#111;border:1px solid #333;border-radius:2px;color:#fff;font-size:0.85rem;padding:5px 8px;width:110px;outline:none;">
+                style="background:#fdf8e8;border:1.5px solid #1a2744;border-radius:2px;color:#1a2744;font-size:0.85rem;padding:5px 8px;width:110px;outline:none;">
               <button class="btn-sm btn-sm-pay" onclick="saveSponsorLogo('${s.id}')">Set</button>
             </div>
           </td>
@@ -858,9 +858,9 @@
       const pars = _cache.pars;
       const grid = document.getElementById('par-grid');
       grid.innerHTML = Array.from({length:18},(_,i) => `
-        <div style="background:#111;border:1px solid #333;border-radius:3px;padding:12px;text-align:center;">
+        <div style="background:#fdf8e8;border:1.5px solid #1a2744;border-radius:3px;padding:12px;text-align:center;">
           <div style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Hole ${i+1}</div>
-          <select id="par-${i}" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:'Cinzel',serif;font-size:1.1rem;padding:6px 10px;width:100%;outline:none;text-align:center;" onchange="updateParTotal()">
+          <select id="par-${i}" style="background:#fdf8e8;border:1.5px solid #1a2744;border-radius:2px;color:#1a2744;font-family:'Cinzel',serif;font-size:1.1rem;padding:6px 10px;width:100%;outline:none;text-align:center;" onchange="updateParTotal()">
             <option value="3" ${pars[i]===3?'selected':''}>3</option>
             <option value="4" ${pars[i]===4?'selected':''}>4</option>
             <option value="5" ${pars[i]===5?'selected':''}>5</option>
@@ -887,19 +887,19 @@
         const assigned = !!team;
         return `
           <div style="
-            background:${assigned?'rgba(201,162,39,0.15)':'#111'};
-            border:1px solid ${assigned?'var(--gold)':'#333'};
+            background:${assigned?'rgba(26,39,68,0.12)':'#fdf8e8'};
+            border:1.5px solid ${assigned?'#1a2744':'#b0a478'};
             border-radius:4px;
             padding:10px 6px;
             text-align:center;
             min-height:80px;
             display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
           ">
-            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'var(--gold-light)':'#555'};">${hole}</div>
-            <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#555;">Par ${par}</div>
+            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'#1a2744':'#7a7090'};">${hole}</div>
+            <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#4a4a6a;">Par ${par}</div>
             ${assigned
-              ? `<div style="font-size:0.72rem;color:#fff;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
-              : `<div style="font-size:0.68rem;color:#444;font-style:italic;">Open</div>`
+              ? `<div style="font-size:0.72rem;color:#1a2744;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
+              : `<div style="font-size:0.68rem;color:#8888a8;font-style:italic;">Open</div>`
             }
           </div>`;
       }).join('');
@@ -913,9 +913,9 @@
       shBody.innerHTML = teams.map(t => {
         const sh = scoresMap[t.name]?.startHole || 1;
         return `<tr>
-          <td style="color:#fff;font-size:1.05rem;">${esc(t.name)}</td>
+          <td style="color:#1a2744;font-size:1.05rem;font-weight:600;">${esc(t.name)}</td>
           <td class="center">
-            <select id="sh-${esc(t.name)}" onchange="updateCourseMap()" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:inherit;font-size:1.0rem;padding:8px 12px;outline:none;">
+            <select id="sh-${esc(t.name)}" onchange="updateCourseMap()" style="background:#fdf8e8;border:1.5px solid #1a2744;border-radius:2px;color:#1a2744;font-family:inherit;font-size:1.0rem;padding:8px 12px;outline:none;">
               <option value="0">— Unassigned —</option>
               ${Array.from({length:18},(_,i)=>`<option value="${i+1}" ${sh===i+1?'selected':''}>${i+1}</option>`).join('')}
             </select>
@@ -945,19 +945,19 @@
         const assigned = !!team;
         return `
           <div style="
-            background:${assigned?'rgba(201,162,39,0.15)':'#111'};
-            border:1px solid ${assigned?'var(--gold)':'#333'};
+            background:${assigned?'rgba(26,39,68,0.12)':'#fdf8e8'};
+            border:1.5px solid ${assigned?'#1a2744':'#b0a478'};
             border-radius:4px;
             padding:10px 6px;
             text-align:center;
             min-height:80px;
             display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
           ">
-            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'var(--gold-light)':'#555'};">${hole}</div>
-            <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#555;">Par ${par}</div>
+            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'#1a2744':'#7a7090'};">${hole}</div>
+            <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#4a4a6a;">Par ${par}</div>
             ${assigned
-              ? `<div style="font-size:0.72rem;color:#fff;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
-              : `<div style="font-size:0.68rem;color:#444;font-style:italic;">Open</div>`
+              ? `<div style="font-size:0.72rem;color:#1a2744;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
+              : `<div style="font-size:0.68rem;color:#8888a8;font-style:italic;">Open</div>`
             }
           </div>`;
       }).join('');
