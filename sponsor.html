@@ -7,19 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sponsorship · STL Naturals Golf Classic</title>
   <link rel="stylesheet" href="assets/css/shared.css?v=2">
-  <style>
-    :root {
-      --gold:       #1a2744;
-      --gold-light: #1a2744;
-      --gold-dim:   rgba(26,39,68,0.55);
-      --gold-border:rgba(26,39,68,0.3);
-      --cream:      #1a2744;
-      --cream-dim:  rgba(26,39,68,0.75);
-      --body-bg:    #fdf8e8;
-      --card-bg:    #f5eed6;
-      --card-border:#d4c89a;
-    }
-  </style>
   <style>body { background: url("assets/images/augusta.jpg") no-repeat center center fixed; background-size: cover; }</style>
   <style>
     .main-wrap {
@@ -42,7 +29,7 @@
       text-decoration:none; margin-bottom:32px;
       transition: color 0.2s;
     }
-    .back-link:hover { color:#1a2744; }
+    .back-link:hover { color:var(--gold-light); }
     .back-link::before { content:'←'; font-size:1.1rem; }
 
     /* Tier cards */
@@ -52,17 +39,11 @@
       gap: 24px;
       margin-bottom: 32px;
     }
-    @media (max-width:700px) {
-      .tier-grid { grid-template-columns:1fr; }
-      .main-wrap { width:96%; padding-left:8px; padding-right:8px; }
-      .tier-price { font-size:2.2rem !important; }
-    }
-    .tier-grid { width:100%; }
-    .tier-card { padding: 24px 20px; }
+    @media (max-width:580px) { .tier-grid { grid-template-columns:1fr; } }
 
     .tier-card {
-      background: #f5eed6;
-      border: 2px solid #c8b87a;
+      background: #1a1a1a;
+      border: 2px solid #333;
       border-radius: 6px;
       padding: 32px 28px;
       cursor: pointer;
@@ -71,14 +52,14 @@
       user-select: none;
     }
     .tier-card:hover {
-      border-color: #1a2744;
-      background: #ede5c8;
+      border-color: var(--gold);
+      background: #222;
       transform: translateY(-3px);
     }
     .tier-card.selected {
-      border-color: #1a2744;
-      background: #e8e0bc;
-      box-shadow: 0 0 0 1px #1a2744, 0 8px 32px rgba(26,39,68,0.2);
+      border-color: var(--gold);
+      background: #1e1800;
+      box-shadow: 0 0 0 1px var(--gold), 0 8px 32px rgba(201,162,39,0.2);
     }
 
     .tier-card .check-ring {
@@ -91,15 +72,15 @@
       font-size:0.9rem; color:transparent;
     }
     .tier-card.selected .check-ring {
-      background: #1a2744;
-      border-color: #1a2744;
-      color: #ffffff;
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #0a0800;
     }
 
     .tier-price {
       font-family:'Cinzel',serif;
       font-size:2.8rem; font-weight:900;
-      color:#1a2744;
+      color:var(--gold-light);
       line-height:1;
       margin-bottom:8px;
     }
@@ -107,10 +88,10 @@
       font-family:'Cinzel',serif;
       font-size:0.90rem; font-weight:700;
       letter-spacing:0.18em; text-transform:uppercase;
-      color:#1a2744;
+      color:#fff;
       margin-bottom:20px;
       padding-bottom:16px;
-      border-bottom:1px solid #c8b87a;
+      border-bottom:1px solid #333;
     }
     .tier-includes {
       list-style:none;
@@ -120,13 +101,13 @@
     }
     .tier-includes li {
       font-size:1.15rem;
-      color:#2a3550;
+      color:#ccc;
       display:flex; align-items:flex-start; gap:12px;
       line-height:1.4;
     }
     .tier-includes li::before {
       content:'✓';
-      color:#1a2744;
+      color:var(--gold);
       font-size:0.95rem;
       margin-top:2px;
       flex-shrink:0;
@@ -138,9 +119,9 @@
       font-family:'Cinzel',serif;
       font-size:0.68rem; letter-spacing:0.12em;
       text-transform:uppercase;
-      background:rgba(26,39,68,0.10);
-      color:#1a2744;
-      border:1px solid rgba(26,39,68,0.35);
+      background:rgba(201,162,39,0.18);
+      color:var(--gold-light);
+      border:1px solid rgba(201,162,39,0.45);
       padding:4px 12px; border-radius:2px;
       margin-bottom:12px;
     }
@@ -149,7 +130,7 @@
     .venmo-section {
       text-align:center;
       padding:36px 24px;
-      background:#f5eed6;
+      background:#1a1a1a;
       border:1px solid #333;
       border-radius:6px;
       margin-bottom:24px;
@@ -157,7 +138,7 @@
     .venmo-section h3 {
       font-family:'Cinzel',serif;
       font-size:1.0rem; letter-spacing:0.20em;
-      text-transform:uppercase; color:#1a2744;
+      text-transform:uppercase; color:var(--gold);
       margin-bottom:20px;
     }
     .venmo-qr-img {
@@ -168,7 +149,7 @@
     }
     .venmo-amount-display {
       font-size:2.0rem; font-weight:700;
-      color:#1a2744; margin:10px 0 6px;
+      color:#fff; margin:10px 0 6px;
       font-family:'Cinzel',serif;
       transition: all 0.3s;
     }
@@ -176,12 +157,12 @@
       display:inline-block;
       font-family:'Cinzel',serif;
       font-size:0.90rem; letter-spacing:0.14em;
-      color:#1a2744; text-decoration:none;
-      border-bottom:1px solid rgba(26,39,68,0.4);
+      color:var(--gold); text-decoration:none;
+      border-bottom:1px solid rgba(201,162,39,0.4);
       padding-bottom:3px;
       transition:color 0.2s, border-color 0.2s;
     }
-    .venmo-link:hover { color:#1a2744; border-color:#1a2744; }
+    .venmo-link:hover { color:var(--gold-light); border-color:var(--gold); }
     .venmo-note {
       font-size:1.05rem; color:rgba(255,255,255,0.45);
       font-style:italic; margin-top:8px;
@@ -201,10 +182,10 @@
     .confirm-row input[type=checkbox] {
       width:20px; height:20px; min-width:20px;
       margin-top:4px; cursor:pointer;
-      accent-color:#1a2744;
+      accent-color:var(--gold);
     }
     .confirm-row label {
-      font-size:1.05rem; color:rgba(255,255,255,0.75);
+      font-size:1.05rem; color:#1a2744;
       cursor:pointer; line-height:1.5;
     }
     .confirm-row label span { color:#1a2744; font-weight:600; }
@@ -215,7 +196,7 @@
     .success-icon { font-size:4rem; margin-bottom:20px; }
     #success-screen h2 {
       font-family:'Cinzel',serif;
-      font-size:1.8rem; color:#1a2744; margin-bottom:16px;
+      font-size:1.8rem; color:var(--gold-light); margin-bottom:16px;
     }
     #success-screen p {
       font-size:1.15rem; font-style:italic;
@@ -247,7 +228,7 @@
       <div class="card">
         <div class="card-title">Select Your Sponsorship Package</div>
 
-        <div class="tier-grid" >
+        <div class="tier-grid" style="grid-template-columns:1fr 1fr;">
 
           <!-- Tier 1: Supporter (Donation) -->
           <div class="tier-card" id="tier-0" onclick="selectTier(0)">
@@ -361,7 +342,7 @@
           </div>
           <p style="font-size:0.88rem;color:var(--cream-dim);font-style:italic;margin-top:-10px;margin-bottom:20px;">
             Your 4 team members can complete individual registration on the
-            <a href="register.html" style="color:#1a2744;text-decoration:none;">registration page</a>
+            <a href="register.html" style="color:var(--gold);text-decoration:none;">registration page</a>
             and select this team name.
           </p>
         </div>
