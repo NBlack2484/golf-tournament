@@ -215,7 +215,7 @@ tbody td.center { text-align:center; }
 .badge-paid   { background:rgba(92,184,122,0.15); color:#5cb87a; border:1px solid rgba(92,184,122,0.4); }
 .badge-unpaid { background:rgba(217,96,96,0.15);  color:#d96060; border:1px solid rgba(217,96,96,0.4); }
 .badge-full   { background:rgba(201,162,39,0.15); color:var(--gold-light); border:1px solid rgba(201,162,39,0.45); }
-.badge-open   { background:rgba(100,160,240,0.12); color:#88b8f0; border:1px solid rgba(100,160,240,0.35); }
+.badge-open   { background:#ffffff; color:#1a2744; border:1.5px solid #1a2744; font-weight:700; }
 
 /* ── FOOTER ──────────────────────── */
 .site-footer {
