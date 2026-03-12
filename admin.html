@@ -242,7 +242,10 @@
 
       <div class="admin-header-row">
         <span class="admin-title">⛳ Tournament Dashboard</span>
-        <button class="logout-btn" onclick="doLogout()">Logout</button>
+        <div style="display:flex;align-items:center;gap:24px;">
+          <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.90rem;letter-spacing:0.14em;text-transform:uppercase;color:#fff;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='#fff'">← Tournament Home</a>
+          <button class="logout-btn" onclick="doLogout()">Logout</button>
+        </div>
       </div>
 
       <!-- Stats -->
