@@ -178,11 +178,25 @@
     .logout-btn {
       font-family:'Cinzel',serif;
       font-size:0.90rem; letter-spacing:0.14em;
-      text-transform:uppercase; color:var(--gold-dim);
+      text-transform:uppercase; color:#ffffff;
       background:none; border:none; cursor:pointer;
       transition:color 0.2s; padding:0;
     }
     .logout-btn:hover { color:var(--gold); }
+
+    /* White text on all admin action buttons */
+    #dashboard .btn-gold {
+      color: #ffffff !important;
+      font-weight: 700;
+    }
+    #dashboard .btn-outline {
+      color: #ffffff !important;
+      border-color: #ffffff !important;
+    }
+    #dashboard .btn-outline:hover {
+      color: var(--gold-light) !important;
+      border-color: var(--gold-light) !important;
+    }
 
     .admin-header-row {
       display:flex; align-items:center; justify-content:space-between;
@@ -243,7 +257,7 @@
       <div class="admin-header-row">
         <span class="admin-title">⛳ Tournament Dashboard</span>
         <div style="display:flex;align-items:center;gap:24px;">
-          <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.90rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold);padding:8px 20px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.background='rgba(201,162,39,0.15)'" onmouseout="this.style.background='transparent'">← Home</a>
+          <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.90rem;letter-spacing:0.14em;text-transform:uppercase;color:#ffffff;text-decoration:none;border:1px solid #ffffff;padding:8px 20px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='#ffffff';this.style.color='#ffffff'">← Home</a>
           <button class="logout-btn" onclick="doLogout()">Logout</button>
         </div>
       </div>
