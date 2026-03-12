@@ -275,6 +275,15 @@
       border: 1.5px solid #1a2744 !important;
       font-weight: 700 !important;
     }
+    /* Players and Unpaid table text → dark navy */
+    #panel-players tbody td,
+    #panel-unpaid tbody td {
+      color: #1a2744 !important;
+    }
+    #panel-players tbody td a,
+    #panel-unpaid tbody td a {
+      color: #1a2744 !important;
+    }
   </style>
 </head>
 <body>
@@ -692,7 +701,7 @@
 
       const tbody = document.getElementById('players-tbody');
       if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="center" style="color:var(--gold-dim);font-style:italic;padding:24px;">No players found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="center" style="color:#1a2744;font-style:italic;padding:24px;">No players found.</td></tr>';
         return;
       }
       tbody.innerHTML = filtered.map(p => {
@@ -700,9 +709,9 @@
         return `<tr>
           <td>${esc(p.name)}</td>
           <td>${esc(p.team)}</td>
-          <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
+          <td><a href="mailto:${esc(p.email)}" style="color:#1a2744;text-decoration:none;">${esc(p.email)}</a></td>
           <td>${esc(p.phone)}</td>
-          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
+          <td style="color:#1a2744;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
           <td class="center"><span class="badge ${isPaid?'badge-paid':'badge-unpaid'}">${isPaid?'Paid':'Unpaid'}</span></td>
           <td class="center" style="white-space:nowrap;">
             ${isPaid
@@ -761,9 +770,9 @@
       tbody.innerHTML = unpaid.map(p => `
         <tr>
           <td>${esc(p.name)}</td><td>${esc(p.team)}</td>
-          <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
+          <td><a href="mailto:${esc(p.email)}" style="color:#1a2744;text-decoration:none;">${esc(p.email)}</a></td>
           <td>${esc(p.phone)}</td>
-          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
+          <td style="color:#1a2744;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
           <td class="center"><button class="btn-sm btn-sm-pay" onclick="togglePaid('${p.id}',true)">Mark Paid</button></td>
         </tr>`).join('');
     }
