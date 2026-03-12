@@ -243,7 +243,7 @@
       <div class="admin-header-row">
         <span class="admin-title">⛳ Tournament Dashboard</span>
         <div style="display:flex;align-items:center;gap:24px;">
-          <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.90rem;letter-spacing:0.14em;text-transform:uppercase;color:#fff;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='#fff'">← Tournament Home</a>
+          <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.90rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold);padding:8px 20px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.background='rgba(201,162,39,0.15)'" onmouseout="this.style.background='transparent'">← Home</a>
           <button class="logout-btn" onclick="doLogout()">Logout</button>
         </div>
       </div>
@@ -710,7 +710,9 @@
           <td>${esc(s.contactName)}</td>
           <td><a href="mailto:${esc(s.contactEmail)}" style="color:var(--gold-dim);text-decoration:none;">${esc(s.contactEmail)}</a></td>
           <td>${esc(s.contactPhone)}</td>
-          <td class="center"><span class="badge ${Number(s.tier)===700?'badge-full':'badge-open'}">${Number(s.tier)===700?'Sponsor+Play ($700)':'Tee Box ($300)'}</span></td>
+          <td class="center"><span class="badge ${Number(s.tier)===700?'badge-full':Number(s.tier)===300?'badge-open':Number(s.tier)===150?'badge-paid':'badge-unpaid'}">
+              ${Number(s.tier)===700?'🥇 Gold ($700)':Number(s.tier)===300?'🥈 Silver ($300)':Number(s.tier)===150?'🥉 Bronze ($150)':`🤍 Supporter ($${s.tier})`}
+            </span></td>
           <td style="color:var(--gold-dim);font-style:italic;">${s.teamName?esc(s.teamName):'—'}</td>
           <td style="color:#888;font-size:0.85rem;">${fmtDate(s.registeredAt)}</td>
           <td>

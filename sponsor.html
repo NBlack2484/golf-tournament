@@ -228,33 +228,60 @@
       <div class="card">
         <div class="card-title">Select Your Sponsorship Package</div>
 
-        <div class="tier-grid">
+        <div class="tier-grid" style="grid-template-columns:1fr 1fr;">
 
-          <!-- Tier 1: Sponsor Only -->
+          <!-- Tier 1: Supporter (Donation) -->
+          <div class="tier-card" id="tier-0" onclick="selectTier(0)">
+            <div class="check-ring">✓</div>
+            <div class="tier-price" style="font-size:2.0rem;">Donation</div>
+            <div class="tier-name">🤍 Supporter</div>
+            <ul class="tier-includes">
+              <li>Contribute any amount you choose</li>
+              <li>Name recognized in tournament program</li>
+              <li>No marketing or on-site presence required</li>
+              <li>100% goes toward tournament operations</li>
+            </ul>
+          </div>
+
+          <!-- Tier 2: Bronze -->
+          <div class="tier-card" id="tier-150" onclick="selectTier(150)">
+            <div class="check-ring">✓</div>
+            <div class="tier-price">$150</div>
+            <div class="tier-name">🥉 Bronze — Tee Box Sponsor</div>
+            <ul class="tier-includes">
+              <li>Business sign displayed at tee box</li>
+              <li>Brand visibility to all players &amp; guests</li>
+              <li>Name in tournament program</li>
+            </ul>
+          </div>
+
+          <!-- Tier 3: Silver -->
           <div class="tier-card" id="tier-300" onclick="selectTier(300)">
             <div class="check-ring">✓</div>
             <div class="tier-price">$300</div>
-            <div class="tier-name">Tee Box Sponsor</div>
+            <div class="tier-name">🥈 Silver — Tent &amp; Tee Box Sponsor</div>
             <ul class="tier-includes">
               <li>Tent setup at your tee box</li>
               <li>Business representative on-site</li>
               <li>Business sign displayed at tee box</li>
               <li>Brand visibility to all players &amp; guests</li>
+              <li>Name in tournament program</li>
             </ul>
           </div>
 
-          <!-- Tier 2: Sponsor + Play -->
+          <!-- Tier 4: Gold -->
           <div class="tier-card" id="tier-700" onclick="selectTier(700)">
             <div class="check-ring">✓</div>
             <div class="tier-badge">Best Value</div>
             <div class="tier-price">$700</div>
-            <div class="tier-name">Sponsor + Play</div>
+            <div class="tier-name">🥇 Gold — Sponsor + Play</div>
             <ul class="tier-includes">
               <li>Full 4-man team entry included</li>
               <li>Tent setup at your tee box</li>
               <li>Business representative on-site</li>
               <li>Business sign displayed at tee box</li>
               <li>Brand visibility to all players &amp; guests</li>
+              <li>Name in tournament program</li>
             </ul>
           </div>
 
@@ -277,6 +304,14 @@
         <div class="card-title">Business &amp; Contact Information</div>
 
         <div id="alert-box" class="alert"></div>
+
+        <!-- Donation amount (Supporter tier only) -->
+        <div id="donation-amount-section" style="display:none;">
+          <div class="form-group">
+            <label for="donation-amount">Donation Amount *</label>
+            <input type="number" id="donation-amount" placeholder="e.g. 50" min="1">
+          </div>
+        </div>
 
         <div class="form-group">
           <label for="biz-name">Business Name *</label>
@@ -353,10 +388,17 @@
       document.getElementById('tier-' + amount).classList.add('selected');
 
       // Update payment display
-      document.getElementById('venmo-amount-display').textContent = '$' + amount.toLocaleString() + '.00';
-      document.getElementById('confirm-amount').textContent = '$' + amount.toLocaleString() + '.00';
+      if (amount === 0) {
+        document.getElementById('venmo-amount-display').textContent = 'Any Amount — Your Choice';
+        document.getElementById('confirm-amount').textContent = 'your chosen donation amount';
+        document.getElementById('donation-amount-section').style.display = 'block';
+      } else {
+        document.getElementById('venmo-amount-display').textContent = '$' + amount.toLocaleString() + '.00';
+        document.getElementById('confirm-amount').textContent = '$' + amount.toLocaleString() + '.00';
+        document.getElementById('donation-amount-section').style.display = 'none';
+      }
 
-      // Show team section only for $700 tier
+      // Show team section only for $700 Gold tier
       document.getElementById('team-section').style.display = amount === 700 ? 'block' : 'none';
     }
 
@@ -372,7 +414,7 @@
 
     async function submitSponsor() {
       hideAlert();
-      if (!selectedTier) return showAlert('Please select a sponsorship package.', 'error');
+      if (selectedTier === null) return showAlert('Please select a sponsorship package.', 'error');
 
       const bizName      = document.getElementById('biz-name').value.trim();
       const contactName  = document.getElementById('contact-name').value.trim();
@@ -386,6 +428,14 @@
       if (!contactEmail || !contactEmail.includes('@')) return showAlert('Please enter a valid email address.', 'error');
       if (!paid)         return showAlert('Please confirm your Venmo payment before submitting.', 'error');
 
+      // Handle donation amount
+      let tierValue = selectedTier;
+      if (selectedTier === 0) {
+        const donationAmt = parseFloat(document.getElementById('donation-amount').value);
+        if (!donationAmt || donationAmt < 1) return showAlert('Please enter your donation amount.', 'error');
+        tierValue = donationAmt; // store actual donation amount
+      }
+
       let teamName = '';
       if (selectedTier === 700) {
         teamName = document.getElementById('sponsor-team-name').value.trim();
@@ -396,11 +446,12 @@
       btn.textContent = 'Submitting...'; btn.disabled = true;
 
       try {
-        const result = await DB.registerSponsor({ bizName, contactName, contactPhone, contactEmail, tier: selectedTier, teamName });
+        const result = await DB.registerSponsor({ bizName, contactName, contactPhone, contactEmail, tier: tierValue, teamName });
         if (result.error) return showAlert(result.error, 'error');
         document.getElementById('sponsor-form-wrap').style.display = 'none';
         document.getElementById('success-screen').classList.add('show');
-        const tierLabel = selectedTier === 700 ? 'Sponsor + Play ($700)' : 'Tee Box Sponsor ($300)';
+        const tierLabels = { 0: 'Supporter (Donation)', 150: 'Bronze — Tee Box Sponsor ($150)', 300: 'Silver — Tent & Tee Box Sponsor ($300)', 700: 'Gold — Sponsor + Play ($700)' };
+        const tierLabel = tierLabels[selectedTier] || `Supporter (Donation — $${tierValue})`;
         document.getElementById('success-message').textContent =
           `${bizName} has been registered as a ${tierLabel} sponsor. ` +
           (teamName ? `Team "${teamName}" has been created — your players can register on the registration page. ` : '') +
