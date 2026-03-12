@@ -10,9 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold:       #c9a227;
-      --gold-light: #f0d060;
-      --gold-dim:   rgba(201,162,39,0.55);
+      --gold:       #1a2744;
+      --gold-light: #1a2744;
+      --gold-dim:   rgba(26,39,68,0.55);
       --cream:      #f4eed8;
       --card-bg:    rgba(4,10,4,0.82);
       --card-border:rgba(201,162,39,0.28);
@@ -34,14 +34,14 @@
     }
     body::before {
       content:''; position:fixed; inset:0;
-      background: rgba(0,0,0,0.72);
+      background: rgba(253,248,232,0.92);
       pointer-events:none; z-index:0;
     }
 
     /* ── HEADER ── */
     .header {
       position:relative; z-index:10;
-      background: rgba(0,0,0,0.6);
+      background: rgba(253,248,232,0.85);
       border-bottom: 1px solid var(--card-border);
       padding: 14px 20px;
       display:flex; align-items:center; justify-content:space-between;
@@ -49,14 +49,14 @@
     .header-team {
       font-family:'Cinzel',serif;
       font-size:0.85rem; font-weight:700;
-      color:var(--gold-light);
+      color:#1a2744;
     }
     .header-score {
       font-family:'Cinzel',serif;
       font-size:0.85rem;
       color:var(--cream);
     }
-    .header-score span { color:var(--gold); }
+    .header-score span { color:#1a2744; }
 
     /* ── ACCESS SCREEN ── */
     #access-screen {
@@ -66,7 +66,7 @@
       padding:24px;
     }
     .access-card {
-      background:var(--card-bg);
+      background:#f5eed6;
       border:1px solid var(--card-border);
       border-radius:6px;
       backdrop-filter:blur(20px);
@@ -76,14 +76,14 @@
     }
     .access-card h1 {
       font-family:'Cinzel',serif;
-      font-size:1.3rem; color:var(--gold-light);
+      font-size:1.3rem; color:#1a2744;
       margin-bottom:8px;
     }
     .access-card p { font-style:italic; color:rgba(244,238,216,0.6); margin-bottom:28px; font-size:1rem; }
 
     .token-input {
       width:100%;
-      background:rgba(0,0,0,0.5);
+      background:rgba(253,248,232,0.80);
       border:1px solid rgba(201,162,39,0.4);
       border-radius:4px;
       color:var(--cream);
@@ -96,7 +96,7 @@
       outline:none;
       margin-bottom:16px;
     }
-    .token-input:focus { border-color:var(--gold); }
+    .token-input:focus { border-color:#1a2744; }
 
     .btn-gold {
       width:100%;
@@ -104,7 +104,7 @@
       font-size:0.68rem; letter-spacing:0.20em;
       text-transform:uppercase;
       padding:14px;
-      background:linear-gradient(135deg,#c9a227,#f0d060,#c9a227);
+      background:linear-gradient(135deg,#1a2744,#2a3d6e,#1a2744);
       color:#0a0800; border:none; border-radius:3px;
       cursor:pointer; transition:all 0.2s;
       font-weight:700;
@@ -117,23 +117,23 @@
 
     /* Hole progress bar */
     .progress-bar {
-      background:rgba(0,0,0,0.5);
+      background:rgba(253,248,232,0.80);
       border-bottom:1px solid var(--card-border);
       padding:10px 16px;
       display:flex; gap:4px;
     }
     .progress-hole {
       flex:1; height:6px; border-radius:3px;
-      background:rgba(255,255,255,0.1);
+      background:rgba(26,39,68,0.1);
       transition:background 0.3s;
     }
-    .progress-hole.done  { background:var(--gold); }
+    .progress-hole.done  { background:#1a2744; }
     .progress-hole.active { background:rgba(201,162,39,0.5); }
 
     /* Hole card */
     .hole-card {
       margin:16px;
-      background:var(--card-bg);
+      background:#f5eed6;
       border:1px solid var(--card-border);
       border-radius:8px;
       backdrop-filter:blur(20px);
@@ -149,7 +149,7 @@
     .hole-number {
       font-family:'Cinzel',serif;
       font-size:1.5rem; font-weight:900;
-      color:var(--gold-light);
+      color:#1a2744;
     }
     .hole-number small {
       display:block;
@@ -185,7 +185,7 @@
       background:rgba(201,162,39,0.12);
       border:1px solid rgba(201,162,39,0.35);
       border-radius:50%;
-      color:var(--gold-light);
+      color:#1a2744;
       font-size:2rem; font-weight:300;
       cursor:pointer; transition:all 0.15s;
       display:flex; align-items:center; justify-content:center;
@@ -257,7 +257,7 @@
       color:rgba(244,238,216,0.7);
     }
     .btn-next {
-      background:linear-gradient(135deg,#c9a227,#f0d060,#c9a227);
+      background:linear-gradient(135deg,#1a2744,#2a3d6e,#1a2744);
       color:#0a0800; font-weight:700;
     }
 
@@ -272,7 +272,7 @@
     .scorecard-summary-title {
       font-family:'Cinzel',serif;
       font-size:0.60rem; letter-spacing:0.16em;
-      text-transform:uppercase; color:var(--gold);
+      text-transform:uppercase; color:#1a2744;
       padding:10px 14px;
       border-bottom:1px solid var(--card-border);
     }
@@ -306,12 +306,12 @@
       border-top:1px solid var(--card-border);
     }
     .sc-totals span { color:var(--gold-dim); }
-    .sc-totals strong { color:var(--gold-light); }
+    .sc-totals strong { color:#1a2744; }
 
     /* Finish screen */
     #finish-screen { display:none; position:relative; z-index:10; padding:40px 20px; text-align:center; }
     #finish-screen.show { display:block; }
-    #finish-screen h2 { font-family:'Cinzel',serif; font-size:1.5rem; color:var(--gold-light); margin-bottom:12px; }
+    #finish-screen h2 { font-family:'Cinzel',serif; font-size:1.5rem; color:#1a2744; margin-bottom:12px; }
     #finish-screen p  { font-style:italic; color:rgba(244,238,216,0.65); margin-bottom:28px; font-size:1.05rem; line-height:1.6; }
 
     .alert { padding:12px 16px; border-radius:3px; margin:0 16px 12px; font-size:0.95rem; display:none; }
@@ -333,7 +333,7 @@
       <button class="btn-gold" onclick="loadScorer()">Start Scoring</button>
       <div id="access-alert" class="alert alert-error" style="margin:12px 0 0;"></div>
       <br>
-      <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);opacity:0.7;text-decoration:none;display:inline-block;margin-top:8px;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">← Tournament Home</a>
+      <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:#1a2744;opacity:0.7;text-decoration:none;display:inline-block;margin-top:8px;transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">← Tournament Home</a>
     </div>
   </div>
 

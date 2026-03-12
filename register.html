@@ -7,6 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register · STL Naturals Golf Classic</title>
   <link rel="stylesheet" href="assets/css/shared.css?v=2">
+  <style>
+    :root {
+      --gold:       #1a2744;
+      --gold-light: #1a2744;
+      --gold-dim:   rgba(26,39,68,0.55);
+      --gold-border:rgba(26,39,68,0.3);
+      --cream:      #1a2744;
+      --cream-dim:  rgba(26,39,68,0.75);
+      --body-bg:    #fdf8e8;
+      --card-bg:    #f5eed6;
+      --card-border:#d4c89a;
+    }
+  </style>
   <style>body { background: url("assets/images/augusta.jpg") no-repeat center center fixed; background-size: cover; }</style>
   <style>
     .main-wrap {
@@ -25,11 +38,11 @@
       display: inline-flex; align-items: center; gap: 8px;
       font-family:'Cinzel',serif;
       font-size:0.60rem; letter-spacing:0.14em;
-      text-transform:uppercase; color:var(--gold-dim);
+      text-transform:uppercase; color:rgba(26,39,68,0.6);
       text-decoration:none; margin-bottom:28px;
       transition: color 0.2s;
     }
-    .back-link:hover { color:var(--gold); }
+    .back-link:hover { color:#1a2744; }
     .back-link::before { content:'←'; font-size:0.85rem; }
 
     /* Team selection toggle */
@@ -49,19 +62,19 @@
       padding:10px 16px;
       background:transparent;
       border:none; cursor:pointer;
-      color:var(--gold-dim);
+      color:rgba(26,39,68,0.6);
       transition: all 0.2s;
     }
     .team-toggle button.active {
-      background: rgba(201,162,39,0.16);
-      color:var(--gold-light);
+      background: rgba(26,39,68,0.12);
+      color:#1a2744;
     }
 
     /* Venmo section */
     .venmo-section {
       text-align:center;
       padding: 28px 20px;
-      background: rgba(0,0,0,0.3);
+      background: rgba(253,248,232,0.6);
       border: 1px solid var(--card-border);
       border-radius:3px;
       margin-bottom:20px;
@@ -69,7 +82,7 @@
     .venmo-section h3 {
       font-family:'Cinzel',serif;
       font-size:0.70rem; letter-spacing:0.20em;
-      text-transform:uppercase; color:var(--gold);
+      text-transform:uppercase; color:#1a2744;
       margin-bottom:14px;
     }
     .venmo-qr-img {
@@ -83,12 +96,12 @@
       display:inline-block;
       font-family:'Cinzel',serif;
       font-size:0.65rem; letter-spacing:0.14em;
-      color:var(--gold); text-decoration:none;
+      color:#1a2744; text-decoration:none;
       border-bottom:1px solid var(--gold-border);
       padding-bottom:2px;
       transition: color 0.2s, border-color 0.2s;
     }
-    .venmo-link:hover { color:var(--gold-light); border-color:var(--gold); }
+    .venmo-link:hover { color:#1a2744; border-color:#1a2744; }
 
     .venmo-amount {
       font-size:1.3rem; font-style:italic;
@@ -119,13 +132,13 @@
     .confirm-row input[type=checkbox] {
       width:18px; height:18px; min-width:18px;
       margin-top:3px; cursor:pointer;
-      accent-color: var(--gold);
+      accent-color: #1a2744;
     }
     .confirm-row label {
       font-size:0.92rem; color:var(--cream-dim);
       cursor:pointer; line-height:1.5;
     }
-    .confirm-row label span { color:var(--gold); }
+    .confirm-row label span { color:#1a2744; }
 
     /* Success screen */
     #success-screen {
@@ -139,7 +152,7 @@
     }
     #success-screen h2 {
       font-family:'Cinzel',serif;
-      font-size:1.4rem; color:var(--gold-light);
+      font-size:1.4rem; color:#1a2744;
       margin-bottom:12px;
     }
     #success-screen p {
