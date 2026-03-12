@@ -22,17 +22,17 @@
       border-radius:3px;
       backdrop-filter:blur(18px);
       padding:40px 48px;
-      width:min(420px,100%);
+      width:min(480px,100%);
       text-align:center;
     }
     .login-card h2 {
       font-family:'Cinzel',serif;
-      font-size:1.1rem; color:var(--gold-light);
-      margin-bottom:6px;
+      font-size:1.6rem; color:var(--gold-light);
+      margin-bottom:8px;
     }
     .login-card p {
       font-style:italic; color:var(--cream-dim);
-      font-size:0.95rem; margin-bottom:28px;
+      font-size:1.1rem; margin-bottom:28px;
     }
 
     /* Dashboard */
@@ -41,7 +41,7 @@
 
     .main-wrap {
       position:relative; z-index:10;
-      width:min(1100px,94%);
+      width:min(1400px,96%);
       margin:0 auto;
       padding-bottom:60px;
       animation: rise 0.7s ease both;
@@ -63,32 +63,32 @@
       border:1px solid var(--card-border);
       border-radius:3px;
       backdrop-filter:blur(14px);
-      padding:22px 20px;
+      padding:24px 20px;
       text-align:center;
     }
     .stat-card .num {
       font-family:'Cinzel',serif;
-      font-size:2.2rem; line-height:1;
+      font-size:2.8rem; line-height:1;
       color:var(--gold-light);
-      margin-bottom:8px;
+      margin-bottom:10px;
     }
     .stat-card .lbl {
       font-family:'Cinzel',serif;
-      font-size:0.58rem; letter-spacing:0.14em;
+      font-size:0.85rem; letter-spacing:0.12em;
       text-transform:uppercase; color:var(--gold-dim);
     }
 
     /* Tabs */
     .admin-tabs {
-      display:flex; gap:4px; margin-bottom:24px;
+      display:flex; gap:6px; margin-bottom:28px; flex-wrap:wrap;
     }
     .admin-tab {
       font-family:'Cinzel',serif;
-      font-size:0.63rem; letter-spacing:0.16em;
+      font-size:0.90rem; letter-spacing:0.14em;
       text-transform:uppercase;
-      color:rgba(201,162,39,0.60);
-      padding:9px 22px;
-      border:1px solid transparent; border-radius:2px;
+      color:rgba(201,162,39,0.70);
+      padding:12px 28px;
+      border:1px solid transparent; border-radius:3px;
       cursor:pointer; background:none; transition:all 0.2s;
     }
     .admin-tab:hover { color:var(--gold-light); border-color:var(--card-border); background:var(--gold-glow); }
@@ -101,9 +101,9 @@
     /* Action buttons in tables */
     .btn-sm {
       font-family:'Cinzel',serif;
-      font-size:0.52rem; letter-spacing:0.10em;
+      font-size:0.75rem; letter-spacing:0.10em;
       text-transform:uppercase;
-      padding:5px 12px; border-radius:2px;
+      padding:7px 16px; border-radius:2px;
       cursor:pointer; border:none;
       transition:all 0.18s;
     }
@@ -117,7 +117,7 @@
     /* Team summary cards */
     .teams-grid {
       display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
+      grid-template-columns:repeat(auto-fill, minmax(320px,1fr));
       gap:18px;
     }
     .team-card {
@@ -125,29 +125,29 @@
       border:1px solid var(--card-border);
       border-radius:3px;
       backdrop-filter:blur(12px);
-      padding:20px 24px;
+      padding:24px 28px;
     }
     .team-card-header {
       display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:14px; padding-bottom:12px;
+      margin-bottom:16px; padding-bottom:14px;
       border-bottom:1px solid var(--card-border);
     }
     .team-card-name {
       font-family:'Cinzel',serif;
-      font-size:0.85rem; color:var(--gold-light);
+      font-size:1.1rem; color:var(--gold-light);
     }
     .team-member {
       display:flex; align-items:center; justify-content:space-between;
-      padding:6px 0;
+      padding:8px 0;
       border-bottom:1px solid rgba(255,255,255,0.04);
-      font-size:0.92rem;
+      font-size:1.05rem;
     }
     .team-member:last-child { border-bottom:none; }
     .team-member .name { color:var(--cream); }
     .team-slots {
       font-family:'Cinzel',serif;
-      font-size:0.60rem; letter-spacing:0.10em;
-      color:var(--gold-dim); margin-top:10px;
+      font-size:0.80rem; letter-spacing:0.10em;
+      color:var(--gold-dim); margin-top:12px;
       text-transform:uppercase;
     }
 
@@ -161,7 +161,7 @@
       border:1px solid rgba(201,162,39,0.30);
       border-radius:2px; color:var(--cream);
       font-family:'Cormorant Garamond',serif;
-      font-size:1rem; padding:9px 14px;
+      font-size:1.1rem; padding:11px 16px;
       outline:none;
     }
     .filter-bar input:focus { border-color:var(--gold); }
@@ -170,14 +170,14 @@
       border:1px solid rgba(201,162,39,0.30);
       border-radius:2px; color:var(--cream);
       font-family:'Cormorant Garamond',serif;
-      font-size:1rem; padding:9px 14px;
+      font-size:1.1rem; padding:11px 16px;
       outline:none; cursor:pointer;
     }
     .filter-bar select option { background:#0e1410; }
 
     .logout-btn {
       font-family:'Cinzel',serif;
-      font-size:0.60rem; letter-spacing:0.14em;
+      font-size:0.90rem; letter-spacing:0.14em;
       text-transform:uppercase; color:var(--gold-dim);
       background:none; border:none; cursor:pointer;
       transition:color 0.2s; padding:0;
@@ -186,16 +186,16 @@
 
     .admin-header-row {
       display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:24px;
+      margin-bottom:28px;
     }
     .admin-title {
       font-family:'Cinzel',serif;
-      font-size:1.0rem; color:var(--gold-light);
+      font-size:1.4rem; color:var(--gold-light);
     }
 
     @media (max-width:640px) {
       .stats-bar { grid-template-columns:repeat(2,1fr); }
-      .admin-tab { padding:8px 12px; font-size:0.56rem; }
+      .admin-tab { padding:10px 16px; font-size:0.78rem; }
     }
     @media (max-width:420px) {
       .stats-bar { grid-template-columns:1fr 1fr; }
