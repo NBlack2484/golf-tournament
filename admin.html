@@ -7,6 +7,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin · STL Naturals Golf Classic</title>
   <link rel="stylesheet" href="assets/css/shared.css?v=2">
+  <style>
+    /* ── VAR OVERRIDES: navy + pale yellow scheme ── */
+    :root {
+      --gold:         #1a2744;
+      --gold-light:   #1a2744;
+      --gold-dim:     rgba(26,39,68,0.55);
+      --gold-border:  rgba(26,39,68,0.30);
+      --gold-glow:    rgba(26,39,68,0.10);
+      --cream:        #1a2744;
+      --cream-dim:    rgba(26,39,68,0.75);
+      --dark:         #fdf8e8;
+      --card-bg:      rgba(245,238,214,0.92);
+      --card-border:  rgba(26,39,68,0.20);
+    }
+
+    /* Tournament Administration tagline */
+    .site-tagline { font-size:0.85rem !important; font-weight:700 !important; letter-spacing:0.25em !important; opacity:1 !important; color:#1a2744 !important; }
+
+    /* Login card */
+    .login-card { background: rgba(245,238,214,0.95) !important; border-color: rgba(26,39,68,0.25) !important; }
+    .login-card h2 { color:#1a2744 !important; }
+    .login-card p  { color:rgba(26,39,68,0.70) !important; }
+
+    /* Admin tabs */
+    .admin-tab {
+      font-family:'Cinzel',serif;
+      font-size:0.90rem; font-weight:700; letter-spacing:0.14em;
+      text-transform:uppercase; color:#fdf8e8;
+      padding:12px 28px;
+      border:1.5px solid #fdf8e8; border-radius:3px;
+      cursor:pointer; background:none; transition:all 0.2s;
+    }
+    .admin-tab:hover  { color:#fff; border-color:#fff; background:rgba(26,39,68,0.70); }
+    .admin-tab.active { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.90); }
+
+    /* Logout button */
+    .logout-btn {
+      font-family:'Cinzel',serif;
+      font-size:0.90rem; font-weight:700; letter-spacing:0.14em;
+      text-transform:uppercase; color:#fdf8e8;
+      background:none; border:1.5px solid #fdf8e8;
+      border-radius:3px; cursor:pointer;
+      transition:all 0.2s; padding:8px 20px;
+    }
+    .logout-btn:hover { background:rgba(26,39,68,0.85); }
+
+    /* Admin title */
+    .admin-title { font-family:'Cinzel',serif; font-size:2.0rem; font-weight:900; color:#fdf8e8; text-shadow:0 2px 8px rgba(0,0,0,0.5); }
+
+    /* Stat card labels */
+    .stat-card .lbl { color:#1a2744 !important; }
+
+    /* Dark navy bg + pale yellow on all dashboard action buttons */
+    #dashboard .btn-gold {
+      background: #1a2744 !important; color: #fdf8e8 !important;
+      font-weight:700; border:1.5px solid #fdf8e8 !important;
+      box-shadow:0 4px 16px rgba(26,39,68,0.4) !important;
+    }
+    #dashboard .btn-gold:hover  { background:#243560 !important; }
+    #dashboard .btn-outline     { background:#1a2744 !important; color:#fdf8e8 !important; border:1.5px solid #fdf8e8 !important; }
+    #dashboard .btn-outline:hover { background:#243560 !important; color:#fff !important; border-color:#fff !important; }
+
+    /* White bg + navy on ALL inputs, selects, filter bars */
+    .form-group input, .form-group select,
+    #dashboard .form-group input, #dashboard .form-group select,
+    #dashboard .filter-bar input, #dashboard .filter-bar select {
+      background: #ffffff !important;
+      border: 1.5px solid #1a2744 !important;
+      color: #1a2744 !important;
+    }
+    .form-group input::placeholder,
+    #dashboard .filter-bar input::placeholder { color:rgba(26,39,68,0.40) !important; }
+    .form-group input:focus, .form-group select:focus,
+    #dashboard .filter-bar input:focus, #dashboard .filter-bar select:focus {
+      border-color:#1a2744 !important;
+      box-shadow:0 0 0 3px rgba(26,39,68,0.12) !important;
+    }
+    .form-group select option,
+    #dashboard .filter-bar select option { background:#ffffff !important; color:#1a2744 !important; }
+    .form-group label { color:#1a2744 !important; opacity:1 !important; }
+
+    /* filter-bar standalone */
+    .filter-bar input, .filter-bar select {
+      background:#ffffff !important; border:1.5px solid #1a2744 !important; color:#1a2744 !important;
+    }
+    .filter-bar select option { background:#ffffff !important; color:#1a2744 !important; }
+  </style>
+
   <style>body { background: url("assets/images/augusta.jpg") no-repeat center center fixed; background-size: cover; }</style>
   <style>
     /* Login screen */
@@ -75,7 +163,7 @@
     .stat-card .lbl {
       font-family:'Cinzel',serif;
       font-size:0.85rem; letter-spacing:0.12em;
-      text-transform:uppercase; color:#1a2744;
+      text-transform:uppercase; color:#ffffff;
     }
 
     .admin-tabs {
@@ -83,15 +171,15 @@
     }
     .admin-tab {
       font-family:'Cinzel',serif;
-      font-size:0.90rem; font-weight:700; letter-spacing:0.14em;
+      font-size:0.90rem; letter-spacing:0.14em;
       text-transform:uppercase;
-      color:#fdf8e8;
+      color:#ffffff;
       padding:12px 28px;
-      border:1.5px solid #fdf8e8; border-radius:3px;
+      border:1px solid #444; border-radius:3px;
       cursor:pointer; background:none; transition:all 0.2s;
     }
-    .admin-tab:hover { color:#ffffff; border-color:#ffffff; background:rgba(26,39,68,0.70); }
-    .admin-tab.active { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.90); }
+    .admin-tab:hover { color:#ffffff; border-color:#fff; background:rgba(255,255,255,0.08); }
+    .admin-tab.active { color:#ffffff; border-color:#ffffff; background:rgba(255,255,255,0.15); }
 
     .tab-panel { display:none; }
     .tab-panel.active { display:block; animation:fadeIn 0.35s ease both; }
@@ -156,56 +244,45 @@
     }
     .filter-bar input {
       flex:1; min-width:200px;
-      background:#ffffff;
-      border:1.5px solid #1a2744;
-      border-radius:2px; color:#1a2744;
+      background:rgba(0,0,0,0.4);
+      border:1px solid rgba(201,162,39,0.30);
+      border-radius:2px; color:var(--cream);
       font-family:'Cormorant Garamond',serif;
       font-size:1.1rem; padding:11px 16px;
       outline:none;
     }
-    .filter-bar input::placeholder { color:rgba(26,39,68,0.45); }
-    .filter-bar input:focus { border-color:#1a2744; box-shadow:0 0 0 3px rgba(26,39,68,0.10); }
+    .filter-bar input:focus { border-color:var(--gold); }
     .filter-bar select {
-      background:#ffffff;
-      border:1.5px solid #1a2744;
-      border-radius:2px; color:#1a2744;
+      background:rgba(0,0,0,0.4);
+      border:1px solid rgba(201,162,39,0.30);
+      border-radius:2px; color:var(--cream);
       font-family:'Cormorant Garamond',serif;
       font-size:1.1rem; padding:11px 16px;
       outline:none; cursor:pointer;
     }
-    .filter-bar select option { background:#ffffff; color:#1a2744; }
+    .filter-bar select option { background:#0e1410; }
 
     .logout-btn {
       font-family:'Cinzel',serif;
-      font-size:0.90rem; font-weight:700; letter-spacing:0.14em;
-      text-transform:uppercase; color:#fdf8e8;
-      background:none; border:1.5px solid #fdf8e8;
-      border-radius:3px; cursor:pointer;
-      transition:all 0.2s; padding:8px 20px;
+      font-size:0.90rem; letter-spacing:0.14em;
+      text-transform:uppercase; color:#ffffff;
+      background:none; border:none; cursor:pointer;
+      transition:color 0.2s; padding:0;
     }
-    .logout-btn:hover { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.85); }
+    .logout-btn:hover { color:var(--gold); }
 
-    /* Dark navy bg + pale yellow text on all admin action buttons */
+    /* White text on all admin action buttons */
     #dashboard .btn-gold {
-      background: #1a2744 !important;
-      color: #fdf8e8 !important;
+      color: #ffffff !important;
       font-weight: 700;
-      border: 1.5px solid #fdf8e8 !important;
-      box-shadow: 0 4px 16px rgba(26,39,68,0.4) !important;
-    }
-    #dashboard .btn-gold:hover {
-      background: #243560 !important;
-      box-shadow: 0 6px 22px rgba(26,39,68,0.55) !important;
     }
     #dashboard .btn-outline {
-      background: #1a2744 !important;
-      color: #fdf8e8 !important;
-      border: 1.5px solid #fdf8e8 !important;
-    }
-    #dashboard .btn-outline:hover {
-      background: #243560 !important;
       color: #ffffff !important;
       border-color: #ffffff !important;
+    }
+    #dashboard .btn-outline:hover {
+      color: var(--gold-light) !important;
+      border-color: var(--gold-light) !important;
     }
 
     .admin-header-row {
@@ -214,40 +291,9 @@
     }
     .admin-title {
       font-family:'Cinzel',serif;
-      font-size:2.0rem; font-weight:900;
-      color:#fdf8e8;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      font-size:1.4rem; color:var(--gold-light);
     }
 
-
-    /* Force white bg + navy text on ALL inputs and selects in dashboard */
-    #dashboard .form-group input,
-    #dashboard .form-group select,
-    #dashboard .filter-bar input,
-    #dashboard .filter-bar select {
-      background: #ffffff !important;
-      border: 1.5px solid #1a2744 !important;
-      color: #1a2744 !important;
-    }
-    #dashboard .form-group input::placeholder,
-    #dashboard .filter-bar input::placeholder {
-      color: rgba(26,39,68,0.40) !important;
-    }
-    #dashboard .form-group input:focus,
-    #dashboard .form-group select:focus,
-    #dashboard .filter-bar input:focus,
-    #dashboard .filter-bar select:focus {
-      border-color: #1a2744 !important;
-      box-shadow: 0 0 0 3px rgba(26,39,68,0.12) !important;
-    }
-    #dashboard .form-group select option,
-    #dashboard .filter-bar select option {
-      background: #ffffff !important;
-      color: #1a2744 !important;
-    }
-    #dashboard .form-group label {
-      color: #1a2744 !important;
-    }
     @media (max-width:640px) {
       .stats-bar { grid-template-columns:repeat(2,1fr); }
       .admin-tab { padding:10px 16px; font-size:0.78rem; }
@@ -268,7 +314,7 @@
   </header>
 
   <div class="gold-rule"><div class="gold-rule-diamond"></div></div>
-  <p class="site-tagline" style="font-size:0.85rem;font-weight:700;letter-spacing:0.25em;opacity:1;">Tournament Administration</p>
+  <p class="site-tagline">Tournament Administration</p>
 
   <!-- LOGIN SCREEN -->
   <div id="login-screen">
@@ -439,7 +485,7 @@
             &nbsp;
             <a href="score.html" target="_blank" class="btn btn-outline" style="font-size:0.60rem;padding:10px 24px;">Open Scorer App ↗</a>
           </div>
-          <p style="font-style:italic;color:#1a2744;font-size:0.88rem;font-weight:600;margin-bottom:20px;">
+          <p style="font-style:italic;color:#1a2744;font-weight:600;font-size:0.88rem;margin-bottom:20px;">
             💡 Share each team's unique scorer link below — scorers open it on their phone and enter scores hole-by-hole. Tap the link field to select it, then copy &amp; text/email it to the scorer.
           </p>
           <div class="table-wrap">
@@ -851,7 +897,7 @@
           <td class="center">${token!=='—'
             ? `<span style="font-family:'Cinzel',serif;letter-spacing:0.15em;color:var(--gold-light);font-size:1.05rem;">${token}</span>`
             : `<button class="btn-sm btn-sm-pay" onclick="genToken('${esc(t.name)}')">Generate</button>`}</td>
-          <td>${link?`<input type="text" value="${link}" readonly onclick="this.select()" style="background:rgba(0,0,0,0.3);border:1px solid rgba(201,162,39,0.2);border-radius:2px;color:var(--gold-dim);font-size:0.78rem;padding:5px 8px;width:100%;max-width:320px;outline:none;">`:'—'}</td>
+          <td>${link?`<input type="text" value="${link}" readonly onclick="this.select()" style="background:#ffffff;border:1.5px solid rgba(26,39,68,0.2);border-radius:2px;color:rgba(26,39,68,0.7);font-size:0.78rem;padding:5px 8px;width:100%;max-width:320px;outline:none;">`:'—'}</td>
           <td class="center" style="font-family:'Cinzel',serif;font-size:0.75rem;color:${holesPlayed===18?'#5cb87a':'var(--cream)'};">${holesPlayed}/18</td>
           <td class="center" style="font-family:'Cinzel',serif;font-size:0.85rem;color:${tp<0?'#5cb87a':tp>0?'#e08888':'var(--cream)'};">${scoreStr}</td>
         </tr>`;
