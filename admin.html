@@ -75,7 +75,7 @@
     .stat-card .lbl {
       font-family:'Cinzel',serif;
       font-size:0.85rem; letter-spacing:0.12em;
-      text-transform:uppercase; color:#1a2744;
+      text-transform:uppercase; color:#ffffff;
     }
 
     .admin-tabs {
@@ -83,15 +83,15 @@
     }
     .admin-tab {
       font-family:'Cinzel',serif;
-      font-size:0.90rem; letter-spacing:0.14em;
+      font-size:0.90rem; font-weight:700; letter-spacing:0.14em;
       text-transform:uppercase;
-      color:#1a2744;
+      color:#fdf8e8;
       padding:12px 28px;
-      border:1px solid #b0a478; border-radius:3px;
+      border:1.5px solid #fdf8e8; border-radius:3px;
       cursor:pointer; background:none; transition:all 0.2s;
     }
-    .admin-tab:hover { color:#1a2744; border-color:#1a2744; background:rgba(26,39,68,0.08); }
-    .admin-tab.active { color:#1a2744; border-color:#1a2744; background:rgba(26,39,68,0.15); }
+    .admin-tab:hover { color:#ffffff; border-color:#ffffff; background:rgba(253,248,232,0.15); }
+    .admin-tab.active { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.85); }
 
     .tab-panel { display:none; }
     .tab-panel.active { display:block; animation:fadeIn 0.35s ease both; }
@@ -138,7 +138,7 @@
     .team-member {
       display:flex; align-items:center; justify-content:space-between;
       padding:8px 0;
-      border-bottom:1px solid rgba(26,39,68,0.10);
+      border-bottom:1px solid rgba(255,255,255,0.04);
       font-size:1.05rem;
     }
     .team-member:last-child { border-bottom:none; }
@@ -156,8 +156,8 @@
     }
     .filter-bar input {
       flex:1; min-width:200px;
-      background:rgba(253,248,232,0.9);
-      border:1px solid rgba(26,39,68,0.30);
+      background:rgba(0,0,0,0.4);
+      border:1px solid rgba(201,162,39,0.30);
       border-radius:2px; color:var(--cream);
       font-family:'Cormorant Garamond',serif;
       font-size:1.1rem; padding:11px 16px;
@@ -165,36 +165,46 @@
     }
     .filter-bar input:focus { border-color:var(--gold); }
     .filter-bar select {
-      background:rgba(253,248,232,0.9);
-      border:1px solid rgba(26,39,68,0.30);
+      background:rgba(0,0,0,0.4);
+      border:1px solid rgba(201,162,39,0.30);
       border-radius:2px; color:var(--cream);
       font-family:'Cormorant Garamond',serif;
       font-size:1.1rem; padding:11px 16px;
       outline:none; cursor:pointer;
     }
-    .filter-bar select option { background:#fdf8e8; color:#1a2744; }
+    .filter-bar select option { background:#0e1410; }
 
     .logout-btn {
       font-family:'Cinzel',serif;
-      font-size:0.90rem; letter-spacing:0.14em;
-      text-transform:uppercase; color:#1a2744;
-      background:none; border:none; cursor:pointer;
-      transition:color 0.2s; padding:0;
+      font-size:0.90rem; font-weight:700; letter-spacing:0.14em;
+      text-transform:uppercase; color:#fdf8e8;
+      background:none; border:1.5px solid #fdf8e8;
+      border-radius:3px; cursor:pointer;
+      transition:all 0.2s; padding:8px 20px;
     }
-    .logout-btn:hover { color:#1a2744; }
+    .logout-btn:hover { color:#fdf8e8; border-color:#fdf8e8; background:rgba(26,39,68,0.85); }
 
-    /* White text on all admin action buttons */
+    /* Dark navy background + pale yellow text on all admin action buttons */
     #dashboard .btn-gold {
-      color: #1a2744 !important;
+      background: #1a2744 !important;
+      color: #fdf8e8 !important;
       font-weight: 700;
+      border: 1.5px solid #fdf8e8 !important;
+      box-shadow: 0 4px 16px rgba(26,39,68,0.4) !important;
+    }
+    #dashboard .btn-gold:hover {
+      background: #243560 !important;
+      box-shadow: 0 6px 22px rgba(26,39,68,0.55) !important;
     }
     #dashboard .btn-outline {
-      color: #1a2744 !important;
-      border-color: #1a2744 !important;
+      background: #1a2744 !important;
+      color: #fdf8e8 !important;
+      border: 1.5px solid #fdf8e8 !important;
     }
     #dashboard .btn-outline:hover {
-      color: var(--gold-light) !important;
-      border-color: var(--gold-light) !important;
+      background: #243560 !important;
+      color: #ffffff !important;
+      border-color: #ffffff !important;
     }
 
     .admin-header-row {
@@ -203,7 +213,9 @@
     }
     .admin-title {
       font-family:'Cinzel',serif;
-      font-size:1.4rem; color:var(--gold-light);
+      font-size:2.0rem; font-weight:900;
+      color:#fdf8e8;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
     @media (max-width:640px) {
@@ -226,7 +238,7 @@
   </header>
 
   <div class="gold-rule"><div class="gold-rule-diamond"></div></div>
-  <p class="site-tagline">Tournament Administration</p>
+  <p class="site-tagline" style="font-size:0.85rem;font-weight:700;letter-spacing:0.25em;opacity:1;">Tournament Administration</p>
 
   <!-- LOGIN SCREEN -->
   <div id="login-screen">
@@ -256,7 +268,7 @@
       <div class="admin-header-row">
         <span class="admin-title">⛳ Tournament Dashboard</span>
         <div style="display:flex;align-items:center;gap:24px;">
-          <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.90rem;letter-spacing:0.14em;text-transform:uppercase;color:#1a2744;text-decoration:none;border:1px solid #1a2744;padding:8px 20px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.borderColor='#1a2744';this.style.color='#1a2744'" onmouseout="this.style.borderColor='#1a2744';this.style.color='#1a2744'">← Home</a>
+          <a href="index.html" style="font-family:'Cinzel',serif;font-size:0.90rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#fdf8e8;text-decoration:none;background:#1a2744;border:1.5px solid #fdf8e8;padding:8px 20px;border-radius:3px;transition:all 0.2s;" onmouseover="this.style.background='#243560'" onmouseout="this.style.background='#1a2744'">← Home</a>
           <button class="logout-btn" onclick="doLogout()">Logout</button>
         </div>
       </div>
@@ -358,8 +370,8 @@
       <div id="panel-sponsors" class="tab-panel">
         <div class="card">
           <div class="card-title">Registered Sponsors</div>
-          <p style="font-style:italic;color:rgba(26,39,68,0.65);font-size:0.88rem;margin-bottom:16px;">
-            💡 To add a sponsor logo: upload the image file to <code style="background:#e8e0bc;padding:2px 6px;border-radius:2px;color:#1a2744;">assets/images/sponsors/</code> in your GitHub repo, then enter the filename below.
+          <p style="font-style:italic;color:rgba(255,255,255,0.45);font-size:0.88rem;margin-bottom:16px;">
+            💡 To add a sponsor logo: upload the image file to <code style="background:#111;padding:2px 6px;border-radius:2px;color:var(--gold);">assets/images/sponsors/</code> in your GitHub repo, then enter the filename below.
           </p>
           <div class="table-wrap">
             <table>
@@ -387,7 +399,7 @@
       <div id="panel-scoring" class="tab-panel">
         <div class="card">
           <div class="card-title">Team Scorer Links</div>
-          <p style="font-style:italic;color:rgba(26,39,68,0.70);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:rgba(244,238,216,0.55);font-size:0.95rem;margin-bottom:20px;">
             Generate a unique scorer code for each team. Share the link with the team's designated scorer — they open it on their phone and enter scores hole-by-hole.
           </p>
           <div style="margin-bottom:16px;">
@@ -397,7 +409,7 @@
             &nbsp;
             <a href="score.html" target="_blank" class="btn btn-outline" style="font-size:0.60rem;padding:10px 24px;">Open Scorer App ↗</a>
           </div>
-          <p style="font-style:italic;color:rgba(26,39,68,0.60);font-size:0.88rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:rgba(255,255,255,0.4);font-size:0.88rem;margin-bottom:20px;">
             💡 Share each team's unique scorer link below — scorers open it on their phone and enter scores hole-by-hole. Tap the link field to select it, then copy &amp; text/email it to the scorer.
           </p>
           <div class="table-wrap">
@@ -419,25 +431,25 @@
 
         <div class="card">
           <div class="card-title">Live Score Override</div>
-          <p style="font-style:italic;color:rgba(26,39,68,0.70);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:rgba(244,238,216,0.55);font-size:0.95rem;margin-bottom:20px;">
             Manually enter or correct a team's score for any hole.
           </p>
           <div style="display:grid;grid-template-columns:1fr 120px 120px auto;gap:12px;align-items:flex-end;">
             <div class="form-group" style="margin-bottom:0;">
               <label>Team</label>
-              <select id="override-team" style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+              <select id="override-team" style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
                 <option value="">— Select team —</option>
               </select>
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Hole (1–18)</label>
               <input type="number" id="override-hole" min="1" max="18" placeholder="1"
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Strokes</label>
               <input type="number" id="override-score" min="1" max="20" placeholder="4"
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <button class="btn btn-gold" onclick="adminOverride()" style="font-size:0.60rem;padding:11px 20px;">Save</button>
           </div>
@@ -449,7 +461,7 @@
       <div id="panel-course" class="tab-panel">
         <div class="card">
           <div class="card-title">Course Par Settings</div>
-          <p style="font-style:italic;color:rgba(26,39,68,0.70);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:rgba(244,238,216,0.55);font-size:0.95rem;margin-bottom:20px;">
             Set the par for each hole. This affects all score-to-par calculations on the leaderboard.
           </p>
           <div id="par-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:24px;"></div>
@@ -462,7 +474,7 @@
 
         <div class="card">
           <div class="card-title">Starting Holes — Shotgun Assignment</div>
-          <p style="font-style:italic;color:rgba(26,39,68,0.65);font-size:0.95rem;margin-bottom:20px;">
+          <p style="font-style:italic;color:rgba(255,255,255,0.5);font-size:0.95rem;margin-bottom:20px;">
             Assign each team's starting hole. The course map below updates live as you assign holes.
           </p>
 
@@ -470,8 +482,8 @@
           <div style="margin-bottom:28px;">
             <div style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Course Map</div>
             <div id="course-map" style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin-bottom:8px;"></div>
-            <div style="display:flex;gap:20px;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.10em;text-transform:uppercase;color:#4a4a6a;margin-top:8px;">
-              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:#fdf8e8;border:1px solid #b0a478;display:inline-block;"></span> Unassigned</span>
+            <div style="display:flex;gap:20px;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.10em;text-transform:uppercase;color:#666;margin-top:8px;">
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:#1a1a1a;border:1px solid #333;display:inline-block;"></span> Unassigned</span>
               <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:rgba(201,162,39,0.25);border:1px solid var(--gold);display:inline-block;"></span> Assigned</span>
             </div>
           </div>
@@ -493,17 +505,17 @@
             <div class="form-group" style="margin-bottom:0;">
               <label>Player Name</label>
               <input type="text" id="ld-player" placeholder="John Smith"
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Hole #</label>
               <input type="number" id="ld-hole" min="1" max="18" placeholder="5"
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Distance (optional)</label>
               <input type="text" id="ld-distance" placeholder="285 yards"
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <button class="btn btn-gold" onclick="saveContest('longest_drive','ld')" style="font-size:0.60rem;padding:11px 20px;">Save</button>
           </div>
@@ -516,17 +528,17 @@
             <div class="form-group" style="margin-bottom:0;">
               <label>Player Name</label>
               <input type="text" id="ctp-player" placeholder="Jane Doe"
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Hole #</label>
               <input type="number" id="ctp-hole" min="1" max="18" placeholder="7"
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>Distance (optional)</label>
               <input type="text" id="ctp-distance" placeholder='4&apos; 2"'
-                style="background:rgba(253,248,232,0.95);border:1px solid rgba(26,39,68,0.35);border-radius:2px;color:#1a2744;font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
+                style="background:rgba(0,0,0,0.45);border:1px solid rgba(201,162,39,0.35);border-radius:2px;color:var(--cream);font-family:inherit;font-size:1rem;padding:11px 14px;width:100%;outline:none;">
             </div>
             <button class="btn btn-gold" onclick="saveContest('closest_to_pin','ctp')" style="font-size:0.60rem;padding:11px 20px;">Save</button>
           </div>
@@ -640,7 +652,7 @@
           <td>${esc(p.team)}</td>
           <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
           <td>${esc(p.phone)}</td>
-          <td style="color:#5a6080;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
+          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
           <td class="center"><span class="badge ${isPaid?'badge-paid':'badge-unpaid'}">${isPaid?'Paid':'Unpaid'}</span></td>
           <td class="center" style="white-space:nowrap;">
             ${isPaid
@@ -701,7 +713,7 @@
           <td>${esc(p.name)}</td><td>${esc(p.team)}</td>
           <td><a href="mailto:${esc(p.email)}" style="color:var(--gold-dim);text-decoration:none;">${esc(p.email)}</a></td>
           <td>${esc(p.phone)}</td>
-          <td style="color:#5a6080;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
+          <td style="color:#888;font-size:0.85rem;">${fmtDate(p.registeredAt)}</td>
           <td class="center"><button class="btn-sm btn-sm-pay" onclick="togglePaid('${p.id}',true)">Mark Paid</button></td>
         </tr>`).join('');
     }
@@ -738,11 +750,11 @@
               ${Number(s.tier)===700?'🥇 Gold ($700)':Number(s.tier)===300?'🥈 Silver ($300)':Number(s.tier)===150?'🥉 Bronze ($150)':`🤍 Supporter ($${s.tier})`}
             </span></td>
           <td style="color:var(--gold-dim);font-style:italic;">${s.teamName?esc(s.teamName):'—'}</td>
-          <td style="color:#5a6080;font-size:0.85rem;">${fmtDate(s.registeredAt)}</td>
+          <td style="color:#888;font-size:0.85rem;">${fmtDate(s.registeredAt)}</td>
           <td>
             <div style="display:flex;gap:6px;align-items:center;">
               <input type="text" id="logo-${s.id}" value="${esc(s.logoFile||'')}" placeholder="logo.png"
-                style="background:#fdf8e8;border:1px solid #b0a478;border-radius:2px;color:#1a2744;font-size:0.85rem;padding:5px 8px;width:110px;outline:none;">
+                style="background:#111;border:1px solid #333;border-radius:2px;color:#fff;font-size:0.85rem;padding:5px 8px;width:110px;outline:none;">
               <button class="btn-sm btn-sm-pay" onclick="saveSponsorLogo('${s.id}')">Set</button>
             </div>
           </td>
@@ -809,7 +821,7 @@
           <td class="center">${token!=='—'
             ? `<span style="font-family:'Cinzel',serif;letter-spacing:0.15em;color:var(--gold-light);font-size:1.05rem;">${token}</span>`
             : `<button class="btn-sm btn-sm-pay" onclick="genToken('${esc(t.name)}')">Generate</button>`}</td>
-          <td>${link?`<input type="text" value="${link}" readonly onclick="this.select()" style="background:rgba(253,248,232,0.9);border:1px solid rgba(26,39,68,0.2);border-radius:2px;color:rgba(26,39,68,0.7);font-size:0.78rem;padding:5px 8px;width:100%;max-width:320px;outline:none;">`:'—'}</td>
+          <td>${link?`<input type="text" value="${link}" readonly onclick="this.select()" style="background:rgba(0,0,0,0.3);border:1px solid rgba(201,162,39,0.2);border-radius:2px;color:var(--gold-dim);font-size:0.78rem;padding:5px 8px;width:100%;max-width:320px;outline:none;">`:'—'}</td>
           <td class="center" style="font-family:'Cinzel',serif;font-size:0.75rem;color:${holesPlayed===18?'#5cb87a':'var(--cream)'};">${holesPlayed}/18</td>
           <td class="center" style="font-family:'Cinzel',serif;font-size:0.85rem;color:${tp<0?'#5cb87a':tp>0?'#e08888':'var(--cream)'};">${scoreStr}</td>
         </tr>`;
@@ -846,9 +858,9 @@
       const pars = _cache.pars;
       const grid = document.getElementById('par-grid');
       grid.innerHTML = Array.from({length:18},(_,i) => `
-        <div style="background:#fdf8e8;border:1px solid #b0a478;border-radius:3px;padding:12px;text-align:center;">
+        <div style="background:#111;border:1px solid #333;border-radius:3px;padding:12px;text-align:center;">
           <div style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Hole ${i+1}</div>
-          <select id="par-${i}" style="background:#fdf8e8;border:1px solid #b0a478;border-radius:2px;color:#1a2744;font-family:'Cinzel',serif;font-size:1.1rem;padding:6px 10px;width:100%;outline:none;text-align:center;" onchange="updateParTotal()">
+          <select id="par-${i}" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:'Cinzel',serif;font-size:1.1rem;padding:6px 10px;width:100%;outline:none;text-align:center;" onchange="updateParTotal()">
             <option value="3" ${pars[i]===3?'selected':''}>3</option>
             <option value="4" ${pars[i]===4?'selected':''}>4</option>
             <option value="5" ${pars[i]===5?'selected':''}>5</option>
@@ -875,19 +887,19 @@
         const assigned = !!team;
         return `
           <div style="
-            background:${assigned?'rgba(26,39,68,0.12)':'#fdf8e8'};
-            border:1px solid ${assigned?'#1a2744':'#b0a478'};
+            background:${assigned?'rgba(201,162,39,0.15)':'#111'};
+            border:1px solid ${assigned?'var(--gold)':'#333'};
             border-radius:4px;
             padding:10px 6px;
             text-align:center;
             min-height:80px;
             display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
           ">
-            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'#1a2744':'#7a7090'};">${hole}</div>
+            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'var(--gold-light)':'#555'};">${hole}</div>
             <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#555;">Par ${par}</div>
             ${assigned
-              ? `<div style="font-size:0.72rem;color:#1a2744;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
-              : `<div style="font-size:0.68rem;color:#9090a8;font-style:italic;">Open</div>`
+              ? `<div style="font-size:0.72rem;color:#fff;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
+              : `<div style="font-size:0.68rem;color:#444;font-style:italic;">Open</div>`
             }
           </div>`;
       }).join('');
@@ -901,9 +913,9 @@
       shBody.innerHTML = teams.map(t => {
         const sh = scoresMap[t.name]?.startHole || 1;
         return `<tr>
-          <td style="color:#1a2744;font-size:1.05rem;">${esc(t.name)}</td>
+          <td style="color:#fff;font-size:1.05rem;">${esc(t.name)}</td>
           <td class="center">
-            <select id="sh-${esc(t.name)}" onchange="updateCourseMap()" style="background:#fdf8e8;border:1px solid #b0a478;border-radius:2px;color:#1a2744;font-family:inherit;font-size:1.0rem;padding:8px 12px;outline:none;">
+            <select id="sh-${esc(t.name)}" onchange="updateCourseMap()" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:inherit;font-size:1.0rem;padding:8px 12px;outline:none;">
               <option value="0">— Unassigned —</option>
               ${Array.from({length:18},(_,i)=>`<option value="${i+1}" ${sh===i+1?'selected':''}>${i+1}</option>`).join('')}
             </select>
@@ -933,19 +945,19 @@
         const assigned = !!team;
         return `
           <div style="
-            background:${assigned?'rgba(26,39,68,0.12)':'#fdf8e8'};
-            border:1px solid ${assigned?'#1a2744':'#b0a478'};
+            background:${assigned?'rgba(201,162,39,0.15)':'#111'};
+            border:1px solid ${assigned?'var(--gold)':'#333'};
             border-radius:4px;
             padding:10px 6px;
             text-align:center;
             min-height:80px;
             display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
           ">
-            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'#1a2744':'#7a7090'};">${hole}</div>
+            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'var(--gold-light)':'#555'};">${hole}</div>
             <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#555;">Par ${par}</div>
             ${assigned
-              ? `<div style="font-size:0.72rem;color:#1a2744;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
-              : `<div style="font-size:0.68rem;color:#9090a8;font-style:italic;">Open</div>`
+              ? `<div style="font-size:0.72rem;color:#fff;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
+              : `<div style="font-size:0.68rem;color:#444;font-style:italic;">Open</div>`
             }
           </div>`;
       }).join('');
