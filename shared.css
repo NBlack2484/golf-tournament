@@ -138,23 +138,23 @@ body::before {
 .form-group input,
 .form-group select {
   width:100%;
-  background: rgba(0,0,0,0.45);
-  border: 1px solid rgba(201,162,39,0.35);
+  background: #ffffff;
+  border: 1.5px solid #1a2744;
   border-radius:2px;
-  color: var(--cream);
+  color: #1a2744;
   font-family:'Cormorant Garamond',serif;
   font-size:1.05rem;
   padding: 11px 14px;
   outline:none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.form-group input::placeholder { color: rgba(244,238,216,0.35); }
+.form-group input::placeholder { color: rgba(26,39,68,0.40); }
 .form-group input:focus,
 .form-group select:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(201,162,39,0.12);
+  border-color: #1a2744;
+  box-shadow: 0 0 0 3px rgba(26,39,68,0.12);
 }
-.form-group select option { background:#0e1410; color:var(--cream); }
+.form-group select option { background:#ffffff; color:#1a2744; }
 
 /* ── BUTTONS ─────────────────────── */
 .btn {
@@ -215,7 +215,7 @@ tbody td.center { text-align:center; }
 .badge-paid   { background:rgba(92,184,122,0.15); color:#5cb87a; border:1px solid rgba(92,184,122,0.4); }
 .badge-unpaid { background:rgba(217,96,96,0.15);  color:#d96060; border:1px solid rgba(217,96,96,0.4); }
 .badge-full   { background:rgba(201,162,39,0.15); color:var(--gold-light); border:1px solid rgba(201,162,39,0.45); }
-.badge-open   { background:rgba(100,160,240,0.12); color:#88b8f0; border:1px solid rgba(100,160,240,0.35); }
+.badge-open   { background:#ffffff; color:#1a2744; border:1.5px solid #1a2744; font-weight:700; }
 
 /* ── FOOTER ──────────────────────── */
 .site-footer {
