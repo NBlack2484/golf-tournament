@@ -4,16 +4,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
 :root {
-  --gold:         #1a2744;
-  --gold-light:   #1a2744;
-  --gold-dim:     rgba(26,39,68,0.55);
-  --gold-border:  rgba(26,39,68,0.30);
-  --gold-glow:    rgba(26,39,68,0.10);
-  --cream:        #1a2744;
-  --cream-dim:    rgba(26,39,68,0.75);
-  --dark:         #fdf8e8;
-  --card-bg:      rgba(245,238,214,0.88);
-  --card-border:  rgba(26,39,68,0.20);
+  --gold:         #c9a227;
+  --gold-light:   #f0d060;
+  --gold-dim:     rgba(201,162,39,0.55);
+  --gold-border:  rgba(201,162,39,0.30);
+  --gold-glow:    rgba(201,162,39,0.15);
+  --cream:        #f4eed8;
+  --cream-dim:    rgba(244,238,216,0.75);
+  --dark:         #07090a;
+  --card-bg:      rgba(4,8,4,0.68);
+  --card-border:  rgba(201,162,39,0.28);
   --green-ok:     #5cb87a;
   --red-err:      #d96060;
 }
@@ -24,18 +24,18 @@ html { scroll-behavior: smooth; }
 body {
   font-family: 'Cormorant Garamond', Georgia, serif;
   min-height: 100vh;
-  color: #1a2744;
+  color: var(--cream);
   overflow-x: hidden;
 }
 
-/* Cinematic light overlay */
+/* Cinematic dark overlay */
 body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 130% 70% at 50% 0%,  rgba(253,248,232,0.55) 0%, transparent 65%),
-    radial-gradient(ellipse 100% 55% at 50% 100%, rgba(253,248,232,0.40) 0%, transparent 55%),
-    linear-gradient(to bottom, rgba(253,248,232,0.30) 0%, rgba(253,248,232,0.05) 45%, rgba(253,248,232,0.28) 100%);
+    radial-gradient(ellipse 130% 70% at 50% 0%,  rgba(0,0,0,0.72) 0%, transparent 65%),
+    radial-gradient(ellipse 100% 55% at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 55%),
+    linear-gradient(to bottom, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.08) 45%, rgba(0,0,0,0.38) 100%);
   pointer-events: none;
   z-index: 0;
 }
@@ -138,8 +138,8 @@ body::before {
 .form-group input,
 .form-group select {
   width:100%;
-  background: rgba(253,248,232,0.85);
-  border: 1px solid rgba(26,39,68,0.35);
+  background: #ffffff;
+  border: 1.5px solid #1a2744;
   border-radius:2px;
   color: #1a2744;
   font-family:'Cormorant Garamond',serif;
@@ -152,9 +152,9 @@ body::before {
 .form-group input:focus,
 .form-group select:focus {
   border-color: #1a2744;
-  box-shadow: 0 0 0 3px rgba(26,39,68,0.10);
+  box-shadow: 0 0 0 3px rgba(26,39,68,0.12);
 }
-.form-group select option { background:#fdf8e8; color:#1a2744; }
+.form-group select option { background:#ffffff; color:#1a2744; }
 
 /* ── BUTTONS ─────────────────────── */
 .btn {
@@ -168,12 +168,12 @@ body::before {
   transition: all 0.22s;
 }
 .btn-gold {
-  background: linear-gradient(135deg, #1a2744 0%, #2a3d6e 50%, #1a2744 100%);
-  color:#ffffff;
-  box-shadow: 0 4px 20px rgba(26,39,68,0.30);
+  background: linear-gradient(135deg, #c9a227 0%, #f0d060 50%, #c9a227 100%);
+  color:#0a0800;
+  box-shadow: 0 4px 20px rgba(201,162,39,0.35);
 }
 .btn-gold:hover {
-  box-shadow: 0 6px 28px rgba(26,39,68,0.50);
+  box-shadow: 0 6px 28px rgba(201,162,39,0.55);
   transform: translateY(-1px);
   filter:brightness(1.08);
 }
@@ -195,13 +195,13 @@ thead th {
   font-size:0.58rem; letter-spacing:0.14em;
   text-transform:uppercase; color:var(--gold);
   text-align:left; padding:0 14px 12px;
-  border-bottom:1px solid rgba(26,39,68,0.30);
+  border-bottom:1px solid rgba(201,162,39,0.38);
   white-space:nowrap;
 }
 thead th.center { text-align:center; }
-tbody tr { border-bottom:1px solid rgba(26,39,68,0.08); transition:background 0.15s; }
-tbody tr:hover { background:rgba(26,39,68,0.05); }
-tbody td { padding:12px 14px; color:#2a3550; vertical-align:middle; }
+tbody tr { border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.15s; }
+tbody tr:hover { background:rgba(201,162,39,0.06); }
+tbody td { padding:12px 14px; color:#d8d0bc; vertical-align:middle; }
 tbody td.center { text-align:center; }
 
 /* ── BADGES ──────────────────────── */
@@ -214,7 +214,7 @@ tbody td.center { text-align:center; }
 }
 .badge-paid   { background:rgba(92,184,122,0.15); color:#5cb87a; border:1px solid rgba(92,184,122,0.4); }
 .badge-unpaid { background:rgba(217,96,96,0.15);  color:#d96060; border:1px solid rgba(217,96,96,0.4); }
-.badge-full   { background:rgba(26,39,68,0.12); color:#1a2744; border:1px solid rgba(26,39,68,0.35); }
+.badge-full   { background:rgba(201,162,39,0.15); color:var(--gold-light); border:1px solid rgba(201,162,39,0.45); }
 .badge-open   { background:rgba(100,160,240,0.12); color:#88b8f0; border:1px solid rgba(100,160,240,0.35); }
 
 /* ── FOOTER ──────────────────────── */
@@ -224,8 +224,8 @@ tbody td.center { text-align:center; }
   padding:24px;
   font-family:'Cinzel',serif;
   font-size:0.58rem; letter-spacing:0.13em;
-  color:rgba(26,39,68,0.45); text-transform:uppercase;
-  border-top:1px solid rgba(26,39,68,0.12);
+  color:rgba(201,162,39,0.40); text-transform:uppercase;
+  border-top:1px solid rgba(201,162,39,0.10);
   margin-top:48px;
 }
 
