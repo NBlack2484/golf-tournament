@@ -10,9 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold:       #1a2744;
-      --gold-light: #1a2744;
-      --gold-dim:   rgba(26,39,68,0.55);
+      --gold:       #fdf8e8;
+      --gold-light: #fdf8e8;
+      --gold-dim:   rgba(253,248,232,0.55);
       --cream:      #f4eed8;
       --eagle:      #a78bfa;
       --birdie:     #60a5fa;
@@ -60,7 +60,7 @@
     .top-bar {
       display:flex; align-items:center; justify-content:space-between;
       padding:18px 40px 14px;
-      border-bottom:1px solid rgba(201,162,39,0.25);
+      border-bottom:1px solid rgba(253,248,232,0.25);
       background:rgba(0,0,0,0.35);
       backdrop-filter:blur(10px);
     }
@@ -89,21 +89,21 @@
       font-size:1.8rem;
       font-weight:900; letter-spacing:0.18em;
       text-transform:uppercase;
-      color:#ffffff;
+      color:#fdf8e8;
       text-shadow:0 2px 12px rgba(0,0,0,0.7);
     }
     .title-sub {
       font-family:'Cinzel',serif;
       font-size:0.85rem;
       letter-spacing:0.22em; text-transform:uppercase;
-      color:#ffffff; opacity:0.85; margin-top:6px;
+      color:#fdf8e8; opacity:0.85; margin-top:6px;
     }
 
     .live-badge {
       display:flex; align-items:center; gap:8px;
       font-family:'Cinzel',serif;
       font-size:0.85rem; letter-spacing:0.18em;
-      text-transform:uppercase; color:#ffffff;
+      text-transform:uppercase; color:#fdf8e8;
     }
     .live-dot {
       width:10px; height:10px; border-radius:50%;
@@ -126,14 +126,14 @@
       grid-template-columns: 80px 1fr 120px 120px 100px;
       gap:0;
       padding:16px 24px 12px;
-      border-bottom:1px solid rgba(201,162,39,0.35);
+      border-bottom:1px solid rgba(253,248,232,0.35);
       margin-top:16px;
     }
     .lb-header span {
       font-family:'Cinzel',serif;
       font-size:0.85rem;
       letter-spacing:0.14em; text-transform:uppercase;
-      color:#ffffff;
+      color:#fdf8e8;
     }
     .lb-header span.right { text-align:right; }
     .lb-header span.center { text-align:center; }
@@ -159,8 +159,8 @@
     @keyframes rowIn { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
 
     .lb-row.rank-1 {
-      background:linear-gradient(135deg,rgba(201,162,39,0.18),rgba(201,162,39,0.06));
-      border-color:rgba(201,162,39,0.40);
+      background:linear-gradient(135deg,rgba(253,248,232,0.18),rgba(253,248,232,0.06));
+      border-color:rgba(253,248,232,0.40);
     }
     .lb-row.rank-2 {
       background:linear-gradient(135deg,rgba(180,180,180,0.10),rgba(180,180,180,0.03));
@@ -178,17 +178,17 @@
     .col-pos {
       font-family:'Cinzel',serif;
       font-size:1.5rem;
-      font-weight:700; color:#ffffff;
+      font-weight:700; color:#fdf8e8;
     }
-    .lb-row.rank-1 .col-pos { color:#ffffff; font-size:1.8rem; }
+    .lb-row.rank-1 .col-pos { color:#fdf8e8; font-size:1.8rem; }
 
     .col-team {
       font-family:'Cinzel',serif;
       font-size:1.4rem;
-      font-weight:600; color:var(--cream);
+      font-weight:600; color:#fdf8e8;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .lb-row.rank-1 .col-team { font-size:1.6rem; color:white; }
+    .lb-row.rank-1 .col-team { font-size:1.6rem; color:#fdf8e8; }
 
     .col-score {
       font-family:'Cinzel',serif;
@@ -197,8 +197,8 @@
     }
     .col-score.under { color:#4ade80; }
     .col-score.over  { color:#f87171; }
-    .col-score.even  { color:var(--cream); }
-    .col-score.dashes { color:rgba(255,255,255,0.25); font-size:1.2rem; }
+    .col-score.even  { color:#fdf8e8; }
+    .col-score.dashes { color:rgba(253,248,232,0.25); font-size:1.2rem; }
 
     .col-total {
       font-family:'Cormorant Garamond',serif;
@@ -221,7 +221,7 @@
       font-family:'Cinzel',serif;
       font-size:1.4rem; letter-spacing:0.18em;
       text-transform:uppercase;
-      color:rgba(201,162,39,0.35);
+      color:rgba(253,248,232,0.35);
     }
 
     /* ── CONTESTS STRIP ── */
@@ -229,12 +229,12 @@
       display:grid; grid-template-columns:1fr 1fr;
       gap:14px;
       padding:14px 40px;
-      border-top:1px solid rgba(201,162,39,0.18);
+      border-top:1px solid rgba(253,248,232,0.18);
       background:rgba(0,0,0,0.30);
     }
     .contest-box {
       background:rgba(0,0,0,0.4);
-      border:1px solid rgba(201,162,39,0.22);
+      border:1px solid rgba(253,248,232,0.22);
       border-radius:3px;
       padding:12px 20px;
       display:flex; align-items:center; justify-content:space-between;
@@ -243,12 +243,12 @@
       font-family:'Cinzel',serif;
       font-size:0.85rem;
       letter-spacing:0.16em; text-transform:uppercase;
-      color:#ffffff;
+      color:#fdf8e8;
     }
     .contest-value {
       font-family:'Cinzel',serif;
       font-size:1.2rem;
-      color:#ffffff; font-weight:700;
+      color:#fdf8e8; font-weight:700;
       text-align:right;
     }
     .contest-value small {
@@ -261,7 +261,7 @@
     /* ── SPONSOR TICKER ── */
     .sponsor-ticker {
       background:rgba(0,0,0,0.65);
-      border-top:1px solid rgba(201,162,39,0.25);
+      border-top:1px solid rgba(253,248,232,0.25);
       padding:18px 0;
       overflow:hidden;
       position:relative;
@@ -288,7 +288,7 @@
       font-family:'Cinzel',serif;
       font-size:1.4rem;
       letter-spacing:0.14em; text-transform:uppercase;
-      color:#ffffff; flex-shrink:0;
+      color:#fdf8e8; flex-shrink:0;
     }
     .ticker-diamond {
       width:10px; height:10px;
@@ -314,7 +314,7 @@
       font-family:'Cinzel',serif;
       font-size:1.1rem;
       letter-spacing:0.10em; text-transform:uppercase;
-      color:#fff;
+      color:#fdf8e8;
       white-space:nowrap;
     }
 
@@ -322,14 +322,14 @@
       font-family:'Cinzel',serif;
       font-size:1.6rem;
       letter-spacing:0.12em; text-transform:uppercase;
-      color:#fff; flex-shrink:0;
+      color:#fdf8e8; flex-shrink:0;
     }
 
     /* Clock */
     .clock {
       font-family:'Cinzel',serif;
       font-size:1.0rem;
-      color:#ffffff; letter-spacing:0.12em;
+      color:#fdf8e8; letter-spacing:0.12em;
     }
 
     /* Home link */
@@ -337,7 +337,7 @@
       font-family:'Cinzel',serif;
       font-size:0.85rem; letter-spacing:0.14em;
       text-transform:uppercase;
-      color:#ffffff;
+      color:#fdf8e8;
       text-decoration:none;
       transition:opacity 0.2s;
       display:block; margin-top:4px;
@@ -350,7 +350,7 @@
       font-family:'Cinzel',serif;
       font-size:0.75rem; letter-spacing:0.12em;
       text-transform:uppercase;
-      color:rgba(201,162,39,0.35);
+      color:rgba(253,248,232,0.35);
       z-index:20;
     }
   </style>
