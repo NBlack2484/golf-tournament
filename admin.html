@@ -219,6 +219,35 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
+
+    /* Force white bg + navy text on ALL inputs and selects in dashboard */
+    #dashboard .form-group input,
+    #dashboard .form-group select,
+    #dashboard .filter-bar input,
+    #dashboard .filter-bar select {
+      background: #ffffff !important;
+      border: 1.5px solid #1a2744 !important;
+      color: #1a2744 !important;
+    }
+    #dashboard .form-group input::placeholder,
+    #dashboard .filter-bar input::placeholder {
+      color: rgba(26,39,68,0.40) !important;
+    }
+    #dashboard .form-group input:focus,
+    #dashboard .form-group select:focus,
+    #dashboard .filter-bar input:focus,
+    #dashboard .filter-bar select:focus {
+      border-color: #1a2744 !important;
+      box-shadow: 0 0 0 3px rgba(26,39,68,0.12) !important;
+    }
+    #dashboard .form-group select option,
+    #dashboard .filter-bar select option {
+      background: #ffffff !important;
+      color: #1a2744 !important;
+    }
+    #dashboard .form-group label {
+      color: #1a2744 !important;
+    }
     @media (max-width:640px) {
       .stats-bar { grid-template-columns:repeat(2,1fr); }
       .admin-tab { padding:10px 16px; font-size:0.78rem; }
