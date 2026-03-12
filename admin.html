@@ -75,7 +75,7 @@
     .stat-card .lbl {
       font-family:'Cinzel',serif;
       font-size:0.85rem; letter-spacing:0.12em;
-      text-transform:uppercase; color:var(--gold-dim);
+      text-transform:uppercase; color:#ffffff;
     }
 
     /* Tabs */
@@ -449,9 +449,20 @@
 
         <div class="card">
           <div class="card-title">Starting Holes — Shotgun Assignment</div>
-          <p style="font-style:italic;color:rgba(244,238,216,0.55);font-size:0.95rem;margin-bottom:20px;">
-            Assign each team's starting hole for the shotgun start.
+          <p style="font-style:italic;color:rgba(255,255,255,0.5);font-size:0.95rem;margin-bottom:20px;">
+            Assign each team's starting hole. The course map below updates live as you assign holes.
           </p>
+
+          <!-- Course Map Visual -->
+          <div style="margin-bottom:28px;">
+            <div style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Course Map</div>
+            <div id="course-map" style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px;margin-bottom:8px;"></div>
+            <div style="display:flex;gap:20px;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.10em;text-transform:uppercase;color:#666;margin-top:8px;">
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:#1a1a1a;border:1px solid #333;display:inline-block;"></span> Unassigned</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:14px;border-radius:2px;background:rgba(201,162,39,0.25);border:1px solid var(--gold);display:inline-block;"></span> Assigned</span>
+            </div>
+          </div>
+
           <div class="table-wrap">
             <table>
               <thead><tr><th>Team</th><th class="center">Starting Hole</th><th class="center">Save</th></tr></thead>
@@ -834,6 +845,41 @@
 
       const teams = _cache.teams;
       const scoresMap = _cache.scoresMap;
+
+      // Build assignment map: hole# -> team name
+      const holeAssignments = {};
+      teams.forEach(t => {
+        const sh = scoresMap[t.name]?.startHole || null;
+        if (sh) holeAssignments[sh] = t.name;
+      });
+
+      // Render course map
+      const mapEl = document.getElementById('course-map');
+      mapEl.innerHTML = Array.from({length:18}, (_,i) => {
+        const hole = i + 1;
+        const team = holeAssignments[hole];
+        const par  = pars[i];
+        const assigned = !!team;
+        return `
+          <div style="
+            background:${assigned?'rgba(201,162,39,0.15)':'#111'};
+            border:1px solid ${assigned?'var(--gold)':'#333'};
+            border-radius:4px;
+            padding:10px 6px;
+            text-align:center;
+            min-height:80px;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+          ">
+            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'var(--gold-light)':'#555'};">${hole}</div>
+            <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#555;">Par ${par}</div>
+            ${assigned
+              ? `<div style="font-size:0.72rem;color:#fff;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
+              : `<div style="font-size:0.68rem;color:#444;font-style:italic;">Open</div>`
+            }
+          </div>`;
+      }).join('');
+
+      // Render assignment table
       const shBody = document.getElementById('starting-holes-tbody');
       if (teams.length === 0) {
         shBody.innerHTML = '<tr><td colspan="3" class="center" style="color:var(--gold-dim);font-style:italic;padding:16px;">No teams yet.</td></tr>';
@@ -842,14 +888,53 @@
       shBody.innerHTML = teams.map(t => {
         const sh = scoresMap[t.name]?.startHole || 1;
         return `<tr>
-          <td style="color:#fff;">${esc(t.name)}</td>
+          <td style="color:#fff;font-size:1.05rem;">${esc(t.name)}</td>
           <td class="center">
-            <select id="sh-${esc(t.name)}" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:inherit;font-size:0.95rem;padding:6px 10px;outline:none;">
+            <select id="sh-${esc(t.name)}" onchange="updateCourseMap()" style="background:#0a0a0a;border:1px solid #444;border-radius:2px;color:#fff;font-family:inherit;font-size:1.0rem;padding:8px 12px;outline:none;">
+              <option value="0">— Unassigned —</option>
               ${Array.from({length:18},(_,i)=>`<option value="${i+1}" ${sh===i+1?'selected':''}>${i+1}</option>`).join('')}
             </select>
           </td>
           <td class="center"><button class="btn-sm btn-sm-pay" onclick="saveStartHole('${esc(t.name)}')">Save</button></td>
         </tr>`;
+      }).join('');
+    }
+
+    function updateCourseMap() {
+      if (!_cache) return;
+      const teams = _cache.teams;
+      const pars  = _cache.pars;
+
+      // Rebuild assignment map from current dropdowns
+      const holeAssignments = {};
+      teams.forEach(t => {
+        const sel = document.getElementById(`sh-${t.name}`);
+        if (sel && parseInt(sel.value) > 0) holeAssignments[parseInt(sel.value)] = t.name;
+      });
+
+      const mapEl = document.getElementById('course-map');
+      mapEl.innerHTML = Array.from({length:18}, (_,i) => {
+        const hole = i + 1;
+        const team = holeAssignments[hole];
+        const par  = pars[i];
+        const assigned = !!team;
+        return `
+          <div style="
+            background:${assigned?'rgba(201,162,39,0.15)':'#111'};
+            border:1px solid ${assigned?'var(--gold)':'#333'};
+            border-radius:4px;
+            padding:10px 6px;
+            text-align:center;
+            min-height:80px;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+          ">
+            <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:${assigned?'var(--gold-light)':'#555'};">${hole}</div>
+            <div style="font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.10em;text-transform:uppercase;color:#555;">Par ${par}</div>
+            ${assigned
+              ? `<div style="font-size:0.72rem;color:#fff;margin-top:4px;font-family:'Cinzel',serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;">${esc(team)}</div>`
+              : `<div style="font-size:0.68rem;color:#444;font-style:italic;">Open</div>`
+            }
+          </div>`;
       }).join('');
     }
 
