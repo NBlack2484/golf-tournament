@@ -262,7 +262,7 @@
     .sponsor-ticker {
       background:rgba(0,0,0,0.65);
       border-top:1px solid rgba(201,162,39,0.25);
-      padding:12px 0;
+      padding:18px 0;
       overflow:hidden;
       position:relative;
     }
@@ -275,9 +275,9 @@
     .sponsor-ticker::after  { right:0; background:linear-gradient(to left,  rgba(0,0,0,0.8), transparent); }
 
     .ticker-track {
-      display:flex; align-items:center; gap:60px;
+      display:flex; align-items:center; gap:80px;
       white-space:nowrap;
-      animation:tickerScroll 40s linear infinite;
+      animation:tickerScroll 15s linear infinite;
     }
     @keyframes tickerScroll {
       from { transform:translateX(0); }
@@ -286,43 +286,41 @@
 
     .ticker-label {
       font-family:'Cinzel',serif;
-      font-size:0.85rem;
+      font-size:1.4rem;
       letter-spacing:0.14em; text-transform:uppercase;
       color:var(--gold-dim); flex-shrink:0;
     }
     .ticker-diamond {
-      width:6px; height:6px;
+      width:10px; height:10px;
       background:var(--gold); transform:rotate(45deg);
       flex-shrink:0;
     }
 
-    /* Sponsor item — logo + name */
     .ticker-item {
       display:inline-flex;
       flex-direction:column;
       align-items:center;
-      gap:6px;
+      gap:8px;
       flex-shrink:0;
     }
     .ticker-item img {
-      height:56px;
+      height:100px;
       width:auto;
-      max-width:180px;
+      max-width:280px;
       object-fit:contain;
       border-radius: 4px;
     }
     .ticker-item span {
       font-family:'Cinzel',serif;
-      font-size:0.75rem;
+      font-size:1.1rem;
       letter-spacing:0.10em; text-transform:uppercase;
       color:#fff;
       white-space:nowrap;
     }
 
-    /* Name-only fallback (no logo) */
     .ticker-name-only {
       font-family:'Cinzel',serif;
-      font-size:1.0rem;
+      font-size:1.6rem;
       letter-spacing:0.12em; text-transform:uppercase;
       color:#fff; flex-shrink:0;
     }
