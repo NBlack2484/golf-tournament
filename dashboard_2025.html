@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Showtime Auto Body LLC — 2025 Expense Dashboard v10</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #252840;
+    --border: #2e3150;
+    --accent: #4f9cf9;
+    --accent2: #7c6af7;
+    --green: #22c55e;
+    --green-dim: #16a34a;
+    --red: #ef4444;
+    --red-dim: #dc2626;
+    --amber: #f59e0b;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-muted: #64748b;
+    --biz-bg: rgba(34,197,94,0.08);
+    --per-bg: rgba(239,68,68,0.08);
+    --flag-bg: rgba(245,158,11,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; min-height: 100vh; }
+  
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #1a1d2e 0%, #252840 100%); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .header-left h1 { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .header-left h1 span { color: var(--accent); }
+  .header-left p { color: var(--text-dim); font-size: 12px; margin-top: 2px; }
+  .header-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 11px; color: var(--text-dim); text-align: right; }
+  .header-badge strong { color: var(--accent); display: block; font-size: 13px; }
+
+  /* SUMMARY CARDS */
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 16px 24px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .card.biz { border-left: 3px solid var(--green); }
+  .card.per { border-left: 3px solid var(--red); }
+  .card.total { border-left: 3px solid var(--accent); }
+  .card.rev { border-left: 3px solid var(--amber); }
+  .card-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .card-value { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .card.biz .card-value { color: var(--green); }
+  .card.per .card-value { color: var(--red); }
+  .card.total .card-value { color: var(--accent); }
+  .card.rev .card-value { color: var(--amber); }
+  .card-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* CONTROLS */
+  .controls { padding: 0 24px 12px; display: flex; flex-direction: column; gap: 10px; }
+  .period-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .period-row label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
+  .filter-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .filter-row label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-right: 4px; }
+
+  /* BUTTONS */
+  .btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.15s; white-space: nowrap; }
+  .btn:hover { background: var(--surface2); color: var(--text); border-color: var(--accent); }
+  .btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .btn.active-biz { background: var(--green); border-color: var(--green); color: #fff; }
+  .btn.active-per { background: var(--red); border-color: var(--red); color: #fff; }
+  .btn.active-all { background: var(--surface2); border-color: var(--accent2); color: var(--text); }
+  .btn.amazon { border-color: #f90; color: #f90; }
+  .btn.amazon.active { background: #f90; color: #000; }
+  .btn.ebay { border-color: #0064d2; color: #60a5fa; }
+  .btn.ebay.active { background: #0064d2; color: #fff; }
+  .btn.revenue { border-color: var(--amber); color: var(--amber); }
+  .btn.revenue.active { background: var(--amber); color: #000; }
+
+  /* CATEGORY PILLS */
+  .cat-pills { display: flex; gap: 5px; flex-wrap: wrap; padding: 0 24px 10px; }
+  .pill { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); padding: 4px 10px; border-radius: 20px; cursor: pointer; font-size: 11px; transition: all 0.15s; }
+  .pill:hover { border-color: var(--accent); color: var(--text); }
+  .pill.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+
+  /* SEARCH */
+  .search-wrap { padding: 0 24px 10px; }
+  .search-input { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; font-size: 13px; width: 320px; outline: none; }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-muted); }
+
+  /* RESULT BAR */
+  .result-bar { background: var(--surface2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 8px 24px; display: flex; gap: 16px; align-items: center; font-size: 12px; color: var(--text-dim); flex-wrap: wrap; }
+  .result-bar strong { color: var(--text); }
+  .result-bar .biz-total { color: var(--green); font-weight: 700; }
+  .result-bar .per-total { color: var(--red); font-weight: 700; }
+  .result-bar .grand-total { color: var(--accent); font-weight: 700; }
+  .rb-sep { color: var(--border); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; padding: 0; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: var(--surface2); padding: 10px 24px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); border-bottom: 1px solid var(--border); font-weight: 600; position: sticky; top: 0; z-index: 10; }
+  tbody tr { border-bottom: 1px solid rgba(46,49,80,0.5); transition: background 0.1s; }
+  tbody tr:hover { background: var(--surface); }
+  tbody tr.biz-row { background: var(--biz-bg); }
+  tbody tr.per-row { background: var(--per-bg); }
+  tbody tr.flag-row { background: var(--flag-bg); }
+  tbody tr.biz-row:hover { background: rgba(34,197,94,0.12); }
+  tbody tr.per-row:hover { background: rgba(239,68,68,0.12); }
+  td { padding: 8px 24px; font-size: 12px; color: var(--text); }
+  td.date-col { color: var(--text-muted); width: 80px; font-variant-numeric: tabular-nums; }
+  td.vendor-col { max-width: 260px; }
+  td.cat-col { color: var(--text-dim); }
+  td.type-col { width: 90px; }
+  td.amount-col { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; width: 100px; }
+  td.flag-col { width: 30px; text-align: center; }
+  
+  .type-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .type-badge.biz { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .type-badge.per { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .flag-icon { color: var(--amber); font-size: 12px; cursor: help; }
+  .biz-amount { color: var(--green); }
+  .per-amount { color: var(--red); }
+
+  /* REVENUE VIEW */
+  .revenue-view { padding: 24px; display: none; }
+  .revenue-view.visible { display: block; }
+  .rev-month { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .rev-month-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--surface2); border-bottom: 1px solid var(--border); }
+  .rev-month-header .month-name { font-weight: 600; font-size: 14px; }
+  .rev-month-header .month-total { color: var(--amber); font-weight: 700; font-size: 15px; }
+  .rev-month-header .pending { color: var(--text-muted); font-size: 12px; font-style: italic; }
+  .rev-deposit { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid rgba(46,49,80,0.4); }
+  .rev-deposit:last-child { border-bottom: none; }
+  .rev-deposit .dep-date { color: var(--text-muted); width: 80px; }
+  .rev-deposit .dep-desc { color: var(--text-dim); flex: 1; }
+  .rev-deposit .dep-amt { color: var(--amber); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  /* MONTHLY SUMMARY VIEW */
+  .monthly-summary { padding: 24px; display: none; }
+  .monthly-summary.visible { display: block; }
+  .month-sum-table { width: 100%; border-collapse: collapse; }
+  .month-sum-table th { background: var(--surface2); padding: 10px 16px; text-align: left; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+  .month-sum-table td { padding: 10px 16px; border-bottom: 1px solid rgba(46,49,80,0.4); font-size: 13px; }
+  .month-sum-table tr:hover td { background: var(--surface); }
+  .month-sum-table .complete { color: var(--green); font-size: 11px; }
+  .month-sum-table .pending { color: var(--amber); font-size: 11px; }
+  .month-sum-table td.biz { color: var(--green); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .month-sum-table td.per { color: var(--red); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .month-sum-table td.tot { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .month-sum-table tr.totals-row td { background: var(--surface2); font-weight: 700; border-top: 2px solid var(--border); }
+
+  /* EXPORT */
+  .export-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-left: auto; }
+  .export-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* CHARTS VIEW */
+  .charts-view { padding: 24px; display: none; }
+  .charts-view.visible { display: block; }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; }
+  .chart-card h2 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .chart-card p { font-size: 11px; color: var(--text-muted); margin-bottom: 16px; }
+  .chart-card.wide { grid-column: 1 / -1; }
+  .chart-container-bar { position: relative; height: 340px; }
+  .chart-container-pie { position: relative; height: 380px; }
+  .chart-totals { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .chart-tot { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; }
+  .chart-tot .ct-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .chart-tot .ct-value { font-size: 15px; font-weight: 700; margin-top: 2px; }
+  .chart-tot.rev .ct-value { color: var(--amber); }
+  .chart-tot.biz .ct-value { color: var(--green); }
+  .chart-tot.per .ct-value { color: var(--red); }
+
+  /* FOOTER */
+  .footer { padding: 16px 24px; color: var(--text-muted); font-size: 11px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; }
+  
+  .hidden { display: none !important; }
+
+.sub-month-bar {
+  display: none;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px 20px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.sub-month-bar.visible { display: flex; }
+.sub-month-btn {
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: inherit;
+  transition: all .15s;
+}
+.sub-month-btn:hover { border-color: var(--amber); color: var(--amber); }
+.sub-month-btn.active { background: var(--amber); color: #000; border-color: var(--amber); font-weight: 600; }
+
+  .back-link { display:inline-flex; align-items:center; gap:6px; color:#7A8A94; font-size:12px; letter-spacing:1px; text-transform:uppercase; text-decoration:none; padding:6px 12px; border:1px solid #2a2a2a; border-radius:3px; transition:color 0.2s,border-color 0.2s; }
+  .back-link:hover { color:#E8E8E8; border-color:#555; }
+  .back-link svg { width:14px; height:14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Showtime Auto Body <span>LLC</span> — 2025 Expense Dashboard</h1>
+    <p>Enterprise Bank &amp; Trust · Account XXXXXX7875 · Jan–Dec 2025 Complete · v10</p>
+  </div>
+  <div class="header-badge">
+    <strong id="hdr-total">$0.00</strong>
+    Total Transactions YTD
+  </div>
+</div>
+  <div style="display:flex;gap:10px;">
+  <a href="index.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Homepage</a>
+  <a href="admin.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Admin</a>
+  </div>
+</div>
+
+<div class="cards">
+  <div class="card biz">
+    <div class="card-label">Business Expenses</div>
+    <div class="card-value" id="card-biz">$0.00</div>
+    <div class="card-sub" id="card-biz-sub">— transactions</div>
+  </div>
+  <div class="card per">
+    <div class="card-label">Personal Expenses</div>
+    <div class="card-value" id="card-per">$0.00</div>
+    <div class="card-sub" id="card-per-sub">— transactions</div>
+  </div>
+  <div class="card total">
+    <div class="card-label">Grand Total Spend</div>
+    <div class="card-value" id="card-total">$0.00</div>
+    <div class="card-sub" id="card-txn-count">— transactions</div>
+  </div>
+  <div class="card rev">
+    <div class="card-label">Revenue (Deposits)</div>
+    <div class="card-value" id="card-rev">$0.00</div>
+    <div class="card-sub">Full year tracked</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="period-row">
+    <label>Period:</label>
+    <button class="btn active" onclick="setPeriod('ytd')" id="btn-ytd">YTD (All 12 Mo)</button>
+    <button class="btn" onclick="setPeriod('jan')" id="btn-jan">Jan</button>
+    <button class="btn" onclick="setPeriod('feb')" id="btn-feb">Feb</button>
+    <button class="btn" onclick="setPeriod('mar')" id="btn-mar">Mar</button>
+    <button class="btn" onclick="setPeriod('apr')" id="btn-apr">Apr</button>
+    <button class="btn" onclick="setPeriod('may')" id="btn-may">May</button>
+    <button class="btn" onclick="setPeriod('jun')" id="btn-jun">Jun</button>
+    <button class="btn" onclick="setPeriod('jul')" id="btn-jul">Jul</button>
+    <button class="btn" onclick="setPeriod('aug')" id="btn-aug">Aug</button>
+    <button class="btn" onclick="setPeriod('sep')" id="btn-sep">Sep</button>
+    <button class="btn" onclick="setPeriod('oct')" id="btn-oct">Oct</button>
+    <button class="btn" onclick="setPeriod('nov')" id="btn-nov">Nov</button>
+    <button class="btn" onclick="setPeriod('dec')" id="btn-dec">Dec</button>
+    <button class="btn amazon" onclick="setPeriod('amazon')" id="btn-amazon">🛒 Amazon</button>
+    <button class="btn ebay" onclick="setPeriod('ebay')" id="btn-ebay">🏷️ eBay</button>
+    <button class="btn" onclick="setPeriod('temu')" id="btn-temu" style="border-color:#ff7043;color:#ff7043;">🛍️ Temu</button>
+    <button class="btn revenue" onclick="setPeriod('revenue')" id="btn-revenue">💰 Revenue</button>
+    <button class="btn" onclick="setPeriod('monthly')" id="btn-monthly">📊 Monthly Summary</button>
+    <button class="btn" onclick="setPeriod('charts')" id="btn-charts">📈 Charts</button>
+  </div>
+  
+<div class="sub-month-bar" id="sub-month-bar">
+  <button class="sub-month-btn active" id="smb-all" onclick="setSubMonth('all')">YTD</button>
+  <button class="sub-month-btn" id="smb-jan" onclick="setSubMonth('jan')">Jan</button>
+    <button class="sub-month-btn" id="smb-feb" onclick="setSubMonth('feb')">Feb</button>
+    <button class="sub-month-btn" id="smb-mar" onclick="setSubMonth('mar')">Mar</button>
+    <button class="sub-month-btn" id="smb-apr" onclick="setSubMonth('apr')">Apr</button>
+    <button class="sub-month-btn" id="smb-may" onclick="setSubMonth('may')">May</button>
+    <button class="sub-month-btn" id="smb-jun" onclick="setSubMonth('jun')">Jun</button>
+    <button class="sub-month-btn" id="smb-jul" onclick="setSubMonth('jul')">Jul</button>
+    <button class="sub-month-btn" id="smb-aug" onclick="setSubMonth('aug')">Aug</button>
+    <button class="sub-month-btn" id="smb-sep" onclick="setSubMonth('sep')">Sep</button>
+    <button class="sub-month-btn" id="smb-oct" onclick="setSubMonth('oct')">Oct</button>
+    <button class="sub-month-btn" id="smb-nov" onclick="setSubMonth('nov')">Nov</button>
+    <button class="sub-month-btn" id="smb-dec" onclick="setSubMonth('dec')">Dec</button>
+</div>
+<div class="filter-row" id="type-filter-row">
+    <label>Type:</label>
+    <button class="btn active-all" onclick="setType('all')" id="btn-all">All</button>
+    <button class="btn" onclick="setType('business')" id="btn-biz">Business</button>
+    <button class="btn" onclick="setType('personal')" id="btn-per">Personal</button>
+    <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+  </div>
+</div>
+
+<div class="cat-pills" id="cat-pills"></div>
+
+<div class="search-wrap" id="search-wrap">
+  <input class="search-input" type="text" id="search" placeholder="Search vendor or category..." oninput="render()">
+</div>
+
+<div class="result-bar" id="result-bar">
+  <span id="rb-period">YTD</span> <span class="rb-sep">|</span>
+  <span><strong id="rb-count">0</strong> transactions</span> <span class="rb-sep">|</span>
+  Biz: <span class="biz-total" id="rb-biz">$0</span> <span class="rb-sep">|</span>
+  Per: <span class="per-total" id="rb-per">$0</span> <span class="rb-sep">|</span>
+  Total: <span class="grand-total" id="rb-total">$0</span>
+</div>
+
+<div class="table-wrap" id="table-wrap">
+  <table id="main-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Vendor / Description</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th style="text-align:right">Amount</th>
+        <th style="text-align:center">⚑</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="revenue-view" id="revenue-view"></div>
+<div class="monthly-summary" id="monthly-summary"></div>
+<div class="charts-view" id="charts-view">
+  <div class="charts-grid">
+
+    <!-- BAR CHART: full width -->
+    <div class="chart-card wide">
+      <h2>Monthly Revenue vs. Business &amp; Personal Expenses</h2>
+      <p>Revenue (gold) · Business Expenses (green) · Personal Expenses (red)</p>
+      <div class="chart-totals">
+        <div class="chart-tot rev"><div class="ct-label">Total Revenue</div><div class="ct-value">$286,721.24</div></div>
+        <div class="chart-tot biz"><div class="ct-label">Business Expenses</div><div class="ct-value" id="ct-biz-total"></div></div>
+        <div class="chart-tot per"><div class="ct-label">Personal Expenses</div><div class="ct-value" id="ct-per-total"></div></div>
+      </div>
+      <div class="chart-container-bar"><canvas id="barChart"></canvas></div>
+    </div>
+
+    <!-- PIE CHART -->
+    <div class="chart-card wide">
+      <h2>Full-Year Expenses by Category</h2>
+      <p>All transactions — business and personal combined</p>
+      <div class="chart-container-pie"><canvas id="pieChart"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <span>⚠ Flagged items require CPA review. Amazon, eBay, and Temu shown from bank statement data only — no double counting.</span>
+  <span>Showtime Auto Body LLC · 2025 · v10</span>
+</div>
+
+<script>
+// ============================================================
+// BANK DATA — Jan–Sep (previously established, condensed)
+// ============================================================
+const BANK_DATA = {
+jan:[
+{date:"01/02",vendor:"DD *DoorDash McDonald's",amount:4.06,category:"Meals (Personal)",type:"personal"},
+  {date:"01/03",vendor:"Circle K Hillsboro",amount:37.50,category:"Fuel & Auto",type:"business"},
+  {date:"01/03",vendor:"Keystone Automotive Bridgeton",amount:326.75,category:"Auto Parts & Repairs",type:"business"},
+  {date:"01/03",vendor:"Wellfit Parts Hazelwood",amount:522.44,category:"Auto Parts & Repairs",type:"business"},
+  {date:"01/06",vendor:"EM Hillsboro 502",amount:6.33,category:"Fuel & Auto",type:"business"},
+  {date:"01/06",vendor:"Circle K Hillsboro",amount:12.54,category:"Fuel & Auto",type:"business"},
+  {date:"01/06",vendor:"Circle K Hillsboro",amount:13.45,category:"Fuel & Auto",type:"business"},
+  {date:"01/06",vendor:"EM Hillsboro 502",amount:28.14,category:"Fuel & Auto",type:"business"},
+  {date:"01/06",vendor:"Jim Butler Chevrolet Fenton",amount:82.92,category:"Auto Parts & Repairs",type:"business"},
+  {date:"01/06",vendor:"Wal-Mart De Soto",amount:252.47,category:"Personal Shopping",type:"personal"},
+  {date:"01/06",vendor:"AC-Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"01/06",vendor:"AC-AMERENMO-UTIL PAY",amount:274.57,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"01/07",vendor:"Amazon.com",amount:311.63,category:"Supplies",type:"business"},
+  {date:"01/08",vendor:"Amazon.com",amount:11.44,category:"Personal Shopping",type:"personal"},
+  {date:"01/08",vendor:"Amazon.com",amount:15.36,category:"Personal Shopping",type:"personal"},
+  {date:"01/08",vendor:"KB Hillsboro MO",amount:27.35,category:"Supplies",type:"business"},
+  {date:"01/09",vendor:"EM Hillsboro 502",amount:14.68,category:"Fuel & Auto",type:"business"},
+  {date:"01/09",vendor:"Yancey Auto Sales Perry MO",amount:95.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"01/09",vendor:"Venmo *Christe Schult",amount:530.00,category:"Personal Transfer",type:"personal"},
+  {date:"01/09",vendor:"Venmo *Christe Schult",amount:530.00,category:"Personal Transfer",type:"personal"},
+  {date:"01/09",vendor:"Check #790 - Ben Meza (Vendor)",amount:350.00,category:"Vendor Payments",type:"business"},
+  {date:"01/10",vendor:"EM Hillsboro 502",amount:63.94,category:"Fuel & Auto",type:"business"},
+  {date:"01/10",vendor:"Amazon.com",amount:107.08,category:"Personal Shopping",type:"personal"},
+  {date:"01/10",vendor:"Schnucks Festus",amount:204.80,category:"Groceries",type:"personal"},
+  {date:"01/13",vendor:"DD *DoorDash McDonald's",amount:3.62,category:"Meals (Personal)",type:"personal"},
+  {date:"01/13",vendor:"Amazon.com",amount:5.50,category:"Personal Shopping",type:"personal"},
+  {date:"01/13",vendor:"Amazon.com",amount:26.06,category:"Personal Shopping",type:"personal"},
+  {date:"01/13",vendor:"Amazon.com",amount:33.32,category:"Personal Shopping",type:"personal"},
+  {date:"01/13",vendor:"Amazon.com",amount:36.61,category:"Supplies",type:"business"},
+  {date:"01/13",vendor:"Amazon.com",amount:63.57,category:"Supplies",type:"business"},
+  {date:"01/13",vendor:"Underdog Sports Inc",amount:100.00,category:"Personal Shopping",type:"personal"},
+  {date:"01/13",vendor:"Venmo *eBay",amount:173.92,category:"Personal Shopping",type:"personal"},
+  {date:"01/13",vendor:"CCC Intelligent Solutions",amount:236.58,category:"Software/SaaS",type:"business"},
+  {date:"01/14",vendor:"Underdog Sports Inc",amount:100.00,category:"Personal Shopping",type:"personal"},
+  {date:"01/14",vendor:"Venmo *eBay",amount:640.66,category:"Personal Shopping",type:"personal"},
+  {date:"01/15",vendor:"Amazon.com",amount:21.88,category:"Supplies",type:"business"},
+  {date:"01/15",vendor:"KB Hillsboro MO",amount:35.73,category:"Supplies",type:"business"},
+  {date:"01/15",vendor:"McDonald's Hillsboro",amount:41.00,category:"Meals (Personal)",type:"personal"},
+  {date:"01/16",vendor:"Circle K Hillsboro",amount:22.27,category:"Fuel & Auto",type:"business"},
+  {date:"01/16",vendor:"AC-Hillsboro R-III",amount:30.35,category:"Personal Shopping",type:"personal"},
+  {date:"01/16",vendor:"AC-Carrington Mortgage",amount:1514.14,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"01/17",vendor:"Amazon.com",amount:13.55,category:"Supplies",type:"business"},
+  {date:"01/17",vendor:"Amazon.com",amount:24.93,category:"Supplies",type:"business"},
+  {date:"01/17",vendor:"Domino's Hillsboro",amount:59.19,category:"Meals (Personal)",type:"personal"},
+  {date:"01/17",vendor:"Keystone Automotive Bridgeton",amount:774.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"01/21",vendor:"Amazon.com",amount:19.97,category:"Personal Shopping",type:"personal"},
+  {date:"01/21",vendor:"EM Hillsboro 502",amount:21.58,category:"Fuel & Auto",type:"business"},
+  {date:"01/21",vendor:"Circle K Hillsboro",amount:21.95,category:"Fuel & Auto",type:"business"},
+  {date:"01/21",vendor:"Amazon.com",amount:25.39,category:"Personal Shopping",type:"personal"},
+  {date:"01/21",vendor:"Circle K Hillsboro",amount:28.13,category:"Fuel & Auto",type:"business"},
+  {date:"01/21",vendor:"Amazon.com",amount:31.24,category:"Supplies",type:"business"},
+  {date:"01/21",vendor:"SQ *Lasers Automotive Imperial",amount:144.87,category:"Auto Parts & Repairs",type:"business"},
+  {date:"01/21",vendor:"Venmo *eBay",amount:156.34,category:"Personal Shopping",type:"personal"},
+  {date:"01/21",vendor:"Performance Auto Color Fenton",amount:289.20,category:"Auto Parts & Repairs",type:"business"},
+  {date:"01/21",vendor:"PSG* Wakefield & Assoc (Insurance)",amount:1146.95,category:"Insurance",type:"business"},
+  {date:"01/21",vendor:"Check #792 - Dispersed Automotive",amount:650.00,category:"Vendor Payments",type:"business"},
+  {date:"01/22",vendor:"Amazon.com",amount:7.81,category:"Supplies",type:"business"},
+  {date:"01/22",vendor:"Amazon.com",amount:15.62,category:"Supplies",type:"business"},
+  {date:"01/22",vendor:"McDonald's Festus",amount:16.00,category:"Meals (Personal)",type:"personal"},
+  {date:"01/22",vendor:"Amazon.com",amount:19.53,category:"Supplies",type:"business"},
+  {date:"01/22",vendor:"Amazon.com",amount:23.77,category:"Supplies",type:"business"},
+  {date:"01/22",vendor:"Amazon.com",amount:25.00,category:"Supplies",type:"business"},
+  {date:"01/22",vendor:"Amazon.com",amount:27.72,category:"Supplies",type:"business"},
+  {date:"01/22",vendor:"Amazon.com",amount:31.88,category:"Supplies",type:"business"},
+  {date:"01/22",vendor:"R and R Propane LLC",amount:725.84,category:"Supplies",type:"business"},
+  {date:"01/23",vendor:"Temu.com",amount:48.76,category:"Supplies",type:"business"},
+  {date:"01/23",vendor:"EM Hillsboro 502",amount:82.99,category:"Fuel & Auto",type:"business"},
+  {date:"01/23",vendor:"Check #797 - Brandon Gould",amount:1316.18,category:"Vendor Payments",type:"business"},
+  {date:"01/24",vendor:"Temu.com",amount:42.05,category:"Personal Shopping",type:"personal"},
+  {date:"01/24",vendor:"EM Hillsboro 502",amount:44.66,category:"Fuel & Auto",type:"business"},
+  {date:"01/24",vendor:"Amazon.com",amount:160.77,category:"Supplies",type:"business"},
+  {date:"01/24",vendor:"AC-Hillsboro R-III",amount:25.35,category:"Personal Shopping",type:"personal"},
+  {date:"01/27",vendor:"EM Hillsboro 502",amount:6.44,category:"Fuel & Auto",type:"business"},
+  {date:"01/27",vendor:"Circle K Hillsboro",amount:13.96,category:"Fuel & Auto",type:"business"},
+  {date:"01/27",vendor:"EM Hillsboro 502",amount:26.53,category:"Fuel & Auto",type:"business"},
+  {date:"01/27",vendor:"Circle K Hillsboro",amount:29.45,category:"Fuel & Auto",type:"business"},
+  {date:"01/27",vendor:"McDonald's Hillsboro",amount:32.07,category:"Meals (Personal)",type:"personal"},
+  {date:"01/27",vendor:"Waffle House Festus",amount:33.50,category:"Meals (Personal)",type:"personal"},
+  {date:"01/27",vendor:"Jesse's Pizza House Springs",amount:92.37,category:"Meals (Personal)",type:"personal"},
+  {date:"01/27",vendor:"Wal-Mart Festus",amount:132.83,category:"Personal Shopping",type:"personal"},
+  {date:"01/27",vendor:"Amazon.com",amount:167.25,category:"Supplies",type:"business"},
+  {date:"01/28",vendor:"Circle K Hillsboro",amount:19.65,category:"Fuel & Auto",type:"business"},
+  {date:"01/28",vendor:"Spectrum",amount:89.99,category:"Phone/Communications",type:"business"},
+  {date:"01/29",vendor:"QT St Louis",amount:1.05,category:"Fuel & Auto",type:"business"},
+  {date:"01/29",vendor:"KB Hillsboro MO",amount:36.39,category:"Supplies",type:"business"},
+  {date:"01/30",vendor:"Arby's St Louis",amount:10.59,category:"Meals (Personal)",type:"personal"},
+  {date:"01/30",vendor:"Raising Cane's Arnold",amount:10.75,category:"Meals (Personal)",type:"personal"},
+  {date:"01/30",vendor:"Schnucks (misc)",amount:37.76,category:"Groceries",type:"personal"},
+  {date:"01/30",vendor:"AC-Hillsboro R-III",amount:35.35,category:"Personal Shopping",type:"personal"},
+  {date:"01/31",vendor:"Circle K Hillsboro",amount:70.52,category:"Fuel & Auto",type:"business"},
+],
+feb:[
+{date:"02/03",vendor:"Ingrams Mapaville MO",amount:21.36,category:"Supplies",type:"business"},
+  {date:"02/03",vendor:"Taco Bell Hillsboro",amount:36.00,category:"Meals (Personal)",type:"personal"},
+  {date:"02/03",vendor:"Texas Roadhouse Festus",amount:37.32,category:"Meals (Personal)",type:"personal"},
+  {date:"02/03",vendor:"SPO*PrimetimeSportsBar Imperial",amount:48.11,category:"Entertainment",type:"personal"},
+  {date:"02/04",vendor:"Ingrams Mapaville MO",amount:11.74,category:"Supplies",type:"business"},
+  {date:"02/04",vendor:"McDonald's Byrnes Mill",amount:12.16,category:"Meals (Personal)",type:"personal"},
+  {date:"02/04",vendor:"Amazon.com",amount:18.75,category:"Supplies",type:"business"},
+  {date:"02/04",vendor:"KB Hillsboro MO",amount:21.89,category:"Supplies",type:"business"},
+  {date:"02/05",vendor:"Amazon.com",amount:10.41,category:"Supplies",type:"business"},
+  {date:"02/05",vendor:"O'Reilly House Springs",amount:20.38,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/05",vendor:"Jesse's Pizza House Springs",amount:75.62,category:"Meals (Personal)",type:"personal"},
+  {date:"02/05",vendor:"AC-Hillsboro R-III",amount:25.35,category:"Personal Shopping",type:"personal"},
+  {date:"02/05",vendor:"AC-AMERENMO-UTIL PAY",amount:339.99,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"02/06",vendor:"SP Detour Sunglasses",amount:43.25,category:"Personal Shopping",type:"personal"},
+  {date:"02/06",vendor:"Amazon.com",amount:129.36,category:"Supplies",type:"business"},
+  {date:"02/06",vendor:"AC-Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"02/07",vendor:"Amazon.com",amount:15.51,category:"Supplies",type:"business"},
+  {date:"02/07",vendor:"McDonald's Hillsboro",amount:17.00,category:"Meals (Personal)",type:"personal"},
+  {date:"02/07",vendor:"KB Hillsboro MO",amount:20.05,category:"Supplies",type:"business"},
+  {date:"02/07",vendor:"Amazon.com",amount:28.03,category:"Personal Shopping",type:"personal"},
+  {date:"02/07",vendor:"Venmo *Christe Schult",amount:430.00,category:"Personal Transfer",type:"personal"},
+  {date:"02/07",vendor:"SYNCB Payment",amount:600.70,category:"Personal Transfer",type:"personal"},
+  {date:"02/10",vendor:"ATM Surcharge Hillsboro",amount:3.50,category:"Bank Fees",type:"business"},
+  {date:"02/10",vendor:"Temu.com",amount:4.93,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Amazon.com",amount:7.29,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Temu.com",amount:8.31,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Amazon.com",amount:10.41,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Amazon.com",amount:18.75,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Amazon.com",amount:31.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/10",vendor:"Temu.com",amount:37.28,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Amazon.com",amount:41.68,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"McDonald's Hillsboro",amount:42.00,category:"Meals (Personal)",type:"personal"},
+  {date:"02/10",vendor:"Temu.com",amount:44.76,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Temu.com",amount:48.49,category:"Personal Shopping",type:"personal"},
+  {date:"02/10",vendor:"Amazon.com",amount:51.97,category:"Personal Shopping",type:"personal"},
+  {date:"02/10",vendor:"Circle K Hillsboro",amount:62.04,category:"Fuel & Auto",type:"business"},
+  {date:"02/10",vendor:"Temu.com",amount:71.78,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Temu.com",amount:96.52,category:"Personal Shopping",type:"personal"},
+  {date:"02/10",vendor:"SQ *Elite Collectibles Imperial",amount:96.95,category:"Personal Shopping",type:"personal"},
+  {date:"02/10",vendor:"ATM Cash Withdrawal Hillsboro",amount:120.00,category:"Personal Transfer",type:"personal"},
+  {date:"02/10",vendor:"Temu.com",amount:150.47,category:"Supplies",type:"business"},
+  {date:"02/10",vendor:"Wal-Mart Festus",amount:224.24,category:"Personal Shopping",type:"personal"},
+  {date:"02/10",vendor:"Jim Butler Chevrolet Fenton",amount:273.53,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/10",vendor:"Jim Butler Chevrolet Fenton",amount:502.86,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/11",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"02/11",vendor:"Wal-Mart Festus",amount:14.72,category:"Personal Shopping",type:"personal"},
+  {date:"02/11",vendor:"DD *DoorDash Dairy Queen",amount:40.43,category:"Meals (Personal)",type:"personal"},
+  {date:"02/11",vendor:"Wal-Mart Festus",amount:74.89,category:"Personal Shopping",type:"personal"},
+  {date:"02/12",vendor:"Google *YouTube TV",amount:4.99,category:"Entertainment",type:"personal"},
+  {date:"02/12",vendor:"Underdog Sports Inc",amount:200.00,category:"Personal Shopping",type:"personal"},
+  {date:"02/12",vendor:"AC-Hillsboro R-III",amount:45.35,category:"Personal Shopping",type:"personal"},
+  {date:"02/14",vendor:"Designer Reading Glasses",amount:39.95,category:"Personal Shopping",type:"personal"},
+  {date:"02/14",vendor:"StorePicernComAllMC (sunglasses)",amount:60.41,category:"Personal Shopping",type:"personal"},
+  {date:"02/18",vendor:"EM Hillsboro 502",amount:2.19,category:"Fuel & Auto",type:"business"},
+  {date:"02/18",vendor:"Amazon.com",amount:7.53,category:"Supplies",type:"business"},
+  {date:"02/18",vendor:"EM Hillsboro 502",amount:11.67,category:"Fuel & Auto",type:"business"},
+  {date:"02/18",vendor:"EM Hillsboro 502",amount:15.23,category:"Fuel & Auto",type:"business"},
+  {date:"02/18",vendor:"EM Hillsboro 502",amount:16.49,category:"Fuel & Auto",type:"business"},
+  {date:"02/18",vendor:"EM Hillsboro 502",amount:17.12,category:"Fuel & Auto",type:"business"},
+  {date:"02/18",vendor:"Amazon.com",amount:17.87,category:"Supplies",type:"business"},
+  {date:"02/18",vendor:"DD *DoorDash Taco Bell",amount:20.84,category:"Meals (Personal)",type:"personal"},
+  {date:"02/18",vendor:"Amazon.com",amount:21.08,category:"Supplies",type:"business"},
+  {date:"02/18",vendor:"Teepublic",amount:29.18,category:"Personal Shopping",type:"personal"},
+  {date:"02/18",vendor:"Amazon.com",amount:31.26,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/18",vendor:"EM Hillsboro 502",amount:37.77,category:"Fuel & Auto",type:"business"},
+  {date:"02/18",vendor:"Karsch's Village Hillsboro",amount:53.21,category:"Groceries",type:"personal"},
+  {date:"02/18",vendor:"Karsch's Village Hillsboro",amount:81.23,category:"Groceries",type:"personal"},
+  {date:"02/18",vendor:"Teepublic",amount:116.72,category:"Personal Shopping",type:"personal"},
+  {date:"02/18",vendor:"SPI*AmerenUE St Louis",amount:657.80,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"02/18",vendor:"AC-Hillsboro R-III",amount:20.35,category:"Personal Shopping",type:"personal"},
+  {date:"02/19",vendor:"Circle K High Ridge",amount:10.15,category:"Fuel & Auto",type:"business"},
+  {date:"02/19",vendor:"Venmo *eBay",amount:22.88,category:"Personal Shopping",type:"personal"},
+  {date:"02/19",vendor:"Ingrams Mapaville MO",amount:35.00,category:"Supplies",type:"business"},
+  {date:"02/19",vendor:"Venmo *Christe Schult",amount:507.00,category:"Personal Transfer",type:"personal"},
+  {date:"02/19",vendor:"Mungenast St Louis Honda",amount:1330.20,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/20",vendor:"Venmo *eBay",amount:1.10,category:"Personal Shopping",type:"personal"},
+  {date:"02/21",vendor:"Casey's Hillsboro",amount:5.60,category:"Fuel & Auto",type:"business"},
+  {date:"02/21",vendor:"Taco Bell Hillsboro",amount:22.25,category:"Meals (Personal)",type:"personal"},
+  {date:"02/21",vendor:"Venmo *Nick Black",amount:50.00,category:"Personal Transfer",type:"personal"},
+  {date:"02/21",vendor:"Mungenast St Louis Honda",amount:177.06,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/21",vendor:"SQ *Lasers Automotive Imperial",amount:650.54,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/24",vendor:"EM Hillsboro 502",amount:13.02,category:"Fuel & Auto",type:"business"},
+  {date:"02/24",vendor:"Circle K Hillsboro",amount:13.56,category:"Fuel & Auto",type:"business"},
+  {date:"02/24",vendor:"EM Hillsboro 502",amount:15.28,category:"Fuel & Auto",type:"business"},
+  {date:"02/24",vendor:"EM Hillsboro 502",amount:23.84,category:"Fuel & Auto",type:"business"},
+  {date:"02/24",vendor:"Circle K Hillsboro",amount:30.05,category:"Fuel & Auto",type:"business"},
+  {date:"02/24",vendor:"Raising Cane's Kirkwood",amount:30.89,category:"Meals (Personal)",type:"personal"},
+  {date:"02/24",vendor:"EM Hillsboro 502",amount:38.03,category:"Fuel & Auto",type:"business"},
+  {date:"02/24",vendor:"SP Smackin",amount:45.95,category:"Personal Shopping",type:"personal"},
+  {date:"02/24",vendor:"Domino's Hillsboro",amount:60.92,category:"Meals (Personal)",type:"personal"},
+  {date:"02/24",vendor:"Mungenast St Louis Honda",amount:77.96,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/24",vendor:"PacSun Des Peres",amount:78.83,category:"Personal Shopping",type:"personal"},
+  {date:"02/24",vendor:"Google *YouTube TV",amount:82.99,category:"Entertainment",type:"personal"},
+  {date:"02/24",vendor:"Jim Butler Chevrolet Fenton",amount:121.33,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/24",vendor:"Karsch's Village Hillsboro",amount:130.19,category:"Groceries",type:"personal"},
+  {date:"02/25",vendor:"Amazon.com",amount:7.29,category:"Supplies",type:"business"},
+  {date:"02/25",vendor:"Amazon.com",amount:9.37,category:"Supplies",type:"business"},
+  {date:"02/25",vendor:"Circle K High Ridge",amount:22.02,category:"Fuel & Auto",type:"business"},
+  {date:"02/25",vendor:"Amazon.com",amount:51.67,category:"Supplies",type:"business"},
+  {date:"02/25",vendor:"SQ *Lasers Automotive Labadie",amount:322.05,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/26",vendor:"AC-Hillsboro R-III",amount:40.35,category:"Personal Shopping",type:"personal"},
+  {date:"02/27",vendor:"Ingrams Mapaville MO",amount:20.08,category:"Supplies",type:"business"},
+  {date:"02/27",vendor:"DD *DoorDash Taco Bell",amount:27.49,category:"Meals (Personal)",type:"personal"},
+  {date:"02/27",vendor:"Schnucks Festus",amount:27.78,category:"Groceries",type:"personal"},
+  {date:"02/27",vendor:"Amazon.com",amount:31.26,category:"Auto Parts & Repairs",type:"business"},
+  {date:"02/27",vendor:"Texas Roadhouse Festus",amount:34.09,category:"Meals (Personal)",type:"personal"},
+  {date:"02/28",vendor:"Spectrum",amount:93.00,category:"Phone/Communications",type:"business"},
+  {date:"02/28",vendor:"SQ *Lasers Automotive Imperial",amount:257.64,category:"Auto Parts & Repairs",type:"business"},
+],
+mar:[
+{date:"03/03",vendor:"Amazon.com",amount:4.04,category:"Personal Shopping",type:"personal"},
+  {date:"03/03",vendor:"Amazon.com",amount:12.54,category:"Personal Shopping",type:"personal"},
+  {date:"03/03",vendor:"Amazon.com",amount:35.43,category:"Supplies",type:"business"},
+  {date:"03/03",vendor:"KB Hillsboro MO",amount:39.73,category:"Supplies",type:"business"},
+  {date:"03/03",vendor:"AC-Carrington Mortgage",amount:1568.85,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"03/04",vendor:"Imos Pizza Hillsboro",amount:54.25,category:"Meals (Personal)",type:"personal"},
+  {date:"03/04",vendor:"ATM Cash Withdrawal House Springs",amount:200.00,category:"Personal Transfer",type:"personal"},
+  {date:"03/05",vendor:"Circle K High Ridge",amount:12.66,category:"Fuel & Auto",type:"business"},
+  {date:"03/05",vendor:"Amazon.com",amount:19.79,category:"Supplies",type:"business"},
+  {date:"03/05",vendor:"Amazon.com",amount:20.25,category:"Supplies",type:"business"},
+  {date:"03/05",vendor:"SP Detour Sunglasses",amount:25.00,category:"Personal Shopping",type:"personal"},
+  {date:"03/05",vendor:"SP COEyewear",amount:43.25,category:"Personal Shopping",type:"personal"},
+  {date:"03/05",vendor:"Amazon.com",amount:47.00,category:"Personal Shopping",type:"personal"},
+  {date:"03/05",vendor:"Amazon.com",amount:52.11,category:"Supplies",type:"business"},
+  {date:"03/05",vendor:"Amazon.com",amount:56.25,category:"Supplies",type:"business"},
+  {date:"03/05",vendor:"Amazon.com",amount:62.66,category:"Supplies",type:"business"},
+  {date:"03/05",vendor:"Amazon.com",amount:138.24,category:"Supplies",type:"business"},
+  {date:"03/05",vendor:"AC-Hillsboro R-III",amount:30.35,category:"Personal Shopping",type:"personal"},
+  {date:"03/06",vendor:"Circle K High Ridge",amount:9.79,category:"Fuel & Auto",type:"business"},
+  {date:"03/06",vendor:"McDonald's Hillsboro",amount:12.50,category:"Meals (Personal)",type:"personal"},
+  {date:"03/06",vendor:"Ingrams Mapaville MO",amount:19.80,category:"Supplies",type:"business"},
+  {date:"03/06",vendor:"AC-Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"03/06",vendor:"AC-AMERENMO-UTIL PAY",amount:319.44,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"03/07",vendor:"Circle K Hillsboro",amount:30.09,category:"Fuel & Auto",type:"business"},
+  {date:"03/07",vendor:"Jesse's Pizza House Springs",amount:61.41,category:"Meals (Personal)",type:"personal"},
+  {date:"03/10",vendor:"McDonald's High Ridge",amount:10.28,category:"Meals (Personal)",type:"personal"},
+  {date:"03/10",vendor:"McDonald's Byrnes Mill",amount:14.92,category:"Meals (Personal)",type:"personal"},
+  {date:"03/10",vendor:"KB Hillsboro MO",amount:19.22,category:"Supplies",type:"business"},
+  {date:"03/10",vendor:"Cracker Barrel Herculaneum",amount:30.53,category:"Meals (Personal)",type:"personal"},
+  {date:"03/10",vendor:"Domino's Hillsboro",amount:52.40,category:"Meals (Personal)",type:"personal"},
+  {date:"03/10",vendor:"NNT Pacific Sunwear Bellevue",amount:63.55,category:"Personal Shopping",type:"personal"},
+  {date:"03/10",vendor:"KB Hillsboro MO",amount:65.07,category:"Supplies",type:"business"},
+  {date:"03/10",vendor:"NNT Pacific Sunwear Bellevue",amount:111.64,category:"Personal Shopping",type:"personal"},
+  {date:"03/10",vendor:"Karsch's Village Hillsboro",amount:116.48,category:"Groceries",type:"personal"},
+  {date:"03/10",vendor:"SQ *Queen City Yard GA",amount:175.65,category:"Personal Shopping",type:"personal"},
+  {date:"03/11",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"03/11",vendor:"KB Hillsboro MO",amount:5.71,category:"Supplies",type:"business"},
+  {date:"03/11",vendor:"NNT Pacific Sunwear Bellevue",amount:46.84,category:"Personal Shopping",type:"personal"},
+  {date:"03/11",vendor:"SQ *Lasers Automotive Imperial",amount:147.87,category:"Auto Parts & Repairs",type:"business"},
+  {date:"03/12",vendor:"Google *YouTube TV",amount:4.99,category:"Entertainment",type:"personal"},
+  {date:"03/12",vendor:"Circle K Hillsboro",amount:12.51,category:"Fuel & Auto",type:"business"},
+  {date:"03/12",vendor:"Imos Pizza Hillsboro",amount:54.87,category:"Meals (Personal)",type:"personal"},
+  {date:"03/12",vendor:"SQ *Big Steve's Septic Bonne Terre",amount:335.00,category:"Supplies",type:"business"},
+  {date:"03/13",vendor:"EM Hillsboro 502",amount:24.91,category:"Fuel & Auto",type:"business"},
+  {date:"03/13",vendor:"O'Reilly Hillsboro",amount:35.26,category:"Auto Parts & Repairs",type:"business"},
+  {date:"03/14",vendor:"SQ *Lasers Automotive Imperial",amount:193.23,category:"Auto Parts & Repairs",type:"business"},
+  {date:"03/17",vendor:"ATM Surcharge Dittmer",amount:3.25,category:"Bank Fees",type:"business"},
+  {date:"03/17",vendor:"KB Hillsboro MO",amount:7.05,category:"Supplies",type:"business"},
+  {date:"03/17",vendor:"EM Pevely 501",amount:8.20,category:"Fuel & Auto",type:"business"},
+  {date:"03/17",vendor:"McDonald's Byrnes Mill",amount:8.56,category:"Meals (Personal)",type:"personal"},
+  {date:"03/17",vendor:"BP Catawissa MO",amount:11.80,category:"Fuel & Auto",type:"business"},
+  {date:"03/17",vendor:"Amazon.com",amount:22.44,category:"Supplies",type:"business"},
+  {date:"03/17",vendor:"Waffle House Festus",amount:46.25,category:"Meals (Personal)",type:"personal"},
+  {date:"03/17",vendor:"Domino's Hillsboro",amount:51.76,category:"Meals (Personal)",type:"personal"},
+  {date:"03/17",vendor:"29027 Festus",amount:57.49,category:"Supplies",type:"business"},
+  {date:"03/17",vendor:"Jim Butler Chevrolet Fenton",amount:79.36,category:"Auto Parts & Repairs",type:"business"},
+  {date:"03/17",vendor:"Texas Roadhouse Festus",amount:88.05,category:"Meals (Personal)",type:"personal"},
+  {date:"03/17",vendor:"ATM Cash Withdrawal Dittmer",amount:100.00,category:"Personal Transfer",type:"personal"},
+  {date:"03/17",vendor:"AC-Hillsboro R-III",amount:20.35,category:"Personal Shopping",type:"personal"},
+  {date:"03/17",vendor:"Check #794 - John Meyer (Vendor)",amount:600.00,category:"Vendor Payments",type:"business"},
+  {date:"03/18",vendor:"Taco Bell Hillsboro",amount:24.34,category:"Meals (Personal)",type:"personal"},
+  {date:"03/18",vendor:"Circle K Hillsboro",amount:28.64,category:"Fuel & Auto",type:"business"},
+  {date:"03/18",vendor:"Holeshots Dittmer",amount:32.00,category:"Entertainment",type:"personal"},
+  {date:"03/19",vendor:"McDonald's Hillsboro",amount:26.87,category:"Meals (Personal)",type:"personal"},
+  {date:"03/19",vendor:"ATT Bill Payment",amount:631.51,category:"Phone/Communications",type:"business"},
+  {date:"03/19",vendor:"AC-Hillsboro R-III",amount:40.35,category:"Personal Shopping",type:"personal"},
+  {date:"03/20",vendor:"Taco Bell Hillsboro",amount:15.16,category:"Meals (Personal)",type:"personal"},
+  {date:"03/20",vendor:"Karsch's Village Hillsboro",amount:64.14,category:"Groceries",type:"personal"},
+  {date:"03/20",vendor:"Nike.com",amount:79.18,category:"Personal Shopping",type:"personal"},
+  {date:"03/20",vendor:"South County Dodge Chrysler St Louis",amount:545.60,category:"Auto Parts & Repairs",type:"business"},
+  {date:"03/21",vendor:"BP House Springs",amount:7.46,category:"Fuel & Auto",type:"business"},
+  {date:"03/21",vendor:"Twin City Toyota Herculaneum",amount:620.41,category:"Auto Parts & Repairs",type:"business"},
+  {date:"03/24",vendor:"EM Festus West",amount:15.77,category:"Fuel & Auto",type:"business"},
+  {date:"03/24",vendor:"McDonald's Byrnes Mill",amount:19.17,category:"Meals (Personal)",type:"personal"},
+  {date:"03/24",vendor:"EM Festus 504",amount:25.01,category:"Fuel & Auto",type:"business"},
+  {date:"03/24",vendor:"Amazon.com",amount:52.11,category:"Supplies",type:"business"},
+  {date:"03/24",vendor:"Domino's Festus",amount:64.10,category:"Meals (Personal)",type:"personal"},
+  {date:"03/24",vendor:"Domino's Hillsboro",amount:79.80,category:"Meals (Personal)",type:"personal"},
+  {date:"03/24",vendor:"Johnny's Hideout High Ridge",amount:81.25,category:"Meals (Personal)",type:"personal"},
+  {date:"03/24",vendor:"Google *YouTube TV",amount:82.99,category:"Entertainment",type:"personal"},
+  {date:"03/24",vendor:"Chili's Fenton",amount:97.22,category:"Meals (Personal)",type:"personal"},
+  {date:"03/25",vendor:"Mercy Pharm Jefferson Festus",amount:15.00,category:"Personal Shopping",type:"personal"},
+  {date:"03/25",vendor:"EM Hillsboro 502",amount:18.51,category:"Fuel & Auto",type:"business"},
+  {date:"03/25",vendor:"EM Hillsboro 502",amount:69.51,category:"Fuel & Auto",type:"business"},
+  {date:"03/26",vendor:"BP Washington MO",amount:18.49,category:"Fuel & Auto",type:"business"},
+  {date:"03/26",vendor:"Check #800 - PWSD #7 (Water Utility)",amount:250.95,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"03/27",vendor:"McDonald's Byrnes Mill",amount:10.74,category:"Meals (Personal)",type:"personal"},
+  {date:"03/27",vendor:"Ingrams Mapaville MO",amount:16.85,category:"Supplies",type:"business"},
+  {date:"03/28",vendor:"Spectrum",amount:93.00,category:"Phone/Communications",type:"business"},
+  {date:"03/28",vendor:"AC-Hillsboro R-III",amount:35.35,category:"Personal Shopping",type:"personal"},
+  {date:"03/31",vendor:"Schnucks Festus (Electronified Check)",amount:199.40,category:"Groceries",type:"personal"},
+  {date:"03/31",vendor:"Hardee's House Springs",amount:10.61,category:"Meals (Personal)",type:"personal"},
+  {date:"03/31",vendor:"Burger King Pevely",amount:15.02,category:"Meals (Personal)",type:"personal"},
+  {date:"03/31",vendor:"TST*Case and Bucks Barnhart",amount:21.97,category:"Meals (Personal)",type:"personal"},
+  {date:"03/31",vendor:"TST*Case and Bucks Barnhart",amount:23.96,category:"Meals (Personal)",type:"personal"},
+  {date:"03/31",vendor:"Jesse's Pizza House Springs",amount:26.80,category:"Meals (Personal)",type:"personal"},
+  {date:"03/31",vendor:"Amazon.com",amount:59.47,category:"Supplies",type:"business"},
+  {date:"03/31",vendor:"Amazon.com",amount:625.30,category:"Auto Parts & Repairs",type:"business"},
+  {date:"03/31",vendor:"AC-Carrington Mortgage",amount:1570.45,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+],
+apr:[
+{date:"04/01",vendor:"EM Hillsboro 502",amount:6.10,category:"Fuel & Auto",type:"business"},
+  {date:"04/01",vendor:"Circle K High Ridge",amount:9.79,category:"Fuel & Auto",type:"business"},
+  {date:"04/01",vendor:"McDonald's Byrnes Mill",amount:12.06,category:"Meals (Personal)",type:"personal"},
+  {date:"04/01",vendor:"Ingrams Mapaville MO",amount:62.27,category:"Supplies",type:"business"},
+  {date:"04/02",vendor:"Texas Roadhouse Festus",amount:45.59,category:"Meals (Personal)",type:"personal"},
+  {date:"04/02",vendor:"Amazon.com",amount:59.37,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/02",vendor:"Home Depot Festus",amount:107.86,category:"Supplies",type:"business"},
+  {date:"04/03",vendor:"Circle K Hillsboro",amount:29.33,category:"Fuel & Auto",type:"business"},
+  {date:"04/03",vendor:"Dollar General Hillsboro",amount:32.06,category:"Personal Shopping",type:"personal"},
+  {date:"04/03",vendor:"Dairy Queen Hillsboro",amount:35.54,category:"Meals (Personal)",type:"personal"},
+  {date:"04/03",vendor:"AC-AMERENMO-UTIL PAY",amount:326.67,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"04/04",vendor:"ATM Surcharge Pevely",amount:3.00,category:"Bank Fees",type:"business"},
+  {date:"04/04",vendor:"EM Pevely 501",amount:6.52,category:"Fuel & Auto",type:"business"},
+  {date:"04/04",vendor:"Hardee's House Springs",amount:11.57,category:"Meals (Personal)",type:"personal"},
+  {date:"04/04",vendor:"Cornhole Central Pevely",amount:12.50,category:"Entertainment",type:"personal"},
+  {date:"04/04",vendor:"Cornhole Central Pevely",amount:20.00,category:"Entertainment",type:"personal"},
+  {date:"04/04",vendor:"Taco Bell Hillsboro",amount:30.09,category:"Meals (Personal)",type:"personal"},
+  {date:"04/04",vendor:"ATM Cash Withdrawal Pevely",amount:100.00,category:"Personal Transfer",type:"personal"},
+  {date:"04/04",vendor:"SQ *Lasers Automotive Imperial",amount:298.81,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/07",vendor:"Circle K Hillsboro",amount:9.96,category:"Fuel & Auto",type:"business"},
+  {date:"04/07",vendor:"Amazon.com",amount:10.41,category:"Personal Shopping",type:"personal"},
+  {date:"04/07",vendor:"Burger King Pevely",amount:14.47,category:"Meals (Personal)",type:"personal"},
+  {date:"04/07",vendor:"QT Arnold",amount:17.36,category:"Fuel & Auto",type:"business"},
+  {date:"04/07",vendor:"Amazon.com",amount:18.75,category:"Personal Shopping",type:"personal"},
+  {date:"04/07",vendor:"KB Hillsboro MO",amount:19.22,category:"Supplies",type:"business"},
+  {date:"04/07",vendor:"McDonald's Hillsboro",amount:32.43,category:"Meals (Personal)",type:"personal"},
+  {date:"04/07",vendor:"Amazon.com",amount:34.38,category:"Personal Shopping",type:"personal"},
+  {date:"04/07",vendor:"Laclede Landing Parking St Louis",amount:40.00,category:"Entertainment",type:"personal"},
+  {date:"04/07",vendor:"Waffle House Festus",amount:45.50,category:"Meals (Personal)",type:"personal"},
+  {date:"04/07",vendor:"Chili's Arnold",amount:57.22,category:"Meals (Personal)",type:"personal"},
+  {date:"04/07",vendor:"QT Arnold",amount:68.32,category:"Fuel & Auto",type:"business"},
+  {date:"04/07",vendor:"SP Smackin",amount:78.95,category:"Personal Shopping",type:"personal"},
+  {date:"04/07",vendor:"Amazon.com",amount:117.76,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/07",vendor:"Schnucks Festus",amount:192.10,category:"Groceries",type:"personal"},
+  {date:"04/07",vendor:"AC-Hillsboro R-III",amount:20.35,category:"Personal Shopping",type:"personal"},
+  {date:"04/07",vendor:"AC-Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"04/08",vendor:"EM Hillsboro 502",amount:12.15,category:"Fuel & Auto",type:"business"},
+  {date:"04/08",vendor:"Wellfit Parts Hazelwood",amount:174.38,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/08",vendor:"Wellfit Parts Hazelwood",amount:235.97,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/09",vendor:"Circle K Hillsboro",amount:15.93,category:"Fuel & Auto",type:"business"},
+  {date:"04/09",vendor:"SQ *Levy @ Adome St Louis",amount:17.66,category:"Entertainment",type:"personal"},
+  {date:"04/09",vendor:"SQ *Levy @ Adome St Louis",amount:26.61,category:"Entertainment",type:"personal"},
+  {date:"04/09",vendor:"Ingrams Mapaville MO",amount:27.38,category:"Supplies",type:"business"},
+  {date:"04/09",vendor:"Check #717 - Suzie Gonzalez (Vendor)",amount:290.00,category:"Vendor Payments",type:"business"},
+  {date:"04/10",vendor:"Quest Diagnostics",amount:12.63,category:"Personal Shopping",type:"personal"},
+  {date:"04/10",vendor:"Burger King Pevely",amount:13.92,category:"Meals (Personal)",type:"personal"},
+  {date:"04/10",vendor:"McDonald's Hillsboro",amount:19.00,category:"Meals (Personal)",type:"personal"},
+  {date:"04/10",vendor:"Amazon.com",amount:29.17,category:"Supplies",type:"business"},
+  {date:"04/10",vendor:"Mercy Clinic St Louis",amount:150.00,category:"Personal Shopping",type:"personal"},
+  {date:"04/10",vendor:"R and R Propane LLC Festus",amount:848.20,category:"Supplies",type:"business"},
+  {date:"04/10",vendor:"AC-Hillsboro R-III",amount:45.35,category:"Personal Shopping",type:"personal"},
+  {date:"04/11",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"04/11",vendor:"Amazon.com",amount:31.24,category:"Supplies",type:"business"},
+  {date:"04/11",vendor:"Amazon.com",amount:37.51,category:"Supplies",type:"business"},
+  {date:"04/11",vendor:"Jim Butler Chevrolet Fenton",amount:192.49,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/14",vendor:"Burger King Festus",amount:11.26,category:"Meals (Personal)",type:"personal"},
+  {date:"04/14",vendor:"Casey's Hillsboro",amount:19.89,category:"Fuel & Auto",type:"business"},
+  {date:"04/14",vendor:"KB Hillsboro MO",amount:22.61,category:"Supplies",type:"business"},
+  {date:"04/14",vendor:"Ingrams Mapaville MO",amount:50.56,category:"Supplies",type:"business"},
+  {date:"04/14",vendor:"TST*Case and Bucks Barnhart",amount:66.20,category:"Meals (Personal)",type:"personal"},
+  {date:"04/14",vendor:"AC-Hillsboro R-III",amount:40.35,category:"Personal Shopping",type:"personal"},
+  {date:"04/15",vendor:"Jack in the Box Festus",amount:10.94,category:"Meals (Personal)",type:"personal"},
+  {date:"04/15",vendor:"EM Hillsboro 502",amount:22.65,category:"Fuel & Auto",type:"business"},
+  {date:"04/15",vendor:"Cafe Smok N Pi De Soto",amount:33.21,category:"Meals (Personal)",type:"personal"},
+  {date:"04/15",vendor:"Cafe Smok N Pi De Soto",amount:70.42,category:"Meals (Personal)",type:"personal"},
+  {date:"04/15",vendor:"Check #751 - St Louis Building & Remodeling",amount:30000.00,category:"Vendor Payments",type:"business",flag:"CPA Review - capital asset or lease?"},
+  {date:"04/16",vendor:"EM Hillsboro 502",amount:3.30,category:"Fuel & Auto",type:"business"},
+  {date:"04/16",vendor:"Circle K Hillsboro",amount:26.24,category:"Fuel & Auto",type:"business"},
+  {date:"04/16",vendor:"EM Hillsboro 502",amount:38.92,category:"Fuel & Auto",type:"business"},
+  {date:"04/16",vendor:"South County Dodge Chrysler St Louis",amount:77.83,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/17",vendor:"Chips 66 Festus",amount:40.70,category:"Fuel & Auto",type:"business"},
+  {date:"04/17",vendor:"Amazon.com",amount:43.76,category:"Personal Shopping",type:"personal"},
+  {date:"04/17",vendor:"Keystone Automotive Bridgeton",amount:187.50,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/17",vendor:"Suntrup Volkswagen St Louis",amount:666.58,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/18",vendor:"McDonald's Hillsboro",amount:11.62,category:"Meals (Personal)",type:"personal"},
+  {date:"04/18",vendor:"Wellfit Parts Hazelwood",amount:147.98,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/18",vendor:"South County Dodge Chrysler St Louis",amount:247.50,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/18",vendor:"Keystone Automotive Bridgeton",amount:391.50,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/18",vendor:"Check #752 - First Choice Glass",amount:479.52,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/21",vendor:"Dairy Queen Hillsboro",amount:18.48,category:"Meals (Personal)",type:"personal"},
+  {date:"04/21",vendor:"KB Hillsboro MO",amount:19.22,category:"Supplies",type:"business"},
+  {date:"04/21",vendor:"TST*The Factory Chesterfield",amount:35.94,category:"Entertainment",type:"personal"},
+  {date:"04/21",vendor:"TST*The Factory Chesterfield",amount:35.94,category:"Entertainment",type:"personal"},
+  {date:"04/21",vendor:"TST*The Factory Chesterfield",amount:35.94,category:"Entertainment",type:"personal"},
+  {date:"04/21",vendor:"TST*The Factory Chesterfield",amount:35.94,category:"Entertainment",type:"personal"},
+  {date:"04/21",vendor:"Waffle House Festus",amount:40.50,category:"Meals (Personal)",type:"personal"},
+  {date:"04/21",vendor:"QT St Charles",amount:60.19,category:"Fuel & Auto",type:"business"},
+  {date:"04/21",vendor:"Texas Roadhouse Festus",amount:63.47,category:"Meals (Personal)",type:"personal"},
+  {date:"04/21",vendor:"Wal-Mart Festus",amount:155.95,category:"Personal Shopping",type:"personal"},
+  {date:"04/21",vendor:"SQ *Lasers Automotive Imperial",amount:622.07,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/21",vendor:"AC-Hillsboro R-III",amount:25.35,category:"Personal Shopping",type:"personal"},
+  {date:"04/22",vendor:"Taco Bell Hillsboro",amount:30.09,category:"Meals (Personal)",type:"personal"},
+  {date:"04/22",vendor:"Check #753 - Twin City Tools",amount:29.77,category:"Supplies",type:"business"},
+  {date:"04/23",vendor:"CCCIS (CCC Intelligent Solutions)",amount:844.57,category:"Software/SaaS",type:"business"},
+  {date:"04/24",vendor:"Jim Butler Chevrolet Fenton",amount:980.96,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/25",vendor:"Bank Withdrawal",amount:500.00,category:"Personal Transfer",type:"personal"},
+  {date:"04/25",vendor:"Circle K Hillsboro",amount:64.33,category:"Fuel & Auto",type:"business"},
+  {date:"04/25",vendor:"AC-Hillsboro R-III",amount:50.35,category:"Personal Shopping",type:"personal"},
+  {date:"04/25",vendor:"Check #754 - Lasers Automotive",amount:218.46,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/25",vendor:"Check #755 - Biehle's Dent Repair Specialist",amount:4181.21,category:"Vendor Payments",type:"business"},
+  {date:"04/28",vendor:"EM Festus West",amount:37.94,category:"Fuel & Auto",type:"business"},
+  {date:"04/28",vendor:"Rhodes 101 Stop Minor MO",amount:57.79,category:"Fuel & Auto",type:"business"},
+  {date:"04/28",vendor:"Buffalo Wild Wings Sikeston",amount:68.80,category:"Meals (Personal)",type:"personal"},
+  {date:"04/28",vendor:"Spectrum",amount:93.00,category:"Phone/Communications",type:"business"},
+  {date:"04/28",vendor:"Keystone Automotive Bridgeton",amount:169.50,category:"Auto Parts & Repairs",type:"business"},
+  {date:"04/28",vendor:"ATT Bill Payment",amount:182.20,category:"Phone/Communications",type:"business"},
+  {date:"04/29",vendor:"Circle K Hillsboro",amount:22.23,category:"Fuel & Auto",type:"business"},
+  {date:"04/29",vendor:"Dollar General Crystal City",amount:43.00,category:"Personal Shopping",type:"personal"},
+  {date:"04/29",vendor:"Harbor Freight Tools Crystal City",amount:67.83,category:"Supplies",type:"business"},
+  {date:"04/29",vendor:"Mary Jane Burgers & Brew Perryville",amount:86.34,category:"Meals (Personal)",type:"personal"},
+  {date:"04/29",vendor:"AC-Carrington Mortgage",amount:1570.45,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"04/29",vendor:"Check #759 - Dent Remedies PDR",amount:10769.00,category:"Vendor Payments",type:"business"},
+  {date:"04/30",vendor:"Mercy Pharm Jefferson Festus",amount:15.00,category:"Personal Shopping",type:"personal"},
+  {date:"04/30",vendor:"McDonald's Hillsboro",amount:17.50,category:"Meals (Personal)",type:"personal"},
+  {date:"04/30",vendor:"Texas Roadhouse Festus",amount:38.00,category:"Meals (Personal)",type:"personal"},
+  {date:"04/30",vendor:"INTUIT *QBooks Online",amount:74.74,category:"Software/SaaS",type:"business"},
+  {date:"04/30",vendor:"Jim Butler Chevrolet Fenton",amount:698.64,category:"Auto Parts & Repairs",type:"business"},
+],
+may:[
+{date:"05/01",vendor:"Amazon.com",amount:10.41,category:"Supplies",type:"business"},
+  {date:"05/01",vendor:"EM Festus 504",amount:26.13,category:"Fuel & Auto",type:"business"},
+  {date:"05/02",vendor:"On The Run Cedar Hill",amount:3.63,category:"Fuel & Auto",type:"business"},
+  {date:"05/02",vendor:"On The Run Fenton",amount:9.11,category:"Fuel & Auto",type:"business"},
+  {date:"05/02",vendor:"KB Hillsboro MO",amount:30.06,category:"Supplies",type:"business"},
+  {date:"05/02",vendor:"Wellfit Parts Hazelwood",amount:140.29,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/02",vendor:"SQ *First Choice Glass Imperial",amount:190.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/02",vendor:"AC-Hillsboro R-III",amount:25.35,category:"Personal Shopping",type:"personal"},
+  {date:"05/05",vendor:"BP Eureka",amount:13.94,category:"Fuel & Auto",type:"business"},
+  {date:"05/05",vendor:"Amazon.com",amount:17.71,category:"Supplies",type:"business"},
+  {date:"05/05",vendor:"McDonald's Hillsboro",amount:23.00,category:"Meals (Personal)",type:"personal"},
+  {date:"05/05",vendor:"Amazon.com",amount:28.89,category:"Personal Shopping",type:"personal"},
+  {date:"05/05",vendor:"QT Eureka",amount:29.03,category:"Fuel & Auto",type:"business"},
+  {date:"05/05",vendor:"Amazon.com",amount:31.24,category:"Personal Shopping",type:"personal"},
+  {date:"05/05",vendor:"Amazon.com",amount:47.28,category:"Supplies",type:"business"},
+  {date:"05/05",vendor:"Circle K Hillsboro",amount:55.17,category:"Fuel & Auto",type:"business"},
+  {date:"05/05",vendor:"Taytros Bar & Bistro Festus",amount:61.80,category:"Meals (Personal)",type:"personal"},
+  {date:"05/05",vendor:"SPO*ThePastaHouseFestus",amount:81.43,category:"Meals (Personal)",type:"personal"},
+  {date:"05/05",vendor:"Amazon.com",amount:113.51,category:"Supplies",type:"business"},
+  {date:"05/05",vendor:"Amazon.com",amount:164.77,category:"Supplies",type:"business"},
+  {date:"05/05",vendor:"AC-AMERENMO-UTIL PAY",amount:205.63,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"05/06",vendor:"Circle K High Ridge",amount:18.77,category:"Fuel & Auto",type:"business"},
+  {date:"05/06",vendor:"Amazon.com",amount:43.10,category:"Personal Shopping",type:"personal"},
+  {date:"05/06",vendor:"AC-Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"05/07",vendor:"EM Hillsboro 502",amount:11.05,category:"Fuel & Auto",type:"business"},
+  {date:"05/07",vendor:"McDonald's Hillsboro",amount:12.56,category:"Meals (Personal)",type:"personal"},
+  {date:"05/07",vendor:"Circle K Hillsboro",amount:16.07,category:"Fuel & Auto",type:"business"},
+  {date:"05/07",vendor:"BP House Springs",amount:23.50,category:"Fuel & Auto",type:"business"},
+  {date:"05/07",vendor:"Texas Roadhouse Festus",amount:97.65,category:"Meals (Personal)",type:"personal"},
+  {date:"05/07",vendor:"AC-Hillsboro R-III",amount:45.35,category:"Personal Shopping",type:"personal"},
+  {date:"05/08",vendor:"Circle K House Springs",amount:4.37,category:"Fuel & Auto",type:"business"},
+  {date:"05/08",vendor:"Amazon.com",amount:32.80,category:"Personal Shopping",type:"personal"},
+  {date:"05/08",vendor:"LKQ Metro Caseyville IL",amount:75.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/08",vendor:"QT High Ridge",amount:181.00,category:"Fuel & Auto",type:"business"},
+  {date:"05/09",vendor:"McDonald's Byrnes Mill",amount:6.69,category:"Meals (Personal)",type:"personal"},
+  {date:"05/09",vendor:"Peebles Vaughn Wideman Festus",amount:12.00,category:"Personal Shopping",type:"personal"},
+  {date:"05/09",vendor:"Burger King Pevely",amount:40.00,category:"Meals (Personal)",type:"personal"},
+  {date:"05/09",vendor:"SP MyJestix Cornhole",amount:99.94,category:"Entertainment",type:"personal"},
+  {date:"05/09",vendor:"Check #774 - Dispersed Automotive",amount:1000.00,category:"Vendor Payments",type:"business"},
+  {date:"05/12",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"05/12",vendor:"ATM Surcharge Pevely",amount:3.00,category:"Bank Fees",type:"business"},
+  {date:"05/12",vendor:"Amazon.com",amount:7.49,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"Burger King Pevely",amount:7.84,category:"Meals (Personal)",type:"personal"},
+  {date:"05/12",vendor:"Amazon.com",amount:9.37,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"Amazon.com",amount:10.41,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"Amazon.com",amount:14.27,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"Amazon.com",amount:16.67,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"EM Hillsboro 502",amount:18.70,category:"Fuel & Auto",type:"business"},
+  {date:"05/12",vendor:"Amazon.com",amount:20.64,category:"Personal Shopping",type:"personal"},
+  {date:"05/12",vendor:"Amazon.com",amount:21.26,category:"Personal Shopping",type:"personal"},
+  {date:"05/12",vendor:"Amazon.com",amount:21.88,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/12",vendor:"Junction Cafe De Soto",amount:24.73,category:"Meals (Personal)",type:"personal"},
+  {date:"05/12",vendor:"Amazon.com",amount:28.11,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"Amazon.com",amount:34.38,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"Domino's Hillsboro",amount:41.57,category:"Meals (Personal)",type:"personal"},
+  {date:"05/12",vendor:"Amazon.com",amount:43.77,category:"Personal Shopping",type:"personal"},
+  {date:"05/12",vendor:"Casa Charro Crystal City",amount:60.45,category:"Meals (Personal)",type:"personal"},
+  {date:"05/12",vendor:"EM Pevely 501",amount:64.45,category:"Fuel & Auto",type:"business"},
+  {date:"05/12",vendor:"SQ *Andy's Produce House Springs",amount:70.58,category:"Groceries",type:"personal"},
+  {date:"05/12",vendor:"SP Homage Columbus OH",amount:106.73,category:"Personal Shopping",type:"personal"},
+  {date:"05/12",vendor:"ATM Cash Withdrawal Pevely",amount:120.00,category:"Personal Transfer",type:"personal"},
+  {date:"05/12",vendor:"Home Depot Festus",amount:186.23,category:"Supplies",type:"business"},
+  {date:"05/12",vendor:"AC-Carrington Mortgage",amount:1515.74,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"05/13",vendor:"Amazon.com",amount:22.92,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/13",vendor:"Temu.com",amount:48.76,category:"Supplies",type:"business"},
+  {date:"05/13",vendor:"Check #760 - Dispersed Automotive",amount:3700.00,category:"Vendor Payments",type:"business"},
+  {date:"05/14",vendor:"ATM Surcharge Hillsboro",amount:4.00,category:"Bank Fees",type:"business"},
+  {date:"05/14",vendor:"EM Hillsboro 502",amount:32.45,category:"Fuel & Auto",type:"business"},
+  {date:"05/14",vendor:"ATM Cash Withdrawal Hillsboro",amount:145.00,category:"Personal Transfer",type:"personal"},
+  {date:"05/14",vendor:"AC-Hillsboro R-III",amount:25.35,category:"Personal Shopping",type:"personal"},
+  {date:"05/15",vendor:"Circle K High Ridge",amount:15.35,category:"Fuel & Auto",type:"business"},
+  {date:"05/15",vendor:"Amazon.com",amount:26.06,category:"Personal Shopping",type:"personal"},
+  {date:"05/15",vendor:"Amazon.com",amount:31.26,category:"Supplies",type:"business"},
+  {date:"05/15",vendor:"Mungenast St Louis Honda",amount:668.24,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/16",vendor:"Circle K Hillsboro",amount:11.87,category:"Fuel & Auto",type:"business"},
+  {date:"05/16",vendor:"AC-Hillsboro R-III",amount:30.35,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"Circle K Hillsboro",amount:7.41,category:"Fuel & Auto",type:"business"},
+  {date:"05/19",vendor:"Amazon.com",amount:10.36,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"Amazon.com",amount:15.43,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"TikTok Shop",amount:15.84,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"Amazon.com",amount:17.50,category:"Supplies",type:"business"},
+  {date:"05/19",vendor:"Amazon.com",amount:21.08,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"Amazon.com",amount:21.80,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"TikTok Shop",amount:24.19,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"Amazon.com",amount:26.85,category:"Supplies",type:"business"},
+  {date:"05/19",vendor:"Amazon.com",amount:33.58,category:"Supplies",type:"business"},
+  {date:"05/19",vendor:"Karsch's Village Hillsboro",amount:34.02,category:"Groceries",type:"personal"},
+  {date:"05/19",vendor:"Burger King Pevely",amount:36.66,category:"Meals (Personal)",type:"personal"},
+  {date:"05/19",vendor:"Amazon.com",amount:39.49,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"Dairy Queen Hillsboro",amount:39.77,category:"Meals (Personal)",type:"personal"},
+  {date:"05/19",vendor:"Amazon.com",amount:40.91,category:"Personal Shopping",type:"personal"},
+  {date:"05/19",vendor:"Amazon.com",amount:44.33,category:"Supplies",type:"business"},
+  {date:"05/19",vendor:"Mungenast St Louis Honda",amount:84.77,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/19",vendor:"Amazon.com",amount:139.80,category:"Supplies",type:"business"},
+  {date:"05/20",vendor:"Amazon.com",amount:9.37,category:"Personal Shopping",type:"personal"},
+  {date:"05/20",vendor:"EM Hillsboro 502",amount:9.75,category:"Fuel & Auto",type:"business"},
+  {date:"05/20",vendor:"TikTok Shop",amount:11.25,category:"Personal Shopping",type:"personal"},
+  {date:"05/20",vendor:"Amazon.com",amount:11.86,category:"Personal Shopping",type:"personal"},
+  {date:"05/20",vendor:"Dairy Queen Hillsboro",amount:15.29,category:"Meals (Personal)",type:"personal"},
+  {date:"05/21",vendor:"KB Hillsboro MO",amount:5.19,category:"Supplies",type:"business"},
+  {date:"05/21",vendor:"DFI 2 De Soto",amount:7.83,category:"Fuel & Auto",type:"business"},
+  {date:"05/21",vendor:"AC-Hillsboro R-III",amount:40.35,category:"Personal Shopping",type:"personal"},
+  {date:"05/22",vendor:"Fat Boy's Saloon De Soto",amount:45.13,category:"Meals (Personal)",type:"personal"},
+  {date:"05/22",vendor:"Wal-Mart Festus",amount:86.82,category:"Personal Shopping",type:"personal"},
+  {date:"05/22",vendor:"Wal-Mart Festus",amount:228.24,category:"Personal Shopping",type:"personal"},
+  {date:"05/23",vendor:"Amazon.com",amount:6.19,category:"Supplies",type:"business"},
+  {date:"05/23",vendor:"Steak-N-Shake Festus",amount:38.35,category:"Meals (Personal)",type:"personal"},
+  {date:"05/23",vendor:"Amazon.com",amount:41.79,category:"Personal Shopping",type:"personal"},
+  {date:"05/23",vendor:"ATT Bill Payment",amount:205.60,category:"Phone/Communications",type:"business"},
+  {date:"05/23",vendor:"Keystone Automotive Bridgeton",amount:534.75,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/27",vendor:"McDonald's Hillsboro",amount:10.38,category:"Meals (Personal)",type:"personal"},
+  {date:"05/27",vendor:"Burger King Pevely",amount:13.38,category:"Meals (Personal)",type:"personal"},
+  {date:"05/27",vendor:"Amazon.com",amount:14.04,category:"Supplies",type:"business"},
+  {date:"05/27",vendor:"QT High Ridge",amount:17.52,category:"Fuel & Auto",type:"business"},
+  {date:"05/27",vendor:"Texas Roadhouse Festus",amount:63.52,category:"Meals (Personal)",type:"personal"},
+  {date:"05/27",vendor:"FuboTV Inc",amount:87.98,category:"Entertainment",type:"personal"},
+  {date:"05/27",vendor:"Amazon.com",amount:94.00,category:"Supplies",type:"business"},
+  {date:"05/27",vendor:"SP Homage Columbus OH",amount:98.96,category:"Personal Shopping",type:"personal"},
+  {date:"05/27",vendor:"AutoZone Hillsboro",amount:104.27,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/28",vendor:"O'Reilly De Soto",amount:8.23,category:"Auto Parts & Repairs",type:"business"},
+  {date:"05/28",vendor:"Fish's Quick Stop De Soto",amount:66.59,category:"Fuel & Auto",type:"business"},
+  {date:"05/28",vendor:"Spectrum",amount:93.00,category:"Phone/Communications",type:"business"},
+  {date:"05/28",vendor:"Check #799 - Dent Remedies PDR",amount:34881.00,category:"Vendor Payments",type:"business"},
+  {date:"05/29",vendor:"Amazon.com",amount:28.10,category:"Supplies",type:"business"},
+  {date:"05/29",vendor:"Amazon.com",amount:29.17,category:"Supplies",type:"business"},
+  {date:"05/29",vendor:"Dollar General Hillsboro",amount:31.37,category:"Personal Shopping",type:"personal"},
+  {date:"05/29",vendor:"AC-Hillsboro R-III",amount:35.35,category:"Personal Shopping",type:"personal"},
+  {date:"05/30",vendor:"Casey's Crystal City",amount:15.14,category:"Fuel & Auto",type:"business"},
+  {date:"05/30",vendor:"INTUIT *QBooks Online",amount:17.50,category:"Software/SaaS",type:"business"},
+  {date:"05/30",vendor:"Chick-fil-A Arnold",amount:49.50,category:"Meals (Personal)",type:"personal"},
+  {date:"05/30",vendor:"Home Depot Festus",amount:109.32,category:"Supplies",type:"business"},
+  {date:"05/30",vendor:"Schnucks Festus",amount:149.00,category:"Groceries",type:"personal"},
+  {date:"05/30",vendor:"SQ *Lasers Automotive Imperial",amount:951.45,category:"Auto Parts & Repairs",type:"business"},
+],
+jun:[
+{date:"06/02",vendor:"EFT Service Charge",amount:0.55,category:"Bank Fees",type:"business"},
+  {date:"06/02",vendor:"Circle K Fenton",amount:3.43,category:"Fuel & Auto",type:"business"},
+  {date:"06/02",vendor:"Amazon.com",amount:5.83,category:"Supplies",type:"business"},
+  {date:"06/02",vendor:"Shreeji of Fenton",amount:6.12,category:"Fuel & Auto",type:"business"},
+  {date:"06/02",vendor:"Penn Station Fenton",amount:16.66,category:"Meals (Personal)",type:"personal"},
+  {date:"06/02",vendor:"QT Fenton",amount:25.37,category:"Fuel & Auto",type:"business"},
+  {date:"06/02",vendor:"Amazon.com",amount:26.22,category:"Personal Shopping",type:"personal"},
+  {date:"06/02",vendor:"PayPal *Iissabravaczyk",amount:54.59,category:"Personal Shopping",type:"personal"},
+  {date:"06/02",vendor:"Jesse's Pizza House Springs",amount:72.26,category:"Meals (Personal)",type:"personal"},
+  {date:"06/02",vendor:"Twin City Toyota Herculaneum",amount:121.62,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/02",vendor:"Amazon.com",amount:121.94,category:"Personal Shopping",type:"personal"},
+  {date:"06/02",vendor:"Hims & Hers Health",amount:294.00,category:"Personal Shopping",type:"personal"},
+  {date:"06/02",vendor:"Keystone Automotive Bridgeton",amount:332.25,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/02",vendor:"CCCIS (CCC Intelligent Solutions)",amount:207.41,category:"Software/SaaS",type:"business"},
+  {date:"06/03",vendor:"KB Hillsboro MO",amount:6.74,category:"Supplies",type:"business"},
+  {date:"06/03",vendor:"Amazon.com",amount:19.53,category:"Supplies",type:"business"},
+  {date:"06/03",vendor:"KB Hillsboro MO",amount:63.54,category:"Supplies",type:"business"},
+  {date:"06/03",vendor:"Lion's Choice South County St Louis",amount:64.27,category:"Meals (Personal)",type:"personal"},
+  {date:"06/03",vendor:"SQ *First Choice Glass Imperial",amount:182.13,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/03",vendor:"Check #761 - Jessica Brai Borgath",amount:548.44,category:"Vendor Payments",type:"business"},
+  {date:"06/03",vendor:"AC-AMERENMO-UTIL PAY",amount:162.63,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"06/04",vendor:"QT St Louis",amount:14.06,category:"Fuel & Auto",type:"business"},
+  {date:"06/04",vendor:"Amazon.com",amount:24.33,category:"Personal Shopping",type:"personal"},
+  {date:"06/04",vendor:"Amazon.com",amount:26.12,category:"Personal Shopping",type:"personal"},
+  {date:"06/04",vendor:"Twin City Toyota Herculaneum",amount:83.96,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/04",vendor:"Wal-Mart De Soto",amount:250.52,category:"Personal Shopping",type:"personal"},
+  {date:"06/04",vendor:"Reuther Ford Herculaneum",amount:1421.80,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/04",vendor:"Check #764 - Dispersed Automotive",amount:2679.00,category:"Vendor Payments",type:"business"},
+  {date:"06/05",vendor:"CKCD Debit KB Hillsboro",amount:61.22,category:"Supplies",type:"business"},
+  {date:"06/05",vendor:"Hardee's House Springs",amount:17.26,category:"Meals (Personal)",type:"personal"},
+  {date:"06/05",vendor:"SP Homage Columbus OH",amount:42.68,category:"Personal Shopping",type:"personal"},
+  {date:"06/05",vendor:"Mungenast St Louis Honda",amount:95.57,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/05",vendor:"SQ *Bar Down Sports Bar St Louis",amount:100.76,category:"Entertainment",type:"personal"},
+  {date:"06/06",vendor:"Twin City Toyota Herculaneum",amount:83.96,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/06",vendor:"SQ *Richards Produce Festus",amount:168.47,category:"Groceries",type:"personal"},
+  {date:"06/06",vendor:"AC-Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"06/09",vendor:"Circle K High Ridge",amount:7.28,category:"Fuel & Auto",type:"business"},
+  {date:"06/09",vendor:"McDonald's Hillsboro",amount:12.00,category:"Meals (Personal)",type:"personal"},
+  {date:"06/09",vendor:"Google *GameChanger",amount:14.99,category:"Software/SaaS",type:"business"},
+  {date:"06/09",vendor:"Dirt Cheap Hillsboro",amount:19.10,category:"Personal Shopping",type:"personal"},
+  {date:"06/09",vendor:"EM Hillsboro 502",amount:23.68,category:"Fuel & Auto",type:"business"},
+  {date:"06/09",vendor:"Taco Bell Pevely",amount:24.13,category:"Meals (Personal)",type:"personal"},
+  {date:"06/09",vendor:"Fat Boy's Saloon De Soto",amount:53.20,category:"Meals (Personal)",type:"personal"},
+  {date:"06/09",vendor:"EM Hillsboro 502",amount:57.20,category:"Fuel & Auto",type:"business"},
+  {date:"06/09",vendor:"Trattoria Giuseppe Imperial",amount:120.83,category:"Meals (Personal)",type:"personal"},
+  {date:"06/10",vendor:"Amazon.com",amount:10.41,category:"Supplies",type:"business"},
+  {date:"06/10",vendor:"Amazon.com",amount:13.59,category:"Supplies",type:"business"},
+  {date:"06/10",vendor:"Suntrup Volkswagen St Louis",amount:762.13,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/11",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"06/11",vendor:"KB Hillsboro MO",amount:6.79,category:"Supplies",type:"business"},
+  {date:"06/11",vendor:"Burger King Festus",amount:7.44,category:"Meals (Personal)",type:"personal"},
+  {date:"06/12",vendor:"Amazon.com",amount:16.64,category:"Personal Shopping",type:"personal"},
+  {date:"06/12",vendor:"Karsch's Village Barnhart",amount:18.02,category:"Groceries",type:"personal"},
+  {date:"06/12",vendor:"Jack in the Box High Ridge",amount:19.18,category:"Meals (Personal)",type:"personal"},
+  {date:"06/12",vendor:"DD *DoorDash Sonic",amount:19.78,category:"Meals (Personal)",type:"personal"},
+  {date:"06/12",vendor:"Fazoli's Festus",amount:26.54,category:"Meals (Personal)",type:"personal"},
+  {date:"06/13",vendor:"Reuther Ford Herculaneum",amount:20.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/13",vendor:"On The Run Cedar Hill",amount:22.82,category:"Fuel & Auto",type:"business"},
+  {date:"06/13",vendor:"Walgreens High Ridge",amount:23.61,category:"Personal Shopping",type:"personal"},
+  {date:"06/13",vendor:"KB Hillsboro MO",amount:26.00,category:"Supplies",type:"business"},
+  {date:"06/13",vendor:"Amazon.com",amount:30.21,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/13",vendor:"Frankie Gianino's Imperial",amount:157.74,category:"Meals (Personal)",type:"personal"},
+  {date:"06/13",vendor:"R and R Propane LLC Festus",amount:408.01,category:"Supplies",type:"business"},
+  {date:"06/13",vendor:"SPI*AmerenUE St Louis",amount:812.84,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"06/16",vendor:"TLC One Stop Brumley MO",amount:3.78,category:"Fuel & Auto",type:"business"},
+  {date:"06/16",vendor:"ATM Surcharge Maryland Heights",amount:9.00,category:"Bank Fees",type:"business"},
+  {date:"06/16",vendor:"ATM Surcharge Maryland Heights",amount:9.00,category:"Bank Fees",type:"business"},
+  {date:"06/16",vendor:"Circle K Fenton",amount:9.69,category:"Fuel & Auto",type:"business"},
+  {date:"06/16",vendor:"EM Hillsboro 502",amount:22.99,category:"Fuel & Auto",type:"business"},
+  {date:"06/16",vendor:"Centene Ice Center Maryland Heights",amount:29.03,category:"Entertainment",type:"personal"},
+  {date:"06/16",vendor:"Centene Ice Center Maryland Heights",amount:29.64,category:"Entertainment",type:"personal"},
+  {date:"06/16",vendor:"Centene Ice Center Maryland Heights",amount:33.86,category:"Entertainment",type:"personal"},
+  {date:"06/16",vendor:"Amazon.com",amount:35.12,category:"Personal Shopping",type:"personal"},
+  {date:"06/16",vendor:"Amazon.com",amount:41.58,category:"Personal Shopping",type:"personal"},
+  {date:"06/16",vendor:"EM Hillsboro 502",amount:65.61,category:"Fuel & Auto",type:"business"},
+  {date:"06/16",vendor:"Redhead Lakeside Grill Osage Beach",amount:76.20,category:"Meals (Personal)",type:"personal"},
+  {date:"06/16",vendor:"StubHub Inc",amount:95.12,category:"Entertainment",type:"personal"},
+  {date:"06/16",vendor:"Wal-Mart Camdenton",amount:105.49,category:"Personal Shopping",type:"personal"},
+  {date:"06/16",vendor:"Under Armour Osage Beach",amount:105.92,category:"Personal Shopping",type:"personal"},
+  {date:"06/16",vendor:"American Eagle Osage Beach",amount:127.14,category:"Personal Shopping",type:"personal"},
+  {date:"06/16",vendor:"Poor Richard's Fenton",amount:288.74,category:"Entertainment",type:"personal"},
+  {date:"06/16",vendor:"ATM Cash Withdrawal Maryland Heights",amount:300.00,category:"Personal Transfer",type:"personal"},
+  {date:"06/16",vendor:"ATM Cash Withdrawal Maryland Heights",amount:500.00,category:"Personal Transfer",type:"personal"},
+  {date:"06/16",vendor:"Lowe's Festus",amount:609.19,category:"Supplies",type:"business"},
+  {date:"06/17",vendor:"TikTok Shop",amount:16.77,category:"Personal Shopping",type:"personal"},
+  {date:"06/17",vendor:"Ruder LLC House Springs",amount:27.89,category:"Supplies",type:"business"},
+  {date:"06/17",vendor:"Amazon.com",amount:35.08,category:"Personal Shopping",type:"personal"},
+  {date:"06/17",vendor:"Texas Roadhouse Festus",amount:86.30,category:"Meals (Personal)",type:"personal"},
+  {date:"06/18",vendor:"Centene Ice Center Maryland Heights",amount:29.64,category:"Entertainment",type:"personal"},
+  {date:"06/18",vendor:"Centene Ice Center Maryland Heights",amount:30.12,category:"Entertainment",type:"personal"},
+  {date:"06/20",vendor:"Circle K High Ridge",amount:7.28,category:"Fuel & Auto",type:"business"},
+  {date:"06/20",vendor:"Circle K Hillsboro",amount:18.56,category:"Fuel & Auto",type:"business"},
+  {date:"06/20",vendor:"LFRC # 205764 St Charles",amount:25.98,category:"Entertainment",type:"personal"},
+  {date:"06/20",vendor:"Reuther Ford Herculaneum",amount:60.68,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/20",vendor:"Schnucks Festus",amount:270.13,category:"Groceries",type:"personal"},
+  {date:"06/20",vendor:"State Farm Insurance",amount:415.67,category:"Insurance",type:"business"},
+  {date:"06/20",vendor:"SQ *Lasers Automotive Imperial",amount:607.33,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/20",vendor:"Check #765 - PWSD Water Utility",amount:170.06,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"06/23",vendor:"VSI*Wentz Wentzville",amount:4.08,category:"Fuel & Auto",type:"business"},
+  {date:"06/23",vendor:"VSI*Wentz Wentzville",amount:4.08,category:"Fuel & Auto",type:"business"},
+  {date:"06/23",vendor:"VSI*Wentz Wentzville",amount:4.08,category:"Fuel & Auto",type:"business"},
+  {date:"06/23",vendor:"Amazon.com",amount:13.59,category:"Supplies",type:"business"},
+  {date:"06/23",vendor:"QT Fenton",amount:17.08,category:"Fuel & Auto",type:"business"},
+  {date:"06/23",vendor:"Wal-Mart Festus",amount:20.83,category:"Personal Shopping",type:"personal"},
+  {date:"06/23",vendor:"Las Brisas Pevely",amount:28.54,category:"Meals (Personal)",type:"personal"},
+  {date:"06/23",vendor:"BP Wentzville",amount:30.02,category:"Fuel (Personal)",type:"personal"},
+  {date:"06/23",vendor:"White Castle Festus",amount:49.69,category:"Meals (Personal)",type:"personal"},
+  {date:"06/23",vendor:"ATT Bill Payment",amount:205.60,category:"Phone/Communications",type:"business"},
+  {date:"06/24",vendor:"Wal-Mart High Ridge",amount:10.26,category:"Personal Shopping",type:"personal"},
+  {date:"06/24",vendor:"KB Hillsboro MO",amount:10.95,category:"Supplies",type:"business"},
+  {date:"06/24",vendor:"Express Mart Union MO",amount:11.32,category:"Fuel & Auto",type:"business"},
+  {date:"06/24",vendor:"Express Mart Union MO",amount:34.69,category:"Fuel & Auto",type:"business"},
+  {date:"06/24",vendor:"Casa Charro Crystal City",amount:40.91,category:"Meals (Personal)",type:"personal"},
+  {date:"06/24",vendor:"Reuther Ford Herculaneum",amount:41.83,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/24",vendor:"FuboTV Inc",amount:107.98,category:"Entertainment",type:"personal"},
+  {date:"06/25",vendor:"Casey's Hillsboro",amount:9.94,category:"Fuel & Auto",type:"business"},
+  {date:"06/25",vendor:"KB Hillsboro MO",amount:19.22,category:"Supplies",type:"business"},
+  {date:"06/25",vendor:"Venmo *Shannon Quayle",amount:500.00,category:"Personal Transfer",type:"personal"},
+  {date:"06/25",vendor:"Mungenast St Louis Honda",amount:38.68,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/25",vendor:"Check #763 - Marie Janko (Shaby May/June)",amount:1600.00,category:"Vendor Payments",type:"business"},
+  {date:"06/26",vendor:"Suntrup Volkswagen St Louis",amount:192.79,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/27",vendor:"Auto Spa Ellisville",amount:12.53,category:"Supplies",type:"business"},
+  {date:"06/30",vendor:"Dollar General Hillsboro",amount:1.97,category:"Personal Shopping",type:"personal"},
+  {date:"06/30",vendor:"KB Hillsboro MO",amount:11.47,category:"Supplies",type:"business"},
+  {date:"06/30",vendor:"Ingrams Mapaville MO",amount:11.55,category:"Supplies",type:"business"},
+  {date:"06/30",vendor:"Ingrams Mapaville MO",amount:12.80,category:"Supplies",type:"business"},
+  {date:"06/30",vendor:"Circle K High Ridge",amount:16.18,category:"Fuel & Auto",type:"business"},
+  {date:"06/30",vendor:"INTUIT *QBooks Online",amount:17.50,category:"Software/SaaS",type:"business"},
+  {date:"06/30",vendor:"Express Mart Imperial",amount:18.69,category:"Fuel & Auto",type:"business"},
+  {date:"06/30",vendor:"Ingrams Mapaville MO",amount:38.70,category:"Supplies",type:"business"},
+  {date:"06/30",vendor:"Lowe's Arnold",amount:53.02,category:"Supplies",type:"business"},
+  {date:"06/30",vendor:"Karsch's Village Hillsboro",amount:81.87,category:"Groceries",type:"personal"},
+  {date:"06/30",vendor:"Texas Roadhouse Festus",amount:90.22,category:"Meals (Personal)",type:"personal"},
+  {date:"06/30",vendor:"Spectrum",amount:93.00,category:"Phone/Communications",type:"business"},
+  {date:"06/30",vendor:"Amazon.com",amount:93.78,category:"Auto Parts & Repairs",type:"business"},
+  {date:"06/30",vendor:"SP PG Store Cedar Rapids IA",amount:96.46,category:"Personal Shopping",type:"personal"},
+  {date:"06/30",vendor:"Wal-Mart Festus",amount:285.45,category:"Personal Shopping",type:"personal"},
+  {date:"06/30",vendor:"SP CornholeGamesUSA Homer Glen IL",amount:286.62,category:"Entertainment",type:"personal"},
+  {date:"06/30",vendor:"Dick's Sporting Goods South County",amount:301.66,category:"Personal Shopping",type:"personal"},
+],
+jul:[
+  {date:"07/01",vendor:"Steak-N-Shake Festus",amount:2.72,category:"Meals (Personal)",type:"personal"},
+  {date:"07/01",vendor:"The First Tee Driving Saint Louis",amount:21.13,category:"Entertainment",type:"personal"},
+  {date:"07/01",vendor:"Kasabi Festus",amount:30.81,category:"Meals (Personal)",type:"personal"},
+  {date:"07/01",vendor:"Applebee's Arnold",amount:53.97,category:"Meals (Personal)",type:"personal"},
+  {date:"07/01",vendor:"Amazon.com",amount:197.25,category:"Personal Shopping",type:"personal"},
+  {date:"07/02",vendor:"Amazon.com",amount:11.45,category:"Personal Shopping",type:"personal"},
+  {date:"07/02",vendor:"Steak-N-Shake Festus",amount:12.83,category:"Meals (Personal)",type:"personal"},
+  {date:"07/02",vendor:"Raintree Country Club Hillsboro",amount:44.00,category:"Entertainment",type:"personal"},
+  {date:"07/02",vendor:"Raintree Country Club Hillsboro",amount:44.00,category:"Entertainment",type:"personal"},
+  {date:"07/02",vendor:"EM Hillsboro 502",amount:412.50,category:"Fuel & Auto",type:"business"},
+  {date:"07/02",vendor:"Frank Leta Acura Saint Louis",amount:1452.21,category:"Auto Parts & Repairs",type:"business"},
+  {date:"07/02",vendor:"CCCIS (CCC Intelligent Solutions)",amount:207.41,category:"Software/SaaS",type:"business"},
+  {date:"07/02",vendor:"AC-Carrington Mortgage",amount:1570.45,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"07/03",vendor:"Check #766 - Ben Hagsa",amount:500.00,category:"Vendor Payments",type:"business"},
+  {date:"07/03",vendor:"Steak-N-Shake Festus",amount:5.46,category:"Meals (Personal)",type:"personal"},
+  {date:"07/03",vendor:"McDonald's Hillsboro",amount:22.80,category:"Meals (Personal)",type:"personal"},
+  {date:"07/03",vendor:"TikTok Shop",amount:44.00,category:"Personal Shopping",type:"personal"},
+  {date:"07/03",vendor:"AC-AMERENMO-UTIL PAY",amount:208.93,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"07/07",vendor:"McDonald's Hillsboro",amount:4.24,category:"Meals (Personal)",type:"personal"},
+  {date:"07/07",vendor:"EM Festus West",amount:10.58,category:"Fuel & Auto",type:"business"},
+  {date:"07/07",vendor:"Amazon.com",amount:17.44,category:"Personal Shopping",type:"personal"},
+  {date:"07/07",vendor:"Walmart Festus",amount:26.13,category:"Personal Shopping",type:"personal"},
+  {date:"07/07",vendor:"Taytros Bar & Bistro Festus",amount:31.00,category:"Meals (Personal)",type:"personal"},
+  {date:"07/07",vendor:"Phillips 66 Fish Square DeSoto",amount:31.53,category:"Fuel & Auto",type:"business"},
+  {date:"07/07",vendor:"Amazon.com",amount:44.45,category:"Personal Shopping",type:"personal"},
+  {date:"07/07",vendor:"EM Pevely 501",amount:59.60,category:"Fuel & Auto",type:"business"},
+  {date:"07/07",vendor:"Amazon.com - Key Fob Jeep/Dodge Durango",amount:121.01,category:"Supplies",type:"business"},
+  {date:"07/07",vendor:"Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"07/08",vendor:"Google *GameChanger",amount:14.99,category:"Software/SaaS",type:"business"},
+  {date:"07/08",vendor:"EM Pevely 501",amount:29.14,category:"Fuel & Auto",type:"business"},
+  {date:"07/08",vendor:"Texas Roadhouse Festus",amount:51.61,category:"Meals (Personal)",type:"personal"},
+  {date:"07/08",vendor:"Jones Animal Health Crystal City",amount:80.84,category:"Personal Shopping",type:"personal"},
+  {date:"07/08",vendor:"Rally's Arnold",amount:332.90,category:"Meals (Personal)",type:"personal"},
+  {date:"07/09",vendor:"QT 618 Arnold",amount:10.84,category:"Fuel & Auto",type:"business"},
+  {date:"07/09",vendor:"McDonald's Hillsboro",amount:18.65,category:"Meals (Personal)",type:"personal"},
+  {date:"07/09",vendor:"McDonald's Hillsboro",amount:20.08,category:"Meals (Personal)",type:"personal"},
+  {date:"07/09",vendor:"Steak-N-Shake Festus",amount:23.10,category:"Meals (Personal)",type:"personal"},
+  {date:"07/09",vendor:"Casey's Crystal City",amount:34.80,category:"Fuel & Auto",type:"business"},
+  {date:"07/09",vendor:"Venmo *eBay",amount:52.75,category:"Personal Shopping",type:"personal"},
+  {date:"07/10",vendor:"BP Chesterfield",amount:6.32,category:"Fuel & Auto",type:"business"},
+  {date:"07/10",vendor:"BMAC Fielder's Choice Bridgeton",amount:13.25,category:"Personal Shopping",type:"personal"},
+  {date:"07/10",vendor:"Wendy's High Ridge",amount:13.65,category:"Meals (Personal)",type:"personal"},
+  {date:"07/10",vendor:"Missouri Jefferson County",amount:51.25,category:"Bank Fees",type:"personal"},
+  {date:"07/10",vendor:"Venmo *eBay",amount:47.48,category:"Personal Shopping",type:"personal"},
+  {date:"07/11",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"07/11",vendor:"Chesterfield Valley Trampoline",amount:9.38,category:"Entertainment",type:"personal"},
+  {date:"07/11",vendor:"Chesterfield Valley Trampoline",amount:9.38,category:"Entertainment",type:"personal"},
+  {date:"07/11",vendor:"Chesterfield Valley Trampoline",amount:9.38,category:"Entertainment",type:"personal"},
+  {date:"07/11",vendor:"EM Hillsboro 502",amount:10.72,category:"Fuel & Auto",type:"business"},
+  {date:"07/11",vendor:"QT 678 St. Louis",amount:24.90,category:"Fuel & Auto",type:"business"},
+  {date:"07/11",vendor:"Amazon.com",amount:42.02,category:"Personal Shopping",type:"personal"},
+  {date:"07/11",vendor:"Venmo *eBay",amount:47.48,category:"Personal Shopping",type:"personal"},
+  {date:"07/11",vendor:"Texas Roadhouse Festus",amount:65.66,category:"Meals (Personal)",type:"personal"},
+  {date:"07/14",vendor:"McDonald's Pacific MO",amount:3.69,category:"Meals (Personal)",type:"personal"},
+  {date:"07/14",vendor:"McDonald's Hillsboro",amount:7.50,category:"Meals (Personal)",type:"personal"},
+  {date:"07/14",vendor:"City of Edwardsville IL",amount:8.00,category:"Bank Fees",type:"personal"},
+  {date:"07/14",vendor:"TikTok Shop",amount:8.58,category:"Personal Shopping",type:"personal"},
+  {date:"07/14",vendor:"QT Quik Stop High Ridge",amount:16.65,category:"Fuel & Auto",type:"business"},
+  {date:"07/14",vendor:"Amazon.com",amount:21.24,category:"Personal Shopping",type:"personal"},
+  {date:"07/14",vendor:"Venmo *eBay",amount:38.82,category:"Personal Shopping",type:"personal"},
+  {date:"07/14",vendor:"Venmo *eBay",amount:42.20,category:"Personal Shopping",type:"personal"},
+  {date:"07/14",vendor:"Phillips 66 EM Pevely",amount:46.04,category:"Fuel & Auto",type:"business"},
+  {date:"07/14",vendor:"Amazon.com - Propane Torch Burner",amount:50.02,category:"Supplies",type:"business"},
+  {date:"07/14",vendor:"Amazon.com",amount:65.10,category:"Personal Shopping",type:"personal"},
+  {date:"07/14",vendor:"Venmo *Christe Schult",amount:80.00,category:"Personal Transfer",type:"personal"},
+  {date:"07/14",vendor:"Lowe's Arnold",amount:163.84,category:"Supplies",type:"business"},
+  {date:"07/14",vendor:"Schnucks Festus",amount:178.91,category:"Groceries",type:"personal"},
+  {date:"07/15",vendor:"McDonald's Hillsboro",amount:8.83,category:"Meals (Personal)",type:"personal"},
+  {date:"07/15",vendor:"McDonald's Byrnes Mill",amount:9.88,category:"Meals (Personal)",type:"personal"},
+  {date:"07/15",vendor:"Taco Bell Pevely",amount:16.84,category:"Meals (Personal)",type:"personal"},
+  {date:"07/16",vendor:"ATM Surcharge House Springs",amount:3.00,category:"Bank Fees",type:"personal"},
+  {date:"07/16",vendor:"McDonald's Pevely",amount:11.38,category:"Meals (Personal)",type:"personal"},
+  {date:"07/16",vendor:"QT 618 Arnold",amount:12.54,category:"Fuel & Auto",type:"business"},
+  {date:"07/16",vendor:"Circle K High Ridge",amount:15.15,category:"Fuel & Auto",type:"business"},
+  {date:"07/16",vendor:"Amazon.com",amount:20.83,category:"Personal Shopping",type:"personal"},
+  {date:"07/16",vendor:"Taco Bell Pevely",amount:21.43,category:"Meals (Personal)",type:"personal"},
+  {date:"07/16",vendor:"Amazon.com - LED Work Light Milwaukee 18V",amount:26.57,category:"Supplies",type:"business"},
+  {date:"07/16",vendor:"Amazon.com - Cordless Glue Gun Milwaukee 18V",amount:35.43,category:"Supplies",type:"business"},
+  {date:"07/16",vendor:"SP Nuewaypets Chicago",amount:35.89,category:"Personal Shopping",type:"personal"},
+  {date:"07/16",vendor:"Amazon.com - Cordless Tire Inflator M18",amount:36.47,category:"Supplies",type:"business"},
+  {date:"07/16",vendor:"Amazon.com - Battery Fan Milwaukee 18V",amount:41.68,category:"Supplies",type:"business"},
+  {date:"07/16",vendor:"Amazon.com - Power Tool Organizer Wall Mount",amount:53.14,category:"Supplies",type:"business"},
+  {date:"07/16",vendor:"KB Hillsboro MO",amount:56.26,category:"Supplies",type:"business"},
+  {date:"07/16",vendor:"Amazon.com",amount:66.48,category:"Personal Shopping",type:"personal"},
+  {date:"07/16",vendor:"Venmo *eBay - Milwaukee M12 Cut Off Tool",amount:83.37,category:"Auto Parts & Repairs",type:"business"},
+  {date:"07/16",vendor:"Amazon.com - Milwaukee M18 Six Pack Charger",amount:113.61,category:"Supplies",type:"business"},
+  {date:"07/16",vendor:"Venmo *Christe Schult",amount:122.00,category:"Personal Transfer",type:"personal"},
+  {date:"07/16",vendor:"ATM Cash Withdrawal House Springs",amount:140.00,category:"Personal Transfer",type:"personal"},
+  {date:"07/16",vendor:"Venmo *eBay - Milwaukee M18 Impact Wrench",amount:140.70,category:"Auto Parts & Repairs",type:"business"},
+  {date:"07/16",vendor:"AC-Carrington Mortgage",amount:1570.45,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"07/16",vendor:"Check #773 - United States Treasury",amount:9278.13,category:"Vendor Payments",type:"business",flag:"CPA Review - confirm tax payment type"},
+  {date:"07/17",vendor:"Check #768 - MO Dept of Revenue",amount:4547.64,category:"Vendor Payments",type:"business",flag:"CPA Review - confirm tax type"},
+  {date:"07/17",vendor:"Check #771 - MO Dept of Revenue",amount:5786.51,category:"Vendor Payments",type:"business",flag:"CPA Review - confirm tax type"},
+  {date:"07/17",vendor:"McDonald's Pevely",amount:5.57,category:"Meals (Personal)",type:"personal"},
+  {date:"07/17",vendor:"McDonald's Arnold",amount:11.98,category:"Meals (Personal)",type:"personal"},
+  {date:"07/17",vendor:"Amazon.com",amount:19.11,category:"Personal Shopping",type:"personal"},
+  {date:"07/17",vendor:"Amazon.com",amount:24.08,category:"Personal Shopping",type:"personal"},
+  {date:"07/18",vendor:"Rally's Arnold",amount:12.13,category:"Meals (Personal)",type:"personal"},
+  {date:"07/18",vendor:"QT 618 Arnold",amount:13.51,category:"Fuel & Auto",type:"business"},
+  {date:"07/18",vendor:"Circle K Hillsboro",amount:17.97,category:"Fuel & Auto",type:"business"},
+  {date:"07/18",vendor:"BP Chesterfield",amount:18.04,category:"Fuel & Auto",type:"business"},
+  {date:"07/18",vendor:"Raising Cane's Arnold",amount:27.55,category:"Meals (Personal)",type:"personal"},
+  {date:"07/18",vendor:"Texas Roadhouse Festus",amount:37.56,category:"Meals (Personal)",type:"personal"},
+  {date:"07/18",vendor:"Chesterfield Valley Trampoline",amount:48.73,category:"Entertainment",type:"personal"},
+  {date:"07/18",vendor:"State Farm Insurance",amount:472.32,category:"Insurance",type:"business"},
+  {date:"07/21",vendor:"McDonald's Festus",amount:5.02,category:"Meals (Personal)",type:"personal"},
+  {date:"07/21",vendor:"Gas Mart Imperial",amount:6.39,category:"Fuel & Auto",type:"business"},
+  {date:"07/21",vendor:"Arby's St. Louis",amount:7.00,category:"Meals (Personal)",type:"personal"},
+  {date:"07/21",vendor:"BP Chesterfield",amount:7.83,category:"Fuel & Auto",type:"business"},
+  {date:"07/21",vendor:"Circle K High Ridge",amount:8.16,category:"Fuel & Auto",type:"business"},
+  {date:"07/21",vendor:"McDonald's Fenton",amount:8.45,category:"Meals (Personal)",type:"personal"},
+  {date:"07/21",vendor:"EM Hillsboro 502",amount:9.92,category:"Fuel & Auto",type:"business"},
+  {date:"07/21",vendor:"EM Hillsboro 502",amount:10.72,category:"Fuel & Auto",type:"business"},
+  {date:"07/21",vendor:"KB Hillsboro MO",amount:13.50,category:"Supplies",type:"business"},
+  {date:"07/21",vendor:"BP Gas Mart Imperial",amount:13.50,category:"Fuel & Auto",type:"business"},
+  {date:"07/21",vendor:"Amazon.com",amount:18.44,category:"Personal Shopping",type:"personal"},
+  {date:"07/21",vendor:"Amazon.com",amount:29.00,category:"Personal Shopping",type:"personal"},
+  {date:"07/21",vendor:"Texas Roadhouse Festus",amount:33.19,category:"Meals (Personal)",type:"personal"},
+  {date:"07/21",vendor:"Karsch's Village Hillsboro",amount:54.16,category:"Groceries",type:"personal"},
+  {date:"07/21",vendor:"Circle K High Ridge",amount:68.68,category:"Fuel & Auto",type:"business"},
+  {date:"07/22",vendor:"Circle K House Springs",amount:9.85,category:"Fuel & Auto",type:"business"},
+  {date:"07/22",vendor:"McDonald's Hillsboro",amount:10.15,category:"Meals (Personal)",type:"personal"},
+  {date:"07/22",vendor:"Circle K Hillsboro",amount:11.66,category:"Fuel & Auto",type:"business"},
+  {date:"07/22",vendor:"Hardee's House Springs",amount:12.44,category:"Meals (Personal)",type:"personal"},
+  {date:"07/22",vendor:"Circle K Hillsboro",amount:19.28,category:"Fuel & Auto",type:"business"},
+  {date:"07/22",vendor:"ATT Bill Payment",amount:52.22,category:"Phone/Communications",type:"business"},
+  {date:"07/23",vendor:"Circle K High Ridge",amount:2.06,category:"Fuel & Auto",type:"business"},
+  {date:"07/23",vendor:"Amazon.com",amount:15.17,category:"Personal Shopping",type:"personal"},
+  {date:"07/23",vendor:"Hardee's House Springs",amount:15.77,category:"Meals (Personal)",type:"personal"},
+  {date:"07/23",vendor:"BP Eureka",amount:19.72,category:"Fuel & Auto",type:"business"},
+  {date:"07/23",vendor:"ATT Bill Payment",amount:205.60,category:"Phone/Communications",type:"business"},
+  {date:"07/24",vendor:"McDonald's Byrnes Mill",amount:8.48,category:"Meals (Personal)",type:"personal"},
+  {date:"07/24",vendor:"Amazon.com",amount:14.48,category:"Personal Shopping",type:"personal"},
+  {date:"07/24",vendor:"Circle K High Ridge",amount:15.16,category:"Fuel & Auto",type:"business"},
+  {date:"07/24",vendor:"FuboTV",amount:107.98,category:"Entertainment",type:"personal"},
+  {date:"07/25",vendor:"Boat-Ed.com",amount:5.05,category:"Personal Shopping",type:"personal"},
+  {date:"07/25",vendor:"QT Quik Stop High Ridge",amount:6.55,category:"Fuel & Auto",type:"business"},
+  {date:"07/25",vendor:"Taco Bell Byrnes Mill",amount:12.73,category:"Meals (Personal)",type:"personal"},
+  {date:"07/25",vendor:"EM Hillsboro 502",amount:15.93,category:"Fuel & Auto",type:"business"},
+  {date:"07/25",vendor:"Buchheit House Springs",amount:49.51,category:"Supplies",type:"business"},
+  {date:"07/25",vendor:"Boat-Ed.com",amount:64.66,category:"Personal Shopping",type:"personal"},
+  {date:"07/25",vendor:"EM Hillsboro 502",amount:69.61,category:"Fuel & Auto",type:"business"},
+  {date:"07/25",vendor:"Wesley Rogers Arnold",amount:74.43,category:"Meals (Personal)",type:"personal"},
+  {date:"07/28",vendor:"QT 646 High Ridge",amount:8.19,category:"Fuel & Auto",type:"business"},
+  {date:"07/28",vendor:"McDonald's Festus",amount:9.38,category:"Meals (Personal)",type:"personal"},
+  {date:"07/28",vendor:"Panda Express Festus",amount:15.64,category:"Meals (Personal)",type:"personal"},
+  {date:"07/28",vendor:"Amazon.com - Reading Glasses Shop Use",amount:16.62,category:"Supplies",type:"business"},
+  {date:"07/28",vendor:"Domino's Hillsboro",amount:60.25,category:"Meals (Personal)",type:"personal"},
+  {date:"07/28",vendor:"Topshooters Columbia IL",amount:76.46,category:"Entertainment",type:"personal"},
+  {date:"07/28",vendor:"Venmo *eBay",amount:104.92,category:"Personal Shopping",type:"personal"},
+  {date:"07/28",vendor:"Schnucks Festus",amount:153.14,category:"Groceries",type:"personal"},
+  {date:"07/30",vendor:"Buchheit House Springs",amount:32.80,category:"Supplies",type:"business"},
+  {date:"07/31",vendor:"EM Hillsboro 502",amount:21.76,category:"Fuel & Auto",type:"business"}
+],
+aug:[
+  {date:"08/01",vendor:"Burger King Pevely",amount:14.70,category:"Meals (Personal)",type:"personal"},
+  {date:"08/01",vendor:"EM Festus West",amount:56.83,category:"Fuel & Auto",type:"business"},
+  {date:"08/01",vendor:"PY *Feature Pest & Termite",amount:99.00,category:"Personal Shopping",type:"personal"},
+  {date:"08/01",vendor:"Walmart Frederick MO",amount:126.70,category:"Personal Shopping",type:"personal"},
+  {date:"08/04",vendor:"Amazon.com",amount:15.99,category:"Personal Shopping",type:"personal"},
+  {date:"08/04",vendor:"INTUIT *QBooks Online",amount:35.00,category:"Software/SaaS",type:"business"},
+  {date:"08/04",vendor:"Spectrum",amount:93.00,category:"Phone/Communications",type:"business"},
+  {date:"08/04",vendor:"Keystone Automotive Bridgeton",amount:699.75,category:"Auto Parts & Repairs",type:"business"},
+  {date:"08/04",vendor:"CCCIS (CCC Intelligent Solutions)",amount:207.41,category:"Software/SaaS",type:"business"},
+  {date:"08/04",vendor:"AC-AMERENMO-UTIL PAY",amount:556.75,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"08/05",vendor:"Amazon.com",amount:150.00,category:"Personal Shopping",type:"personal"},
+  {date:"08/06",vendor:"Texas Roadhouse Festus",amount:13.95,category:"Meals (Personal)",type:"personal"},
+  {date:"08/06",vendor:"KB Hillsboro MO",amount:34.97,category:"Supplies",type:"business"},
+  {date:"08/06",vendor:"Texas Roadhouse Festus",amount:68.08,category:"Meals (Personal)",type:"personal"},
+  {date:"08/06",vendor:"Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"08/07",vendor:"Venmo *Sean Leonard",amount:30.00,category:"Personal Transfer",type:"personal"},
+  {date:"08/07",vendor:"Google *GameChanger",amount:14.99,category:"Software/SaaS",type:"business"},
+  {date:"08/08",vendor:"Amazon Prime",amount:14.99,category:"Personal Shopping",type:"personal"},
+  {date:"08/11",vendor:"Circle K Hillsboro",amount:2.99,category:"Fuel & Auto",type:"business"},
+  {date:"08/11",vendor:"Domino's Hillsboro",amount:12.90,category:"Meals (Personal)",type:"personal"},
+  {date:"08/11",vendor:"Venmo *eBay",amount:22.25,category:"Personal Shopping",type:"personal"},
+  {date:"08/11",vendor:"Domino's Hillsboro",amount:64.15,category:"Meals (Personal)",type:"personal"},
+  {date:"08/12",vendor:"Venmo *Christe Schult",amount:400.00,category:"Personal Transfer",type:"personal"},
+  {date:"08/13",vendor:"Amazon.com",amount:28.34,category:"Personal Shopping",type:"personal"},
+  {date:"08/13",vendor:"Amazon.com",amount:35.63,category:"Personal Shopping",type:"personal"},
+  {date:"08/13",vendor:"Texas Roadhouse Festus",amount:69.38,category:"Meals (Personal)",type:"personal"},
+  {date:"08/13",vendor:"Keystone Automotive Bridgeton",amount:351.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"08/14",vendor:"Check #767 - PWSD #7",amount:226.19,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"08/14",vendor:"FS *SuperCellStore Santa Barbara",amount:6.99,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Amazon.com",amount:10.37,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Walmart De Soto",amount:10.80,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Amazon.com",amount:22.92,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Venmo *eBay",amount:32.30,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Amazon.com",amount:37.77,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Amazon.com",amount:43.76,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Amazon.com",amount:44.18,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Amazon.com",amount:53.46,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Circle K Hillsboro",amount:59.59,category:"Fuel & Auto",type:"business"},
+  {date:"08/14",vendor:"Mungenast St. Louis Honda",amount:91.78,category:"Auto Parts & Repairs",type:"business"},
+  {date:"08/14",vendor:"Walmart De Soto",amount:110.05,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Venmo *Christe Schult",amount:122.00,category:"Personal Transfer",type:"personal"},
+  {date:"08/14",vendor:"Walmart.com",amount:288.68,category:"Personal Shopping",type:"personal"},
+  {date:"08/14",vendor:"Keystone Automotive Bridgeton",amount:542.25,category:"Auto Parts & Repairs",type:"business"},
+  {date:"08/14",vendor:"AC-Carrington Mortgage",amount:1515.74,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"08/15",vendor:"Mungenast St. Louis Honda",amount:9.58,category:"Auto Parts & Repairs",type:"business"},
+  {date:"08/15",vendor:"Amazon.com",amount:21.08,category:"Personal Shopping",type:"personal"},
+  {date:"08/15",vendor:"Ingrams Mapaville MO",amount:27.38,category:"Supplies",type:"business"},
+  {date:"08/15",vendor:"Venmo *Christe Schult",amount:60.00,category:"Personal Transfer",type:"personal"},
+  {date:"08/15",vendor:"SQ *Lasers Automotive Imperial",amount:344.45,category:"Auto Parts & Repairs",type:"business"},
+  {date:"08/18",vendor:"Amazon.com",amount:7.44,category:"Personal Shopping",type:"personal"},
+  {date:"08/18",vendor:"Amazon.com",amount:13.73,category:"Personal Shopping",type:"personal"},
+  {date:"08/18",vendor:"Amazon.com",amount:21.80,category:"Personal Shopping",type:"personal"},
+  {date:"08/18",vendor:"Amazon.com",amount:24.94,category:"Personal Shopping",type:"personal"},
+  {date:"08/18",vendor:"Texas Roadhouse Festus",amount:34.10,category:"Meals (Personal)",type:"personal"},
+  {date:"08/18",vendor:"Amazon.com",amount:44.55,category:"Personal Shopping",type:"personal"},
+  {date:"08/18",vendor:"Jesse's Pizza House Springs",amount:65.71,category:"Meals (Personal)",type:"personal"},
+  {date:"08/18",vendor:"Texas Roadhouse Festus",amount:126.04,category:"Meals (Personal)",type:"personal"},
+  {date:"08/19",vendor:"HSDR3.org Hillsboro",amount:21.00,category:"Personal Shopping",type:"personal"},
+  {date:"08/20",vendor:"EM Hillsboro 502",amount:21.63,category:"Fuel & Auto",type:"business"},
+  {date:"08/20",vendor:"China One Festus",amount:44.67,category:"Meals (Personal)",type:"personal"},
+  {date:"08/20",vendor:"State Farm Insurance",amount:556.96,category:"Insurance",type:"business"},
+  {date:"08/21",vendor:"Amazon.com",amount:10.41,category:"Personal Shopping",type:"personal"},
+  {date:"08/21",vendor:"EM Hillsboro 502",amount:13.27,category:"Fuel & Auto",type:"business"},
+  {date:"08/21",vendor:"Amazon.com",amount:20.27,category:"Personal Shopping",type:"personal"},
+  {date:"08/21",vendor:"Amazon.com",amount:41.68,category:"Personal Shopping",type:"personal"},
+  {date:"08/21",vendor:"Keystone Automotive Bridgeton",amount:56.91,category:"Auto Parts & Repairs",type:"business"},
+  {date:"08/21",vendor:"Cornhole Central Pevely",amount:576.00,category:"Entertainment",type:"personal"},
+  {date:"08/22",vendor:"EM Pevely 501",amount:6.60,category:"Fuel & Auto",type:"business"},
+  {date:"08/22",vendor:"Taco Bell Hillsboro",amount:26.25,category:"Meals (Personal)",type:"personal"},
+  {date:"08/22",vendor:"EM Pevely 501",amount:30.00,category:"Fuel & Auto",type:"business"},
+  {date:"08/25",vendor:"7-Eleven Festus",amount:7.27,category:"Fuel & Auto",type:"business"},
+  {date:"08/25",vendor:"Taco Bell Hillsboro",amount:15.02,category:"Meals (Personal)",type:"personal"},
+  {date:"08/25",vendor:"KB Hillsboro MO",amount:40.02,category:"Supplies",type:"business"},
+  {date:"08/25",vendor:"Dollar General Hillsboro",amount:42.12,category:"Personal Shopping",type:"personal"},
+  {date:"08/25",vendor:"Texas Roadhouse Festus",amount:53.54,category:"Meals (Personal)",type:"personal"},
+  {date:"08/25",vendor:"Domino's Hillsboro",amount:63.15,category:"Meals (Personal)",type:"personal"},
+  {date:"08/25",vendor:"SP PG Store Cedar Rapids",amount:84.32,category:"Personal Shopping",type:"personal"},
+  {date:"08/25",vendor:"Karsch's Village Hillsboro",amount:98.50,category:"Groceries",type:"personal"},
+  {date:"08/25",vendor:"Lowe's Festus",amount:101.15,category:"Supplies",type:"business"},
+  {date:"08/25",vendor:"FuboTV",amount:107.98,category:"Entertainment",type:"personal"},
+  {date:"08/25",vendor:"ATT Bill Payment",amount:205.60,category:"Phone/Communications",type:"business"},
+  {date:"08/26",vendor:"Underdog Brooklyn NY",amount:10.00,category:"Personal Shopping",type:"personal"},
+  {date:"08/26",vendor:"Krabby Daddy's Festus",amount:62.37,category:"Meals (Personal)",type:"personal"},
+  {date:"08/27",vendor:"Taco Bell Hillsboro",amount:12.28,category:"Meals (Personal)",type:"personal"},
+  {date:"08/27",vendor:"KB Hillsboro MO",amount:16.15,category:"Supplies",type:"business"},
+  {date:"08/27",vendor:"Amazon.com",amount:43.76,category:"Personal Shopping",type:"personal"},
+  {date:"08/27",vendor:"HSDR3.org Hillsboro",amount:42.00,category:"Personal Shopping",type:"personal"},
+  {date:"08/28",vendor:"Amazon.com",amount:11.27,category:"Personal Shopping",type:"personal"},
+  {date:"08/28",vendor:"KB Hillsboro MO",amount:28.43,category:"Supplies",type:"business"},
+  {date:"08/28",vendor:"Amazon.com",amount:33.34,category:"Personal Shopping",type:"personal"},
+  {date:"08/28",vendor:"HSDR3.org Hillsboro",amount:42.00,category:"Personal Shopping",type:"personal"},
+  {date:"08/28",vendor:"Spectrum",amount:95.00,category:"Phone/Communications",type:"business"},
+  {date:"08/29",vendor:"EM Pevely 501",amount:8.01,category:"Fuel & Auto",type:"business"},
+  {date:"08/29",vendor:"Cornhole Central Pevely",amount:17.25,category:"Entertainment",type:"personal"},
+  {date:"08/29",vendor:"Buchheit House Springs",amount:40.30,category:"Supplies",type:"business"},
+  {date:"08/29",vendor:"EM Pevely 501",amount:58.60,category:"Fuel & Auto",type:"business"}
+],
+sep:[
+  {date:"09/02",vendor:"Circle K Hillsboro",amount:14.18,category:"Fuel & Auto",type:"business"},
+  {date:"09/02",vendor:"Taco Bell Hillsboro",amount:17.18,category:"Meals (Personal)",type:"personal"},
+  {date:"09/02",vendor:"Dollar General Hillsboro",amount:26.08,category:"Personal Shopping",type:"personal"},
+  {date:"09/02",vendor:"Circle K Hillsboro",amount:32.46,category:"Fuel & Auto",type:"business"},
+  {date:"09/02",vendor:"INTUIT *QBooks Online",amount:35.00,category:"Software/SaaS",type:"business"},
+  {date:"09/02",vendor:"Steak-N-Shake Festus",amount:39.29,category:"Meals (Personal)",type:"personal"},
+  {date:"09/02",vendor:"Jesse's Pizza House Springs",amount:59.51,category:"Meals (Personal)",type:"personal"},
+  {date:"09/02",vendor:"Las Brisas Pevely",amount:64.82,category:"Meals (Personal)",type:"personal"},
+  {date:"09/02",vendor:"PY *Feature Pest & Termite",amount:65.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/02",vendor:"Hims & Hers Health",amount:294.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/02",vendor:"CCCIS (CCC Intelligent Solutions)",amount:207.41,category:"Software/SaaS",type:"business"},
+  {date:"09/03",vendor:"EM Hillsboro 502",amount:10.73,category:"Fuel & Auto",type:"business"},
+  {date:"09/03",vendor:"McDonald's Hillsboro",amount:19.17,category:"Meals (Personal)",type:"personal"},
+  {date:"09/03",vendor:"O'Reilly Hillsboro",amount:52.90,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/03",vendor:"Karsch's Village Hillsboro",amount:141.57,category:"Groceries",type:"personal"},
+  {date:"09/03",vendor:"AC-AMERENMO-UTIL PAY",amount:530.57,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"09/04",vendor:"Circle K High Ridge",amount:13.17,category:"Fuel & Auto",type:"business"},
+  {date:"09/04",vendor:"HSDR3.org Hillsboro",amount:26.25,category:"Personal Shopping",type:"personal"},
+  {date:"09/04",vendor:"Keystone Automotive Bridgeton",amount:93.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/04",vendor:"Arnold Dental Center",amount:112.50,category:"Personal Shopping",type:"personal"},
+  {date:"09/05",vendor:"Burger King Pevely",amount:17.03,category:"Meals (Personal)",type:"personal"},
+  {date:"09/05",vendor:"Cornhole Central Pevely",amount:17.25,category:"Entertainment",type:"personal"},
+  {date:"09/05",vendor:"Ingrams Mapaville MO",amount:30.00,category:"Supplies",type:"business"},
+  {date:"09/08",vendor:"McDonald's Hillsboro",amount:5.33,category:"Meals (Personal)",type:"personal"},
+  {date:"09/08",vendor:"McDonald's Hillsboro",amount:13.39,category:"Meals (Personal)",type:"personal"},
+  {date:"09/08",vendor:"Google *GameChanger",amount:14.99,category:"Software/SaaS",type:"business"},
+  {date:"09/08",vendor:"Domino's Pevely",amount:17.55,category:"Meals (Personal)",type:"personal"},
+  {date:"09/08",vendor:"Steak-N-Shake Festus",amount:22.09,category:"Meals (Personal)",type:"personal"},
+  {date:"09/08",vendor:"The Blue Owl Bakery Kimmswick",amount:23.26,category:"Meals (Personal)",type:"personal"},
+  {date:"09/08",vendor:"Amazon.com",amount:43.76,category:"Personal Shopping",type:"personal"},
+  {date:"09/08",vendor:"Walmart Festus",amount:46.54,category:"Personal Shopping",type:"personal"},
+  {date:"09/08",vendor:"Amazon.com",amount:62.52,category:"Personal Shopping",type:"personal"},
+  {date:"09/08",vendor:"Texas Roadhouse Festus",amount:85.47,category:"Meals (Personal)",type:"personal"},
+  {date:"09/08",vendor:"Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"09/09",vendor:"Amazon.com",amount:22.81,category:"Personal Shopping",type:"personal"},
+  {date:"09/09",vendor:"Domino's Hillsboro",amount:56.90,category:"Meals (Personal)",type:"personal"},
+  {date:"09/10",vendor:"HSDR3.org Hillsboro",amount:31.50,category:"Personal Shopping",type:"personal"},
+  {date:"09/11",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"09/11",vendor:"McDonald's Hillsboro",amount:5.33,category:"Meals (Personal)",type:"personal"},
+  {date:"09/12",vendor:"ATM Surcharge Pevely",amount:3.00,category:"Bank Fees",type:"personal"},
+  {date:"09/12",vendor:"EM Pevely 501",amount:15.05,category:"Fuel & Auto",type:"business"},
+  {date:"09/12",vendor:"Saucy's Pizzeria Hillsboro",amount:55.94,category:"Meals (Personal)",type:"personal"},
+  {date:"09/12",vendor:"ATM Cash Withdrawal Pevely",amount:80.00,category:"Personal Transfer",type:"personal"},
+  {date:"09/15",vendor:"Underdog Brooklyn NY",amount:10.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/15",vendor:"TikTok Shop",amount:27.07,category:"Personal Shopping",type:"personal"},
+  {date:"09/15",vendor:"EM Pevely 501",amount:31.56,category:"Fuel & Auto",type:"business"},
+  {date:"09/15",vendor:"Underdog Brooklyn NY",amount:120.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/15",vendor:"Schnucks Festus",amount:213.74,category:"Groceries",type:"personal"},
+  {date:"09/15",vendor:"SPI *AMERENUE Saint Louis",amount:571.34,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"09/15",vendor:"AC-Carrington Mortgage",amount:1515.74,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"09/16",vendor:"HSDR3.org Hillsboro",amount:63.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/17",vendor:"Amazon.com",amount:20.25,category:"Personal Shopping",type:"personal"},
+  {date:"09/17",vendor:"Amazon.com",amount:21.20,category:"Personal Shopping",type:"personal"},
+  {date:"09/17",vendor:"Amazon.com",amount:22.28,category:"Personal Shopping",type:"personal"},
+  {date:"09/17",vendor:"Amazon.com",amount:24.08,category:"Personal Shopping",type:"personal"},
+  {date:"09/17",vendor:"On The Run Pevely",amount:51.29,category:"Fuel & Auto",type:"business"},
+  {date:"09/17",vendor:"Amazon Prime",amount:69.17,category:"Personal Shopping",type:"personal"},
+  {date:"09/17",vendor:"McDonald's Hillsboro",amount:144.87,category:"Meals (Personal)",type:"personal"},
+  {date:"09/18",vendor:"McDonald's Hillsboro",amount:5.33,category:"Meals (Personal)",type:"personal"},
+  {date:"09/18",vendor:"SQ *Lasers Automotive Imperial",amount:224.17,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/18",vendor:"State Farm Insurance",amount:543.45,category:"Insurance",type:"business"},
+  {date:"09/19",vendor:"Underdog Brooklyn NY",amount:10.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/19",vendor:"SP Freebird Allentown PA",amount:41.64,category:"Personal Shopping",type:"personal"},
+  {date:"09/22",vendor:"McDonald's Hillsboro",amount:5.66,category:"Meals (Personal)",type:"personal"},
+  {date:"09/22",vendor:"KB Hillsboro MO",amount:6.63,category:"Supplies",type:"business"},
+  {date:"09/22",vendor:"Amazon.com",amount:13.54,category:"Personal Shopping",type:"personal"},
+  {date:"09/22",vendor:"Underdog Brooklyn NY",amount:25.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/22",vendor:"Underdog Brooklyn NY",amount:33.33,category:"Personal Shopping",type:"personal"},
+  {date:"09/22",vendor:"Amazon.com",amount:41.68,category:"Personal Shopping",type:"personal"},
+  {date:"09/22",vendor:"Underdog Brooklyn NY",amount:100.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/23",vendor:"Amazon.com",amount:10.24,category:"Personal Shopping",type:"personal"},
+  {date:"09/23",vendor:"HSDR3.org Hillsboro",amount:230.80,category:"Personal Shopping",type:"personal"},
+  {date:"09/24",vendor:"Check #772 - Dispersed Automotive",amount:1000.00,category:"Vendor Payments",type:"business"},
+  {date:"09/24",vendor:"Ingrams Mapaville MO",amount:22.18,category:"Supplies",type:"business"},
+  {date:"09/24",vendor:"HSDR3.org Hillsboro",amount:52.50,category:"Personal Shopping",type:"personal"},
+  {date:"09/24",vendor:"FuboTV",amount:107.98,category:"Entertainment",type:"personal"},
+  {date:"09/24",vendor:"Schnucks Festus",amount:138.22,category:"Groceries",type:"personal"},
+  {date:"09/25",vendor:"Amazon.com",amount:7.24,category:"Personal Shopping",type:"personal"},
+  {date:"09/25",vendor:"Amazon.com",amount:14.58,category:"Personal Shopping",type:"personal"},
+  {date:"09/25",vendor:"Amazon.com",amount:15.09,category:"Personal Shopping",type:"personal"},
+  {date:"09/25",vendor:"Amazon.com - Golf Cart Access Panel Club Car DS",amount:32.74,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/25",vendor:"Walmart.com",amount:47.98,category:"Personal Shopping",type:"personal"},
+  {date:"09/25",vendor:"Amazon.com",amount:62.52,category:"Personal Shopping",type:"personal"},
+  {date:"09/25",vendor:"Amazon.com",amount:76.70,category:"Personal Shopping",type:"personal"},
+  {date:"09/25",vendor:"Amazon.com",amount:76.70,category:"Personal Shopping",type:"personal"},
+  {date:"09/26",vendor:"Amazon.com",amount:10.41,category:"Personal Shopping",type:"personal"},
+  {date:"09/26",vendor:"Amazon.com",amount:10.41,category:"Personal Shopping",type:"personal"},
+  {date:"09/26",vendor:"Amazon.com",amount:15.94,category:"Personal Shopping",type:"personal"},
+  {date:"09/26",vendor:"Amazon.com - Golf Cart Strut Mount Pads",amount:17.71,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/26",vendor:"Amazon.com - Golf Cart Strut Mount Pads",amount:17.71,category:"Personal Shopping",type:"personal"},
+  {date:"09/26",vendor:"Amazon.com",amount:35.43,category:"Personal Shopping",type:"personal"},
+  {date:"09/26",vendor:"Amazon.com",amount:111.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/26",vendor:"Wellfit Parts Hazelwood",amount:457.05,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/29",vendor:"McDonald's Hillsboro",amount:6.64,category:"Meals (Personal)",type:"personal"},
+  {date:"09/29",vendor:"Amazon.com",amount:12.45,category:"Personal Shopping",type:"personal"},
+  {date:"09/29",vendor:"McDonald's Hillsboro",amount:14.46,category:"Meals (Personal)",type:"personal"},
+  {date:"09/29",vendor:"Circle K Hillsboro",amount:36.39,category:"Fuel & Auto",type:"business"},
+  {date:"09/29",vendor:"Circle K Hillsboro",amount:36.63,category:"Fuel & Auto",type:"business"},
+  {date:"09/29",vendor:"Underdog Brooklyn NY",amount:50.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/29",vendor:"Taytros Bar & Bistro Festus",amount:60.20,category:"Meals (Personal)",type:"personal"},
+  {date:"09/29",vendor:"Spectrum",amount:95.00,category:"Phone/Communications",type:"business"},
+  {date:"09/29",vendor:"Underdog Brooklyn NY",amount:100.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/29",vendor:"Underdog Brooklyn NY",amount:100.00,category:"Personal Shopping",type:"personal"},
+  {date:"09/29",vendor:"eBay O*10-13633-97461",amount:137.63,category:"Personal Shopping",type:"personal"},
+  {date:"09/29",vendor:"Amazon.com",amount:150.08,category:"Personal Shopping",type:"personal"},
+  {date:"09/30",vendor:"INTUIT *QBooks Online",amount:35.00,category:"Software/SaaS",type:"business"},
+  {date:"09/30",vendor:"HSDR3.org Hillsboro",amount:36.75,category:"Personal Shopping",type:"personal"},
+  {date:"09/30",vendor:"Amazon.com - Valve Cover Chevy Cruze",amount:60.59,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/30",vendor:"South County Dodge Chrysler",amount:109.29,category:"Auto Parts & Repairs",type:"business"},
+  {date:"09/30",vendor:"Wellfit Parts Hazelwood",amount:167.78,category:"Auto Parts & Repairs",type:"business"}
+],
+
+// ============================================================
+// NEW MONTHS — Oct/Nov/Dec (exact from statements)
+// ============================================================
+oct:[
+  {date:"10/01",vendor:"Domino's Hillsboro",amount:40.75,category:"Meals (Personal)",type:"personal"},
+  {date:"10/01",vendor:"PY *Feature Pest & Termite",amount:65.00,category:"Personal Shopping",type:"personal"},
+  {date:"10/02",vendor:"EM Festus West",amount:47.74,category:"Fuel & Auto",type:"business"},
+  {date:"10/02",vendor:"Keystone Automotive Hazelwood",amount:294.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"10/02",vendor:"CCCIS (CCC Intelligent Solutions)",amount:207.41,category:"Software/SaaS",type:"business"},
+  {date:"10/02",vendor:"AC-AMERENMO-UTIL PAY",amount:487.75,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"10/03",vendor:"ATM Surcharge Pevely",amount:3.00,category:"Bank Fees",type:"personal"},
+  {date:"10/03",vendor:"Amazon.com",amount:20.83,category:"Personal Shopping",type:"personal"},
+  {date:"10/03",vendor:"KB Hillsboro MO",amount:25.12,category:"Supplies",type:"business"},
+  {date:"10/03",vendor:"ATM Cash Withdrawal Pevely",amount:100.00,category:"Personal Transfer",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:1.49,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:1.57,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:1.57,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"FreeShipping.com",amount:2.00,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:2.01,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:2.07,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:11.33,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"McDonald's Hillsboro",amount:15.05,category:"Meals (Personal)",type:"personal"},
+  {date:"10/06",vendor:"Taco Bell Hillsboro",amount:17.07,category:"Meals (Personal)",type:"personal"},
+  {date:"10/06",vendor:"HSDR3.org Hillsboro",amount:26.25,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"eBay - Budweiser Stein Vintage",amount:39.21,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:40.31,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:46.47,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:49.72,category:"Supplies",type:"business"},
+  {date:"10/06",vendor:"Save A Lot House Springs",amount:83.63,category:"Groceries",type:"personal"},
+  {date:"10/06",vendor:"TeePublic",amount:90.69,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Amazon.com",amount:90.95,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:113.41,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"eBay - Budweiser Wall Clock",amount:115.90,category:"Personal Shopping",type:"personal"},
+  {date:"10/06",vendor:"Temu.com",amount:170.95,category:"Supplies",type:"business"},
+  {date:"10/06",vendor:"Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"10/07",vendor:"KB Hillsboro MO",amount:15.01,category:"Supplies",type:"business"},
+  {date:"10/07",vendor:"KB Hillsboro MO",amount:19.22,category:"Supplies",type:"business"},
+  {date:"10/07",vendor:"McDonald's Hillsboro",amount:32.00,category:"Meals (Personal)",type:"personal"},
+  {date:"10/07",vendor:"Circle K Hillsboro",amount:54.92,category:"Fuel & Auto",type:"business"},
+  {date:"10/08",vendor:"Google *GameChanger",amount:14.99,category:"Software/SaaS",type:"business"},
+  {date:"10/08",vendor:"Dollar General Hillsboro",amount:68.55,category:"Personal Shopping",type:"personal"},
+  {date:"10/09",vendor:"Keystone Automotive Hazelwood",amount:135.75,category:"Auto Parts & Repairs",type:"business"},
+  {date:"10/10",vendor:"Reuther Ford Herculaneum",amount:109.09,category:"Auto Parts & Repairs",type:"business"},
+  {date:"10/14",vendor:"FS *SuperCellStore",amount:1.99,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"Amazon Prime",amount:2.99,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"Morganford Market St. Louis",amount:3.83,category:"Meals (Personal)",type:"personal"},
+  {date:"10/14",vendor:"Mungenast St. Louis Honda",amount:6.90,category:"Auto Parts & Repairs",type:"business"},
+  {date:"10/14",vendor:"eBay - Bud Man Salt Pepper Shaker",amount:8.43,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"Johnny's Food Mart St. Louis",amount:10.97,category:"Groceries",type:"personal"},
+  {date:"10/14",vendor:"FS *SuperCellStore",amount:11.99,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"Johnny's Food Mart St. Louis",amount:19.00,category:"Groceries",type:"personal"},
+  {date:"10/14",vendor:"FreeShipping.com",amount:22.63,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"TikTok Shop",amount:30.21,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"eBay - Budweiser Vintage Stein",amount:43.57,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"Get Plugged LLC St. Louis",amount:56.26,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"HSDR3.org Hillsboro",amount:57.75,category:"Personal Shopping",type:"personal"},
+  {date:"10/14",vendor:"Johnny's Food Mart",amount:85.00,category:"Groceries",type:"personal"},
+  {date:"10/17",vendor:"AC-Carrington Mortgage",amount:1518.74,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"10/28",vendor:"State Farm Insurance",amount:423.63,category:"Insurance",type:"business"},
+  {date:"10/28",vendor:"AC-AMERENMO-UTIL PAY",amount:520.44,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"10/29",vendor:"Speedpay AmerenMO",amount:162.00,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"10/31",vendor:"KB Hillsboro MO",amount:20.00,category:"Supplies",type:"business"},
+  {date:"10/31",vendor:"AC-AMERENMO-UTIL PAY",amount:300.23,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"10/06",vendor:"eBay - Budweiser Bud Man Stein",amount:88.49,category:"Personal Shopping",type:"personal"}
+],
+nov:[
+  {date:"11/03",vendor:"KFC De Soto",amount:14.00,category:"Meals (Personal)",type:"personal"},
+  {date:"11/03",vendor:"EM Hillsboro 502",amount:23.13,category:"Fuel & Auto",type:"business"},
+  {date:"11/03",vendor:"Karsch's Village Hillsboro",amount:35.43,category:"Groceries",type:"personal"},
+  {date:"11/03",vendor:"Walmart De Soto",amount:260.75,category:"Personal Shopping",type:"personal"},
+  {date:"11/03",vendor:"CCCIS (CCC Intelligent Solutions)",amount:207.41,category:"Software/SaaS",type:"business"},
+  {date:"11/04",vendor:"EM Pevely 501",amount:12.37,category:"Fuel & Auto",type:"business"},
+  {date:"11/04",vendor:"Circle K High Ridge",amount:15.24,category:"Fuel & Auto",type:"business"},
+  {date:"11/04",vendor:"EM Pevely 501",amount:20.01,category:"Fuel & Auto",type:"business"},
+  {date:"11/05",vendor:"Burger King Pevely",amount:10.22,category:"Meals (Personal)",type:"personal"},
+  {date:"11/06",vendor:"Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"11/07",vendor:"Keystone Automotive Hazelwood",amount:115.65,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/10",vendor:"Temu.com",amount:1.97,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"Temu.com",amount:3.09,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"Temu.com",amount:3.46,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"ATM Surcharge Festus",amount:3.50,category:"Bank Fees",type:"personal"},
+  {date:"11/10",vendor:"Taco Bell Pevely",amount:12.05,category:"Meals (Personal)",type:"personal"},
+  {date:"11/10",vendor:"Temu.com",amount:12.05,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"EM Hillsboro 502",amount:25.01,category:"Fuel & Auto",type:"business"},
+  {date:"11/10",vendor:"Ingrams Mapaville MO",amount:26.59,category:"Supplies",type:"business"},
+  {date:"11/10",vendor:"Temu.com",amount:33.79,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"Temu.com",amount:36.66,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"Temu.com",amount:36.66,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"Temu.com",amount:54.27,category:"Supplies",type:"business"},
+  {date:"11/10",vendor:"Schnucks Festus",amount:193.78,category:"Groceries",type:"personal"},
+  {date:"11/10",vendor:"ATM Cash Withdrawal Festus",amount:200.00,category:"Personal Transfer",type:"personal"},
+  {date:"11/10",vendor:"eBay - Golf Cart Seat Flip Kit",amount:290.79,category:"Personal Shopping",type:"personal"},
+  {date:"11/10",vendor:"Venmo *Christe Schult",amount:350.00,category:"Personal Transfer",type:"personal"},
+  {date:"11/12",vendor:"Amazon.com",amount:24.78,category:"Supplies",type:"business"},
+  {date:"11/12",vendor:"On The Run Cedar Hill",amount:30.05,category:"Fuel & Auto",type:"business"},
+  {date:"11/12",vendor:"Temu.com",amount:38.84,category:"Personal Shopping",type:"personal"},
+  {date:"11/12",vendor:"Texas Roadhouse Festus",amount:58.16,category:"Meals (Personal)",type:"personal"},
+  {date:"11/12",vendor:"Walmart High Ridge",amount:58.82,category:"Personal Shopping",type:"personal"},
+  {date:"11/12",vendor:"Temu.com",amount:97.35,category:"Supplies",type:"business"},
+  {date:"11/12",vendor:"Temu.com",amount:103.83,category:"Supplies",type:"business"},
+  {date:"11/12",vendor:"Wellfit Parts Hazelwood",amount:694.77,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/12",vendor:"Keystone Automotive Hazelwood",amount:894.20,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/13",vendor:"Jack In The Box High Ridge",amount:8.03,category:"Meals (Personal)",type:"personal"},
+  {date:"11/13",vendor:"Amazon.com",amount:8.33,category:"Personal Shopping",type:"personal"},
+  {date:"11/13",vendor:"Amazon.com",amount:10.40,category:"Personal Shopping",type:"personal"},
+  {date:"11/13",vendor:"Keystone Automotive Hazelwood",amount:103.10,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/13",vendor:"SQ *Lasers Automotive Imperial",amount:557.68,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/14",vendor:"Check #775 - Everything Auto Glass",amount:225.00,category:"Vendor Payments",type:"business"},
+  {date:"11/14",vendor:"Burger King Pevely",amount:7.91,category:"Meals (Personal)",type:"personal"},
+  {date:"11/14",vendor:"Circle K Hillsboro",amount:9.39,category:"Fuel & Auto",type:"business"},
+  {date:"11/14",vendor:"Cornhole Central Pevely",amount:21.60,category:"Entertainment",type:"personal"},
+  {date:"11/14",vendor:"Cornhole Central Pevely",amount:22.50,category:"Entertainment",type:"personal"},
+  {date:"11/14",vendor:"On The Run Cedar Hill",amount:40.01,category:"Fuel & Auto",type:"business"},
+  {date:"11/17",vendor:"EM Hillsboro 502",amount:9.88,category:"Fuel & Auto",type:"business"},
+  {date:"11/17",vendor:"EM Hillsboro 502",amount:12.30,category:"Fuel & Auto",type:"business"},
+  {date:"11/17",vendor:"Frankie Gianino's Imperial",amount:13.74,category:"Meals (Personal)",type:"personal"},
+  {date:"11/17",vendor:"EM Hillsboro 502",amount:15.12,category:"Fuel & Auto",type:"business"},
+  {date:"11/17",vendor:"Amazon.com",amount:16.03,category:"Personal Shopping",type:"personal"},
+  {date:"11/17",vendor:"KB Hillsboro MO",amount:33.14,category:"Supplies",type:"business"},
+  {date:"11/17",vendor:"Frankie Gianino's Imperial",amount:80.78,category:"Meals (Personal)",type:"personal"},
+  {date:"11/17",vendor:"Sorelli's Italian Cedar Hill",amount:87.20,category:"Meals (Personal)",type:"personal"},
+  {date:"11/17",vendor:"Dollar General Barnhart",amount:112.78,category:"Personal Shopping",type:"personal"},
+  {date:"11/17",vendor:"eBay - Headlamp Lincoln MKX",amount:199.09,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/18",vendor:"Google *Google One",amount:0.49,category:"Software/SaaS",type:"business"},
+  {date:"11/18",vendor:"Spectrum",amount:203.95,category:"Phone/Communications",type:"business"},
+  {date:"11/18",vendor:"State Farm Insurance",amount:22.00,category:"Insurance",type:"business"},
+  {date:"11/19",vendor:"Circle K High Ridge",amount:9.92,category:"Fuel & Auto",type:"business"},
+  {date:"11/19",vendor:"McDonald's Byrnes Mill",amount:15.14,category:"Meals (Personal)",type:"personal"},
+  {date:"11/19",vendor:"Domino's Hillsboro",amount:39.57,category:"Meals (Personal)",type:"personal"},
+  {date:"11/19",vendor:"Motor Vehicle Dept Cedar City",amount:48.45,category:"Bank Fees",type:"personal"},
+  {date:"11/19",vendor:"SPI *AMERENUE Saint Louis",amount:277.88,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"11/19",vendor:"eBay - AFS Lincoln MKX Headlamp",amount:138.62,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/19",vendor:"eBay - Headlamp Lincoln MKX CAPA",amount:176.14,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/19",vendor:"SQ *Lasers Automotive Imperial",amount:236.17,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/20",vendor:"Check #651 - County Collector",amount:1552.36,category:"Vendor Payments",type:"business",flag:"CPA Review - confirm tax type"},
+  {date:"11/20",vendor:"Amazon.com",amount:10.41,category:"Supplies",type:"business"},
+  {date:"11/20",vendor:"Circle K House Springs",amount:14.40,category:"Fuel & Auto",type:"business"},
+  {date:"11/20",vendor:"Quik Stop High Ridge",amount:43.42,category:"Fuel & Auto",type:"business"},
+  {date:"11/20",vendor:"Parts Town LLC Addison IL",amount:68.61,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/21",vendor:"EM Hillsboro 502",amount:14.44,category:"Fuel & Auto",type:"business"},
+  {date:"11/21",vendor:"Steak-N-Shake Festus",amount:28.58,category:"Meals (Personal)",type:"personal"},
+  {date:"11/21",vendor:"Casey's Hillsboro",amount:39.73,category:"Fuel & Auto",type:"business"},
+  {date:"11/21",vendor:"HSDR3.org Hillsboro",amount:42.00,category:"Personal Shopping",type:"personal"},
+  {date:"11/21",vendor:"Keystone Automotive Hazelwood",amount:75.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/24",vendor:"ATM Surcharge Arnold",amount:3.00,category:"Bank Fees",type:"personal"},
+  {date:"11/24",vendor:"On The Run Cedar Hill",amount:3.73,category:"Fuel & Auto",type:"business"},
+  {date:"11/24",vendor:"Casey's Hillsboro",amount:5.83,category:"Fuel & Auto",type:"business"},
+  {date:"11/24",vendor:"Dairy Queen Hillsboro",amount:10.56,category:"Meals (Personal)",type:"personal"},
+  {date:"11/24",vendor:"Temu.com",amount:26.58,category:"Personal Shopping",type:"personal"},
+  {date:"11/24",vendor:"Amazon.com",amount:40.64,category:"Personal Shopping",type:"personal"},
+  {date:"11/24",vendor:"Texas Roadhouse Festus",amount:49.20,category:"Meals (Personal)",type:"personal"},
+  {date:"11/24",vendor:"Dollar General Hillsboro",amount:68.31,category:"Personal Shopping",type:"personal"},
+  {date:"11/24",vendor:"On The Run Cedar Hill",amount:69.75,category:"Fuel & Auto",type:"business"},
+  {date:"11/24",vendor:"ATM Cash Withdrawal Arnold",amount:200.00,category:"Personal Transfer",type:"personal"},
+  {date:"11/24",vendor:"Keystone Automotive Hazelwood",amount:218.25,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/24",vendor:"ATT Payment",amount:506.09,category:"Phone/Communications",type:"business"},
+  {date:"11/25",vendor:"Temu.com",amount:28.42,category:"Personal Shopping",type:"personal"},
+  {date:"11/25",vendor:"Temu.com",amount:32.41,category:"Personal Shopping",type:"personal"},
+  {date:"11/25",vendor:"Jesse's Pizza House Springs",amount:55.61,category:"Meals (Personal)",type:"personal"},
+  {date:"11/25",vendor:"Dick's Sporting Goods",amount:119.85,category:"Personal Shopping",type:"personal"},
+  {date:"11/26",vendor:"Texas Roadhouse Festus",amount:42.41,category:"Meals (Personal)",type:"personal"},
+  {date:"11/26",vendor:"Autozone Hillsboro",amount:149.58,category:"Auto Parts & Repairs",type:"business"},
+  {date:"11/26",vendor:"Walmart Festus",amount:222.96,category:"Personal Shopping",type:"personal"},
+  {date:"11/28",vendor:"Amazon.com",amount:18.71,category:"Personal Shopping",type:"personal"},
+  {date:"11/28",vendor:"Dollar General Hillsboro",amount:23.41,category:"Personal Shopping",type:"personal"},
+  {date:"11/28",vendor:"Temu.com",amount:41.26,category:"Personal Shopping",type:"personal"},
+  {date:"11/28",vendor:"China King De Soto",amount:57.84,category:"Meals (Personal)",type:"personal"},
+  {date:"11/28",vendor:"KB Hillsboro MO",amount:58.56,category:"Supplies",type:"business"}
+],
+dec:[
+  {date:"12/01",vendor:"Amazon.com",amount:9.36,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"EM Hillsboro 502",amount:10.82,category:"Fuel & Auto",type:"business"},
+  {date:"12/01",vendor:"Temu.com",amount:13.43,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Check #668 - PWSD #7",amount:185.31,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"12/01",vendor:"Circle K Hillsboro",amount:14.62,category:"Fuel & Auto",type:"business"},
+  {date:"12/01",vendor:"Circle K Hillsboro",amount:15.75,category:"Fuel & Auto",type:"business"},
+  {date:"12/01",vendor:"eBay - PUMA Court Classic Shoes",amount:19.87,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Amazon.com",amount:20.20,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Amazon.com",amount:20.52,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Temu.com",amount:32.16,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Casey's Hillsboro",amount:33.25,category:"Fuel & Auto",type:"business"},
+  {date:"12/01",vendor:"Temu.com",amount:33.92,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Temu.com",amount:35.09,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"eBay - Puma Turino Sneakers",amount:37.93,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"eBay - Panini Prizm Basketball Box",amount:49.87,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Amazon.com",amount:53.10,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"Joe Boccardi's Eureka",amount:63.66,category:"Meals (Personal)",type:"personal"},
+  {date:"12/01",vendor:"Temu.com",amount:71.02,category:"Personal Shopping",type:"personal"},
+  {date:"12/01",vendor:"SP Hat Club Gilbert AZ",amount:111.70,category:"Personal Shopping",type:"personal"},
+  {date:"12/02",vendor:"Amazon.com",amount:16.62,category:"Supplies",type:"business"},
+  {date:"12/02",vendor:"eBay - Under Armour Golf Belt",amount:19.80,category:"Personal Shopping",type:"personal"},
+  {date:"12/02",vendor:"eBay - Under Armour Golf Belt",amount:24.07,category:"Personal Shopping",type:"personal"},
+  {date:"12/02",vendor:"Amazon.com",amount:26.00,category:"Personal Shopping",type:"personal"},
+  {date:"12/02",vendor:"Amazon.com",amount:44.18,category:"Personal Shopping",type:"personal"},
+  {date:"12/02",vendor:"TeePublic",amount:133.39,category:"Personal Shopping",type:"personal"},
+  {date:"12/02",vendor:"Amazon.com - Ram 1500 Bumper",amount:228.25,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/02",vendor:"CCCIS (CCC Intelligent Solutions)",amount:207.41,category:"Software/SaaS",type:"business"},
+  {date:"12/02",vendor:"State Farm Insurance",amount:520.43,category:"Insurance",type:"business"},
+  {date:"12/03",vendor:"Popeyes St. Louis",amount:13.46,category:"Meals (Personal)",type:"personal"},
+  {date:"12/03",vendor:"Cornhole Central Pevely",amount:20.70,category:"Entertainment",type:"personal"},
+  {date:"12/03",vendor:"ZX 64 Saint Louis",amount:24.99,category:"Personal Shopping",type:"personal"},
+  {date:"12/03",vendor:"Casey's Hillsboro",amount:27.28,category:"Fuel & Auto",type:"business"},
+  {date:"12/03",vendor:"Amazon.com - Ram 1500 Bumper",amount:198.46,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/03",vendor:"Amazon.com - Ram 1500 Steel Bumper",amount:375.19,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/03",vendor:"AC-AMERENMO-UTIL PAY",amount:171.16,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - mixed use utility"},
+  {date:"12/04",vendor:"KB Hillsboro MO",amount:16.15,category:"Supplies",type:"business"},
+  {date:"12/04",vendor:"HSDR3.org Hillsboro",amount:36.75,category:"Personal Shopping",type:"personal"},
+  {date:"12/04",vendor:"Amazon.com",amount:58.63,category:"Personal Shopping",type:"personal"},
+  {date:"12/04",vendor:"Venmo *Christe Schult",amount:472.00,category:"Personal Transfer",type:"personal"},
+  {date:"12/05",vendor:"KB Hillsboro MO",amount:19.21,category:"Supplies",type:"business"},
+  {date:"12/05",vendor:"Temu.com",amount:38.10,category:"Personal Shopping",type:"personal"},
+  {date:"12/05",vendor:"Jesse's Pizza House Springs",amount:63.30,category:"Meals (Personal)",type:"personal"},
+  {date:"12/05",vendor:"Amazon.com",amount:92.01,category:"Personal Shopping",type:"personal"},
+  {date:"12/05",vendor:"AstraForge Inc Denver",amount:101.97,category:"Personal Shopping",type:"personal"},
+  {date:"12/05",vendor:"TeePublic",amount:106.30,category:"Personal Shopping",type:"personal"},
+  {date:"12/08",vendor:"KB Hillsboro MO",amount:6.94,category:"Supplies",type:"business"},
+  {date:"12/08",vendor:"Jack In The Box High Ridge",amount:9.76,category:"Meals (Personal)",type:"personal"},
+  {date:"12/08",vendor:"ATM Surcharge St. Charles",amount:9.99,category:"Bank Fees",type:"personal"},
+  {date:"12/08",vendor:"EM Festus 504",amount:11.13,category:"Fuel & Auto",type:"business"},
+  {date:"12/08",vendor:"McDonald's Hillsboro",amount:13.10,category:"Meals (Personal)",type:"personal"},
+  {date:"12/08",vendor:"Levy @ Stifel Center St. Louis",amount:27.64,category:"Entertainment",type:"personal"},
+  {date:"12/08",vendor:"Levy @ Stifel Center St. Louis",amount:28.90,category:"Entertainment",type:"personal"},
+  {date:"12/08",vendor:"Levy @ Stifel Center St. Louis",amount:28.90,category:"Entertainment",type:"personal"},
+  {date:"12/08",vendor:"Levy @ Stifel Center St. Louis",amount:28.90,category:"Entertainment",type:"personal"},
+  {date:"12/08",vendor:"Amazon.com",amount:30.21,category:"Personal Shopping",type:"personal"},
+  {date:"12/08",vendor:"Texas Roadhouse Festus",amount:38.53,category:"Meals (Personal)",type:"personal"},
+  {date:"12/08",vendor:"Ingrams Mapaville MO",amount:60.88,category:"Supplies",type:"business"},
+  {date:"12/08",vendor:"KB Hillsboro MO",amount:61.72,category:"Supplies",type:"business"},
+  {date:"12/08",vendor:"Biggies St. Louis",amount:116.21,category:"Meals (Personal)",type:"personal"},
+  {date:"12/08",vendor:"ATM Cash Withdrawal St. Charles",amount:500.00,category:"Personal Transfer",type:"personal"},
+  {date:"12/08",vendor:"Amer Home Shield",amount:86.99,category:"Insurance",type:"business"},
+  {date:"12/09",vendor:"Amazon.com",amount:18.46,category:"Personal Shopping",type:"personal"},
+  {date:"12/09",vendor:"Amazon.com",amount:19.17,category:"Personal Shopping",type:"personal"},
+  {date:"12/09",vendor:"Amazon.com",amount:28.61,category:"Personal Shopping",type:"personal"},
+  {date:"12/09",vendor:"Amazon.com",amount:40.65,category:"Personal Shopping",type:"personal"},
+  {date:"12/09",vendor:"Amazon.com",amount:41.66,category:"Personal Shopping",type:"personal"},
+  {date:"12/10",vendor:"HSDR3.org Hillsboro",amount:42.00,category:"Personal Shopping",type:"personal"},
+  {date:"12/10",vendor:"Domino's Hillsboro",amount:60.02,category:"Meals (Personal)",type:"personal"},
+  {date:"12/10",vendor:"eBay - JJ Wetherholt Auto Card",amount:100.27,category:"Personal Shopping",type:"personal"},
+  {date:"12/10",vendor:"Performance Auto Color Fenton",amount:337.19,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/11",vendor:"Motor Vehicle Dept Cedar City",amount:20.14,category:"Bank Fees",type:"personal"},
+  {date:"12/11",vendor:"EM Pevely 501",amount:40.01,category:"Fuel & Auto",type:"business"},
+  {date:"12/11",vendor:"Jim Butler Chevrolet Fenton",amount:49.55,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/11",vendor:"Walmart De Soto",amount:113.43,category:"Personal Shopping",type:"personal"},
+  {date:"12/11",vendor:"Keystone Automotive Hazelwood",amount:439.38,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/11",vendor:"Yancey Auto Sales Perry MO",amount:475.00,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/12",vendor:"Check #652 - Dispersed Automotive",amount:2031.14,category:"Vendor Payments",type:"business"},
+  {date:"12/12",vendor:"Amazon.com",amount:13.01,category:"Personal Shopping",type:"personal"},
+  {date:"12/12",vendor:"Amazon.com",amount:21.46,category:"Personal Shopping",type:"personal"},
+  {date:"12/12",vendor:"Amazon.com",amount:26.04,category:"Personal Shopping",type:"personal"},
+  {date:"12/12",vendor:"Cornhole Central Pevely",amount:32.20,category:"Entertainment",type:"personal"},
+  {date:"12/12",vendor:"Amazon.com",amount:32.51,category:"Personal Shopping",type:"personal"},
+  {date:"12/12",vendor:"Amazon.com",amount:74.03,category:"Personal Shopping",type:"personal"},
+  {date:"12/12",vendor:"Ruder LLC House Springs",amount:75.78,category:"Personal Shopping",type:"personal"},
+  {date:"12/15",vendor:"Five Guys Fenton",amount:6.47,category:"Meals (Personal)",type:"personal"},
+  {date:"12/15",vendor:"Lowe's Festus",amount:10.91,category:"Supplies",type:"business"},
+  {date:"12/15",vendor:"eBay - Missouri Tigers Jogger Pants",amount:16.14,category:"Personal Shopping",type:"personal"},
+  {date:"12/15",vendor:"Ingrams Mapaville MO",amount:21.36,category:"Supplies",type:"business"},
+  {date:"12/15",vendor:"Advance Auto Parts Festus",amount:22.95,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/15",vendor:"Popeyes St. Louis",amount:28.54,category:"Meals (Personal)",type:"personal"},
+  {date:"12/15",vendor:"Five Guys Fenton",amount:38.08,category:"Meals (Personal)",type:"personal"},
+  {date:"12/15",vendor:"Circle K Hillsboro",amount:40.05,category:"Fuel & Auto",type:"business"},
+  {date:"12/15",vendor:"Dollar General Hillsboro",amount:56.95,category:"Personal Shopping",type:"personal"},
+  {date:"12/15",vendor:"eBay - Mizzou Hoodie",amount:59.38,category:"Personal Shopping",type:"personal"},
+  {date:"12/15",vendor:"Reuther Ford Herculaneum",amount:69.83,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/15",vendor:"eBay - JJ Wetherholt Bowman Auto",amount:87.34,category:"Personal Shopping",type:"personal"},
+  {date:"12/15",vendor:"Twin City Toyota Herculaneum",amount:89.48,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/15",vendor:"Venmo *Ryan Bonacker",amount:120.00,category:"Personal Transfer",type:"personal"},
+  {date:"12/15",vendor:"Keystone Automotive Hazelwood",amount:121.50,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/15",vendor:"Amazon.com",amount:131.90,category:"Personal Shopping",type:"personal"},
+  {date:"12/15",vendor:"Karsch's Village Hillsboro",amount:147.46,category:"Groceries",type:"personal"},
+  {date:"12/17",vendor:"eBay - DINY Hooded Puffy Coat",amount:30.74,category:"Personal Shopping",type:"personal"},
+  {date:"12/17",vendor:"eBay - Missouri Tigers T-Shirt",amount:31.97,category:"Personal Shopping",type:"personal"},
+  {date:"12/17",vendor:"eBay - Nike Sportswear Jacket",amount:39.54,category:"Personal Shopping",type:"personal"},
+  {date:"12/17",vendor:"Autozone Festus",amount:45.27,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/17",vendor:"eBay - Nike Tech Jacket",amount:60.25,category:"Personal Shopping",type:"personal"},
+  {date:"12/17",vendor:"State Farm Insurance",amount:22.00,category:"Insurance",type:"business"},
+  {date:"12/18",vendor:"Google *Google One",amount:0.49,category:"Software/SaaS",type:"business"},
+  {date:"12/18",vendor:"Hardee's House Springs",amount:18.12,category:"Meals (Personal)",type:"personal"},
+  {date:"12/18",vendor:"Circle K House Springs",amount:20.12,category:"Fuel & Auto",type:"business"},
+  {date:"12/18",vendor:"Amazon.com",amount:30.02,category:"Personal Shopping",type:"personal"},
+  {date:"12/18",vendor:"Amazon.com",amount:35.41,category:"Personal Shopping",type:"personal"},
+  {date:"12/18",vendor:"Amazon.com",amount:40.44,category:"Personal Shopping",type:"personal"},
+  {date:"12/18",vendor:"State Farm Insurance",amount:182.61,category:"Insurance",type:"business"},
+  {date:"12/19",vendor:"HSDR3.org Hillsboro",amount:36.75,category:"Personal Shopping",type:"personal"},
+  {date:"12/19",vendor:"Walmart High Ridge",amount:297.74,category:"Personal Shopping",type:"personal"},
+  {date:"12/19",vendor:"AC-Carrington Mortgage",amount:3140.90,category:"Home Office / Mixed Use",type:"business",flag:"CPA Review - home/business mixed use"},
+  {date:"12/22",vendor:"On The Run Cedar Hill",amount:3.73,category:"Fuel & Auto",type:"business"},
+  {date:"12/22",vendor:"Amazon.com",amount:8.09,category:"Personal Shopping",type:"personal"},
+  {date:"12/22",vendor:"EM Hillsboro 502",amount:10.28,category:"Fuel & Auto",type:"business"},
+  {date:"12/22",vendor:"McDonald's Hillsboro",amount:10.58,category:"Meals (Personal)",type:"personal"},
+  {date:"12/22",vendor:"Amazon.com",amount:14.16,category:"Personal Shopping",type:"personal"},
+  {date:"12/22",vendor:"Amazon.com",amount:15.82,category:"Personal Shopping",type:"personal"},
+  {date:"12/22",vendor:"Temu.com",amount:19.68,category:"Personal Shopping",type:"personal"},
+  {date:"12/22",vendor:"Amazon.com",amount:20.83,category:"Personal Shopping",type:"personal"},
+  {date:"12/22",vendor:"On The Run Cedar Hill",amount:25.97,category:"Fuel & Auto",type:"business"},
+  {date:"12/22",vendor:"Amazon.com",amount:29.24,category:"Personal Shopping",type:"personal"},
+  {date:"12/22",vendor:"Amazon.com",amount:30.28,category:"Personal Shopping",type:"personal"},
+  {date:"12/22",vendor:"Saucy's Pizzeria Hillsboro",amount:59.35,category:"Meals (Personal)",type:"personal"},
+  {date:"12/22",vendor:"Lowe's Festus",amount:80.09,category:"Supplies",type:"business"},
+  {date:"12/22",vendor:"Twin City Toyota Herculaneum",amount:89.05,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/22",vendor:"Twin City Toyota Herculaneum",amount:112.50,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/22",vendor:"Temu.com",amount:116.63,category:"Supplies",type:"business"},
+  {date:"12/22",vendor:"Texas Roadhouse Festus",amount:124.73,category:"Meals (Personal)",type:"personal"},
+  {date:"12/23",vendor:"Amazon.com",amount:10.06,category:"Personal Shopping",type:"personal"},
+  {date:"12/23",vendor:"Amazon.com",amount:16.72,category:"Supplies",type:"business"},
+  {date:"12/23",vendor:"Temu.com",amount:48.55,category:"Personal Shopping",type:"personal"},
+  {date:"12/23",vendor:"ATT Payment",amount:155.15,category:"Phone/Communications",type:"business"},
+  {date:"12/24",vendor:"Microsoft *Xbox",amount:1.00,category:"Personal Shopping",type:"personal"},
+  {date:"12/24",vendor:"TikTok Shop",amount:17.12,category:"Personal Shopping",type:"personal"},
+  {date:"12/24",vendor:"Twin City Toyota Herculaneum",amount:22.39,category:"Auto Parts & Repairs",type:"business"},
+  {date:"12/24",vendor:"Walmart Festus",amount:33.35,category:"Personal Shopping",type:"personal"},
+  {date:"12/24",vendor:"Dollar General Hillsboro",amount:69.35,category:"Personal Shopping",type:"personal"},
+  {date:"12/26",vendor:"SP Edikted Wilmington DE",amount:30.00,category:"Personal Shopping",type:"personal"},
+  {date:"12/26",vendor:"Texas Roadhouse Festus",amount:52.48,category:"Meals (Personal)",type:"personal"},
+  {date:"12/26",vendor:"Circle K Hillsboro",amount:113.10,category:"Fuel & Auto",type:"business"},
+  {date:"12/29",vendor:"Ingrams Mapaville MO",amount:36.00,category:"Supplies",type:"business"},
+  {date:"12/29",vendor:"McDonald's Hillsboro",amount:6.30,category:"Meals (Personal)",type:"personal"},
+  {date:"12/29",vendor:"McDonald's Pevely",amount:22.35,category:"Meals (Personal)",type:"personal"},
+  {date:"12/29",vendor:"EM Hillsboro 502",amount:28.30,category:"Fuel & Auto",type:"business"},
+  {date:"12/29",vendor:"Texas Roadhouse Festus",amount:72.25,category:"Meals (Personal)",type:"personal"},
+  {date:"12/29",vendor:"Spectrum",amount:95.00,category:"Phone/Communications",type:"business"},
+  {date:"12/30",vendor:"Culver's Crystal City",amount:16.35,category:"Meals (Personal)",type:"personal"},
+  {date:"12/30",vendor:"Hims & Hers Health",amount:294.00,category:"Personal Shopping",type:"personal"},
+  {date:"12/31",vendor:"KB Hillsboro MO",amount:11.08,category:"Supplies",type:"business"},
+  {date:"12/31",vendor:"Circle K Hillsboro",amount:22.34,category:"Fuel & Auto",type:"business"},
+  {date:"12/31",vendor:"eBay - JJ Wetherholt Cardinals Auto",amount:190.21,category:"Personal Shopping",type:"personal"}
+]
+};
+
+// Revenue deposits by month
+const REVENUE = {
+  jan:[{date:"01/06",desc:"Customer Payment Deposit (ATM Hillsboro Branch)",amount:57370.64}],
+  feb:[{date:"02/28",desc:"Customer Payment Deposit",amount:17176.80}],mar:[],apr:[{date:"04/21",desc:"Customer Payment Deposit",amount:20989.53},{date:"04/25",desc:"Customer Payment Deposit",amount:2059.00}],may:[{date:"05/14",desc:"Customer Payment Deposit",amount:33154.38},{date:"05/27",desc:"Customer Payment Deposit",amount:39135.19},{date:"05/27",desc:"Customer Payment Deposit",amount:47481.43}],
+  jun:[{date:"06/30",desc:"Customer Payment Deposit",amount:16412.23}],
+  jul:[
+    {date:"07/09",desc:"Customer Payment Deposit",amount:6700.08},
+    {date:"07/30",desc:"Customer Payment Deposit",amount:5674.37},
+    {date:"07/31",desc:"Customer Payment Deposit",amount:3647.20},
+  ],
+  aug:[],
+  sep:[{date:"09/30",desc:"Customer Payment Deposit",amount:16543.65}],
+  oct:[],
+  nov:[{date:"11/04",desc:"Customer Payment Deposit",amount:4816.00}],
+  dec:[{date:"12/22",desc:"Customer Payment Deposit",amount:15560.74}],
+};
+
+const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const MONTH_LABELS = {jan:'January',feb:'February',mar:'March',apr:'April',may:'May',jun:'June',jul:'July',aug:'August',sep:'September',oct:'October',nov:'November',dec:'December'};
+
+let gPeriod = 'ytd';
+let gType = 'all';
+let gCat = null;
+let gSubMonth = 'all'; // for amazon/ebay/temu/revenue month filter
+
+function getPool() {
+  let pool = [];
+  if (gPeriod === 'ytd') {
+    MONTHS.forEach(m => { (BANK_DATA[m]||[]).forEach(t => pool.push(t)); });
+  } else if (gPeriod === 'amazon') {
+    const mList = gSubMonth === 'all' ? MONTHS : [gSubMonth];
+    mList.forEach(m => { (BANK_DATA[m]||[]).filter(t => t.vendor.toLowerCase().includes('amazon')).forEach(t => pool.push(t)); });
+  } else if (gPeriod === 'ebay') {
+    const mList = gSubMonth === 'all' ? MONTHS : [gSubMonth];
+    mList.forEach(m => { (BANK_DATA[m]||[]).filter(t => t.vendor.toLowerCase().includes('ebay')).forEach(t => pool.push(t)); });
+  } else if (gPeriod === 'temu') {
+    const mList = gSubMonth === 'all' ? MONTHS : [gSubMonth];
+    mList.forEach(m => { (BANK_DATA[m]||[]).filter(t => t.vendor.toLowerCase().includes('temu')).forEach(t => pool.push(t)); });
+  } else {
+    pool = BANK_DATA[gPeriod] || [];
+  }
+  return pool;
+}
+
+function filtered() {
+  let pool = getPool();
+  if (gType !== 'all') pool = pool.filter(t => t.type === gType);
+  if (gCat) pool = pool.filter(t => t.category === gCat);
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  if (q) pool = pool.filter(t => t.vendor.toLowerCase().includes(q) || t.category.toLowerCase().includes(q));
+  return pool;
+}
+
+function fmt(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+function updateCards() {
+  const all = [];
+  MONTHS.forEach(m => (BANK_DATA[m]||[]).forEach(t => all.push(t)));
+  const biz = all.filter(t=>t.type==='business').reduce((s,t)=>s+t.amount,0);
+  const per = all.filter(t=>t.type==='personal').reduce((s,t)=>s+t.amount,0);
+  const bizCt = all.filter(t=>t.type==='business').length;
+  const perCt = all.filter(t=>t.type==='personal').length;
+  const rev = MONTHS.reduce((s,m) => s + (REVENUE[m]||[]).reduce((r,d)=>r+d.amount,0), 0);
+  document.getElementById('card-biz').textContent = fmt(biz);
+  document.getElementById('card-biz-sub').textContent = bizCt + ' transactions';
+  document.getElementById('card-per').textContent = fmt(per);
+  document.getElementById('card-per-sub').textContent = perCt + ' transactions';
+  document.getElementById('card-total').textContent = fmt(biz+per);
+  document.getElementById('card-txn-count').textContent = all.length + ' total transactions';
+  document.getElementById('card-rev').textContent = fmt(rev);
+  document.getElementById('hdr-total').textContent = fmt(biz+per);
+}
+
+function updateCatPills() {
+  const pool = getPool();
+  const cats = [...new Set(pool.map(t=>t.category))].sort();
+  const pills = document.getElementById('cat-pills');
+  pills.innerHTML = '<span class="pill '+(gCat===null?'active':'')+'" onclick="setCat(null)">All Categories</span>' +
+    cats.map(c => `<span class="pill ${gCat===c?'active':''}" onclick="setCat('${c.replace(/'/g,"\\'")}')">${c}</span>`).join('');
+}
+
+function render() {
+  const data = filtered();
+  const biz = data.filter(t=>t.type==='business').reduce((s,t)=>s+t.amount,0);
+  const per = data.filter(t=>t.type==='personal').reduce((s,t)=>s+t.amount,0);
+
+  document.getElementById('rb-count').textContent = data.length;
+  document.getElementById('rb-biz').textContent = fmt(biz);
+  document.getElementById('rb-per').textContent = fmt(per);
+  document.getElementById('rb-total').textContent = fmt(biz+per);
+
+  const periodLabels = {ytd:'YTD (All 12 Months)',amazon:'Amazon',ebay:'eBay',temu:'Temu',
+    jan:'January',feb:'February',mar:'March',apr:'April',may:'May',jun:'June',
+    jul:'July',aug:'August',sep:'September',oct:'October',nov:'November',dec:'December'};
+  const monthLabels = {all:'YTD',jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',
+    jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec'};
+  const subCtx = ['amazon','ebay','temu'].includes(gPeriod) && gSubMonth !== 'all'
+    ? ' · ' + monthLabels[gSubMonth] : ['amazon','ebay','temu'].includes(gPeriod) && gSubMonth === 'all'
+    ? ' · YTD' : '';
+  document.getElementById('rb-period').textContent = (periodLabels[gPeriod]||gPeriod) + subCtx + (gCat?' · '+gCat:'');
+
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = data.map(t => {
+    const rowClass = t.flag ? 'flag-row' : (t.type==='business' ? 'biz-row' : 'per-row');
+    const amtClass = t.type==='business' ? 'biz-amount' : 'per-amount';
+    return `<tr class="${rowClass}">
+      <td class="date-col">${t.date}</td>
+      <td class="vendor-col">${t.vendor}</td>
+      <td class="cat-col">${t.category}</td>
+      <td class="type-col"><span class="type-badge ${t.type==='business'?'biz':'per'}">${t.type==='business'?'Biz':'Per'}</span></td>
+      <td class="amount-col ${amtClass}">${fmt(t.amount)}</td>
+      <td class="flag-col">${t.flag?`<span class="flag-icon" title="${t.flag}">⚑</span>`:''}</td>
+    </tr>`;
+  }).join('');
+}
+
+function setPeriod(p) {
+  gPeriod = p;
+  gCat = null;
+  if (!['amazon','ebay','temu','revenue'].includes(p)) gSubMonth = 'all';
+  document.querySelectorAll('.period-row .btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-'+p)?.classList.add('active');
+
+  const isSpecial = ['revenue','monthly','charts'].includes(p);
+  document.getElementById('table-wrap').style.display = isSpecial ? 'none' : 'block';
+  document.getElementById('type-filter-row').style.display = isSpecial ? 'none' : 'flex';
+  document.getElementById('cat-pills').style.display = isSpecial ? 'none' : 'flex';
+  document.getElementById('search-wrap').style.display = isSpecial ? 'none' : 'block';
+  document.getElementById('result-bar').style.display = isSpecial ? 'none' : 'flex';
+  document.getElementById('revenue-view').className = p === 'revenue' ? 'revenue-view visible' : 'revenue-view';
+  document.getElementById('monthly-summary').className = p === 'monthly' ? 'monthly-summary visible' : 'monthly-summary';
+  document.getElementById('charts-view').className = p === 'charts' ? 'charts-view visible' : 'charts-view';
+  if (p === 'charts') initCharts();
+
+  // Show sub-month bar for amazon/ebay/temu/revenue
+  const subBar = document.getElementById('sub-month-bar');
+  if (['amazon','ebay','temu','revenue'].includes(p)) {
+    subBar.classList.add('visible');
+  } else {
+    subBar.classList.remove('visible');
+    gSubMonth = 'all';
+    document.querySelectorAll('.sub-month-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('smb-all')?.classList.add('active');
+  }
+  if (p === 'revenue') { renderRevenue(); return; }
+  if (p === 'monthly') { renderMonthlySummary(); return; }
+
+  updateCatPills();
+  render();
+}
+
+function setSubMonth(m) {
+  gSubMonth = m;
+  document.querySelectorAll('.sub-month-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('smb-' + m)?.classList.add('active');
+  if (gPeriod === 'revenue') { renderRevenue(); return; }
+  updateCatPills();
+  render();
+}
+
+function setType(t) {
+  gType = t;
+  document.querySelectorAll('#type-filter-row .btn').forEach(b => b.classList.remove('active','active-biz','active-per','active-all'));
+  if (t==='all') document.getElementById('btn-all').classList.add('active-all');
+  else if (t==='business') document.getElementById('btn-biz').classList.add('active-biz');
+  else document.getElementById('btn-per').classList.add('active-per');
+  render();
+}
+
+function setCat(c) {
+  gCat = c;
+  updateCatPills();
+  render();
+}
+
+function renderRevenue() {
+  const rev = document.getElementById('revenue-view');
+  const mList = gSubMonth === 'all' ? MONTHS : [gSubMonth];
+  const total = mList.reduce((s,m) => s + (REVENUE[m]||[]).reduce((r,d)=>r+d.amount,0), 0);
+  const ytdTotal = MONTHS.reduce((s,m) => s + (REVENUE[m]||[]).reduce((r,d)=>r+d.amount,0), 0);
+  const label = gSubMonth === 'all' ? 'YTD — All 12 Months' : (MONTH_LABELS[gSubMonth] + ' 2025');
+  rev.innerHTML = `<h2 style="color:var(--amber);margin-bottom:16px;font-size:18px;">💰 Revenue — Customer Payment Deposits · ${label}</h2>
+    <p style="color:var(--text-dim);margin-bottom:20px;font-size:12px;">Deposits extracted from bank statement additions. Excludes refunds and returns. Use the month buttons above to filter by month.</p>` +
+    mList.map(m => {
+      const deps = REVENUE[m]||[];
+      const mTotal = deps.reduce((s,d)=>s+d.amount,0);
+      const isPending = deps.length === 0;
+      return `<div class="rev-month">
+        <div class="rev-month-header">
+          <span class="month-name">${MONTH_LABELS[m]} 2025</span>
+          ${isPending ? '<span class="pending">No customer deposits</span>' : `<span class="month-total">${fmt(mTotal)}</span>`}
+        </div>
+        ${deps.map(d=>`<div class="rev-deposit">
+          <span class="dep-date">${d.date}</span>
+          <span class="dep-desc">${d.desc}</span>
+          <span class="dep-amt">${fmt(d.amount)}</span>
+        </div>`).join('')}
+      </div>`;
+    }).join('') +
+    `<div style="background:var(--surface2);border:1px solid var(--amber);border-radius:10px;padding:16px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="color:var(--text-dim);font-size:13px;">Total 2025 Revenue (Bank Deposits)</span>
+      <span style="color:var(--amber);font-size:22px;font-weight:700;">${fmt(total)}</span>
+    </div>
+    <p style="color:var(--text-muted);font-size:11px;margin-top:10px;">⚠ Revenue represents deposits to bank account. Your CPA should verify against invoices and receivables for final tax return.</p>`;
+}
+
+function renderMonthlySummary() {
+  const el = document.getElementById('monthly-summary');
+  let totalBiz = 0, totalPer = 0, totalTxn = 0;
+  const rows = MONTHS.map(m => {
+    const data = BANK_DATA[m]||[];
+    const biz = data.filter(t=>t.type==='business').reduce((s,t)=>s+t.amount,0);
+    const per = data.filter(t=>t.type==='personal').reduce((s,t)=>s+t.amount,0);
+    totalBiz += biz; totalPer += per; totalTxn += data.length;
+    const status = data.length > 0 ? '<span class="complete">✓ Complete</span>' : '<span class="pending">Pending</span>';
+    return `<tr>
+      <td>${MONTH_LABELS[m]} 2025</td>
+      <td>${data.length || '—'}</td>
+      <td class="biz">${data.length ? fmt(biz) : '—'}</td>
+      <td class="per">${data.length ? fmt(per) : '—'}</td>
+      <td class="tot">${data.length ? fmt(biz+per) : '—'}</td>
+      <td>${status}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML = `<h2 style="color:var(--accent);margin-bottom:16px;font-size:18px;">📊 Monthly Summary — All 12 Months</h2>
+    <table class="month-sum-table">
+      <thead><tr><th>Month</th><th>Transactions</th><th>Business</th><th>Personal</th><th>Total</th><th>Status</th></tr></thead>
+      <tbody>${rows}
+        <tr class="totals-row">
+          <td>FULL YEAR 2025</td><td>${totalTxn}</td>
+          <td class="biz">${fmt(totalBiz)}</td>
+          <td class="per">${fmt(totalPer)}</td>
+          <td class="tot">${fmt(totalBiz+totalPer)}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>`;
+}
+
+function exportCSV() {
+  const data = filtered();
+  const rows = [['Date','Vendor','Category','Type','Amount','Flag'],...data.map(t=>[t.date,`"${t.vendor}"`,t.category,t.type,t.amount.toFixed(2),t.flag||''])];
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv,' + encodeURIComponent(csv);
+  a.download = `showtime_2025_${gPeriod}_export.csv`;
+  a.click();
+}
+
+// Init
+updateCards();
+updateCatPills();
+render();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+let chartsInitialized = false;
+function initCharts() {
+  if (chartsInitialized) return;
+  chartsInitialized = true;
+
+  const monthLabels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Build monthly totals from BANK_DATA
+  const bizByMonth = new Array(12).fill(0);
+  const perByMonth = new Array(12).fill(0);
+  MONTHS.forEach((m, i) => {
+    (BANK_DATA[m] || []).forEach(t => {
+      if (t.type === 'business') bizByMonth[i] += t.amount;
+      else perByMonth[i] += t.amount;
+    });
+  });
+
+  // Revenue from REVENUE object
+  const revByMonth = MONTHS.map(m => (REVENUE[m] || []).reduce((s, d) => s + d.amount, 0));
+
+  // Category totals from all transactions
+  const catMap = {};
+  MONTHS.forEach(m => {
+    (BANK_DATA[m] || []).forEach(t => {
+      catMap[t.category] = (catMap[t.category] || 0) + t.amount;
+    });
+  });
+
+  // Update total badges
+  const fmtN = n => '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  document.getElementById('ct-biz-total').textContent = fmtN(bizByMonth.reduce((a,b)=>a+b,0));
+  document.getElementById('ct-per-total').textContent = fmtN(perByMonth.reduce((a,b)=>a+b,0));
+
+  const gridColor = 'rgba(46,49,80,0.5)';
+  const tickColor = '#94a3b8';
+  const ttDefaults = { backgroundColor:'#1a1d2e', borderColor:'#2e3150', borderWidth:1, titleColor:'#e2e8f0', bodyColor:'#94a3b8' };
+
+  // BAR CHART
+  new Chart(document.getElementById('barChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: monthLabels,
+      datasets: [
+        { label:'Revenue',           data:revByMonth, backgroundColor:'rgba(245,158,11,0.75)', borderColor:'#f59e0b', borderWidth:1, borderRadius:4 },
+        { label:'Business Expenses', data:bizByMonth, backgroundColor:'rgba(34,197,94,0.65)',  borderColor:'#22c55e', borderWidth:1, borderRadius:4 },
+        { label:'Personal Expenses', data:perByMonth, backgroundColor:'rgba(239,68,68,0.65)',  borderColor:'#ef4444', borderWidth:1, borderRadius:4 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color:tickColor, font:{size:12}, boxWidth:12, padding:16 } },
+        tooltip: { ...ttDefaults, callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + fmtN(ctx.parsed.y) } }
+      },
+      scales: {
+        x: { ticks:{color:tickColor, font:{size:11}}, grid:{color:gridColor} },
+        y: { ticks:{color:tickColor, font:{size:11}, callback: function(v){ return '$'+(v>=1000?(v/1000).toFixed(0)+'k':v); }}, grid:{color:gridColor} }
+      }
+    }
+  });
+
+  // PIE CHART
+  const catEntries = Object.entries(catMap).sort((a,b) => b[1]-a[1]);
+  const catLabels = catEntries.map(e => e[0]);
+  const catValues = catEntries.map(e => e[1]);
+  const pieColors = ['#4f9cf9','#22c55e','#f59e0b','#ef4444','#7c6af7','#ec4899','#14b8a6','#f97316','#a855f7','#06b6d4','#84cc16','#fb923c','#38bdf8','#64748b','#94a3b8'];
+
+  new Chart(document.getElementById('pieChart').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: catLabels,
+      datasets: [{ data:catValues, backgroundColor:pieColors.map(function(c){return c+'cc';}), borderColor:pieColors, borderWidth:1.5, hoverOffset:10 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout:'52%',
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color:tickColor, font:{size:11}, boxWidth:11, padding:10,
+            generateLabels: function(chart) {
+              return chart.data.labels.map(function(label, i) {
+                return {
+                  text: label + '  $' + (chart.data.datasets[0].data[i]/1000).toFixed(1) + 'k',
+                  fillStyle: chart.data.datasets[0].backgroundColor[i],
+                  strokeStyle: chart.data.datasets[0].borderColor[i],
+                  lineWidth: 1, index: i
+                };
+              });
+            }
+          }
+        },
+        tooltip: { ...ttDefaults, callbacks: {
+          label: function(ctx) {
+            var total = ctx.dataset.data.reduce(function(a,b){return a+b;},0);
+            return ' ' + fmtN(ctx.parsed) + '  (' + ((ctx.parsed/total)*100).toFixed(1) + '%)';
+          }
+        }}
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
